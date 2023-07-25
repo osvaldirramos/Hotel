@@ -1,0 +1,256 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+ sodbc15.ins - V3 installation script for Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  DESCRIPTION
+    This script installs Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  OWNER
+    R.Srinivasan (srengasa.in)
+
+  MODIFIED    DD-MMM-YY  Reason
+    sthivaka.in  20-Jun-96   modification for ver 1.15
+    abeldalk.in  12-Apr-96  Take care of WRITE_ERROR exception handle when copying odbc group files.
+    abeldalk.in  29-Mar-96  Older version files to be replaced
+			    with new one
+    Sthivaka.in  05-Mar-96  Modified for Windows NT
+    JHobson      30-SEP-95  Modified the version checking code to handle
+				installs from diskette
+    LMurphy      27-DEC-94  Modified for v1.11
+    akelley      08-NOV-94  Created.
+*****************************************************************************/
+{
+  if (doit)
+    {
+      /*****************************
+	Set the VRF-INS script ratchet
+      ******************************/
+      ins_ratchet = "1.15.3.1.0";
+
+      execute("%installer_home%\nt.ins");
+      permit_retry_operations = TRUE;
+
+      /******************
+	Install the product
+      *******************/
+      install(w32rsf73); 
+
+      ui_product(product_label);
+      ui_action( instantiate(installing_scripts) );
+      copy(deinst);
+
+      ui_action( instantiate(installing_ora) );
+
+      copy (ora);
+      copy (odbctst);
+	
+
+	win32_create_key("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI");
+	
+	win32_create_key("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\ODBC Drivers");
+	win32_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\ODBC Drivers","Oracle73","Installed");        
+	
+	win32_create_key("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle73");
+	win32_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle73","Driver",odbcini_driver_path);        
+	win32_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle73","Setup",odbcini_setup_path);        
+	win32_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle73","Orahelp",odbcini_help_path);
+
+
+      ui_action( instantiate(version_check) );
+
+      /*********************
+       Check if system files in groups odbc, odbca, odbci,
+       odbcmsc already exist or if they are old 
+       before installing them.
+      **********************/
+     
+/* Group odbc */
+      odbc_files = group_files(odbc);
+      product_directory = implode(list(product_home,
+				       product_location(current_product)),"\");
+      pathify(product_directory);
+
+      PERMIT_RETRY_OPERATIONS = FALSE;
+      while (not (empty(odbc_files)))
+      {
+	 /* Set up the filenames and versions */
+	 current_destination_file = first(odbc_files);
+	 current_source_file2 = implode(list(product_directory,
+					    file_name(current_destination_file)),
+				       "\");
+	 /* If we are installing from diskette, then product_home is */
+	 /* something like "A:\" and product_location (current_product) */
+	 /* is "". The implode before the while will make product_directory */
+	 /* something like "A:\\". The implode above will make */
+	 /* current_source_file2 something like "A:\\\ODBC.DLL". */
+	 /* Simple solution--replace "\\\" by "\" */
+	 current_source_file = replace (current_source_file2, "\\\", "\");
+	 pathify(current_source_file);
+
+	 source_file_version = windows_file_version(current_source_file);
+	 {
+	 
+	   if ((not(exists(current_destination_file)))
+	    || (not(windows_earlier_version(current_destination_file,
+					source_file_version))))
+	     signal('FILE_NOT_FOUND);
+	   else
+		{
+			copy_file(current_source_file,current_destination_file);
+		}
+		[
+			'WRITE_ERROR:information_dialog(
+				"Failed to copy %current_source_file% to %current_destination_file%;
+				%carriage_return%%carriage_return%Please copy %current_source_file% to %current_destination_file% manually after installation", 
+				"Write Error / File in use", 
+				'NO_CANCEL);
+		]
+
+	 } 
+	 [ 
+	   'FILE_NOT_FOUND: continue();
+	   'DEFAULT:
+		{
+		    {
+			copy_file(current_source_file,current_destination_file);
+		    }
+		    [
+			'WRITE_ERROR:information_dialog(
+				"Failed to copy %current_source_file% to %current_destination_file%;
+				%carriage_return%%carriage_return%Please copy %current_source_file% to %current_destination_file% manually after installation", 
+				"Write Error / File in use", 
+				'NO_CANCEL);
+		    ]
+		
+		}
+	 ]
+
+	 odbc_files = rest(odbc_files);
+
+      }
+      PERMIT_RETRY_OPERATIONS = TRUE;
+
+      copy_odbci=FALSE;
+
+/* Group odbci */
+      copy_odbci = FALSE;
+      odbci_files = group_files(odbci);
+      product_directory = implode(list(product_home,
+				       product_location(current_product)),"\");
+      pathify(product_directory);
+
+      while (not (empty(odbci_files)))
+      {
+	 /* Set up the filenames and versions */
+	 current_destination_file = first(odbci_files);
+	 current_source_file2 = implode(list(product_directory,
+					    file_name(current_destination_file)),
+				       "\");
+	 /* If we are installing from diskette, then product_home is */
+	 /* something like "A:\" and product_location (current_product) */
+	 /* is "". The implode before the while will make product_directory */
+	 /* something like "A:\\". The implode above will make */
+	 /* current_source_file2 something like "A:\\\ODBC.DLL". */
+	 /* Simple solution--replace "\\\" by "\" */
+	 current_source_file = replace (current_source_file2, "\\\", "\");
+	 pathify(current_source_file);
+
+	 source_file_version = windows_file_version(current_source_file);
+	 {
+	   if ((not(exists(current_destination_file)))
+	    || (not(windows_earlier_version(current_destination_file,
+					source_file_version))))
+	     signal('FILE_NOT_FOUND);
+	   else
+		{
+		  copy_file(current_source_file,current_destination_file);
+		  copy_odbci = TRUE;
+		}
+	 } 
+	 [ 
+	   'FILE_NOT_FOUND: continue();
+	   'DEFAULT: 
+		{
+		  copy_file(current_source_file,current_destination_file);
+		  copy_odbci = TRUE;
+		}
+	 ]
+
+	 odbci_files = rest(odbci_files);
+
+      }
+
+/* File odbcadm.exe */
+      destination = first(group_files(odbca));
+      source2 = implode(list(product_home, product_location(current_product),
+				file_name(destination)), "\");
+      /* If we are installing from diskette, then product_home is */
+      /* something like "A:\" and product_location (current_product) */
+      /* is "". The implode will make source2 something like */
+      /* "A:\\\ODBCADM.EXE". Simple solution--replace "\\\" by "\" */
+      source = replace (source2, "\\\", "\");
+      pathify(source);
+      source_version = windows_file_version(source);
+      {
+	if ((not(exists(destination))) ||
+		(not(windows_earlier_version(destination,source_version))))
+		signal('FILE_NOT_FOUND);
+	else
+		copy(odbca);
+      }
+      [ 
+	'FILE_NOT_FOUND: continue();
+	'DEFAULT: copy(odbca);
+      ]      
+
+
+
+      odbca_path = "%systemroot%\system32\odbcad32.exe";
+      if(exists(odbca_path))
+      {
+	  
+	  copy(odbcaicon);            
+      }
+      
+     
+      if (copy_odbci)
+      {
+	ui_action( instantiate(installing_odbc) );      
+	copy(odbcihlp);  
+      }
+
+  
+
+      /*******************
+	Register the product
+      ********************/
+      ui_action( instantiate(registering) );
+
+      register(current_product);
+      if (member(selected_products,current_product))
+	reference(current_product);
+
+      if (reminder_msg)
+          {
+          if (member(remind_list,config_odbc_prompt)==FALSE) 
+	        add(remind_list, config_odbc_prompt);
+	  if (member(remind_helps,config_odbc_help)==FALSE) 
+	        add(remind_helps, config_odbc_help);
+          }
+      else
+          {
+        	{
+		if (install_type == "Custom Install")
+		information_dialog(instantiate(config_odbc_prompt)
+			 instantiate(config_odbc_content)
+			 instantiate(config_odbc_help));
+      		}
+      		[ 'UNBOUND_VARIABLE: information_dialog(instantiate(config_odbc_prompt)
+			 instantiate(config_odbc_content)
+			 instantiate(config_odbc_help)); ]
+    		}
+
+      permit_retry_operations = FALSE;
+    }
+}

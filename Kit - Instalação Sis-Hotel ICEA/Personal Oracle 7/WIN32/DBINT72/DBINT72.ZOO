@@ -1,0 +1,32 @@
+#Name   Subgroup Source         Destination          			Size   Instantiate? Append? Compress? StartDisk TotalDisks Icon Group                             Item                         Command                    
+
+nocopy  ""       "DBINT72.VRF"  "%%INSTALLER_HOME%%\"    		8458 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "DBINT72.INS"  "%%INSTALLER_HOME%%\"    		8694 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "%NAV72%REN.EXE" "%%INSTALLER_HOME%%\"   		16896 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "NAV.BMP"      "%%INSTALLER_HOME%%\"   		36854 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "DBINT72.MAP"  "%%INSTALLER_HOME%%\"   		 4715 	false        false   false            00         00   00 ""                                ""                           ""                         
+
+deinst  ""       "DBINT72.DEI"  "%%INSTALLER_HOME%%\"    		9144 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "DBINT72.ZOO"  "%%INSTALLER_HOME%%\DBINT72.MAP"   	4729 	true         false   false            00         00   00 ""                                ""                           ""                         
+
+exe     ""       "PO7.EXE"      "%%ORACLE_HOME%%\BIN\" 			569344 	false        false   false            00         00   00 "%nav_group_name%"                "%ora_navigate%"             "%%ORACLE_HOME%%\BIN\PO7.EXE"
+
+dll     ""       "EXPP73.DLL"   "%%ORACLE_HOME%%\BIN\" 			131072 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "PORESUS.DLL"  "%%ORACLE_HOME%%\BIN\" 			212480 	false        false   false            00         00   00 ""                                ""                           ""                         
+
+smpldir ""       ""             "%%NAV72%%"               		 00 	false        false   false            00         00   00 ""                                ""                           ""                         
+
+sample  ""       ""             "%%NAV72%%"              		  00 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "SAMPLE.ZPJ"   "%%NAV72%%\"             		 419 	false        false   false            00         00   00 ""                                ""                           ""                         
+        "95"     "TOOLBOX.ZPJ"  "%%NAV72%%\"             		 255 	false        false   false            00         00   00 ""                                ""                           ""                         
+
+ocx     ""       "MMTX32.OCX"   "%%ORACLE_HOME%%\BIN\" 			510976 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "MMTX.LIC"     "%%ORACLE_HOME%%\BIN\"   		 423 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "REGSVR32.EXE" "%%ORACLE_HOME%%\BIN\"  		24064 	false        false   false            00         00   00 ""                                ""                           ""                         
+
+newpo7  ""       "PO7.EXE"      "%%ORACLE_HOME%%\BIN\" 			569344 	false        false   false            00         00   00 "%nav_group_name%" 		   "%ora_navigate%"             "%%ORACLE_HOME%%\BIN\PO7.exe"
+
+help    ""       ""             "%%MSHELP%%"           			   00 	false        false   false            00         00   00 ""                                ""                           ""                         
+        ""       "NAV7US.HLP"   "%%MSHELP%%\NAV7.HLP" 			326301 	false        false   false            00         00   00 "%nav_group_name%" 		   "Personal Oracle7 Help"      "%%MSHELP%%\NAV7.HLP"        
+        ""       "NAV7US.CNT"   "%%MSHELP%%\NAV7.CNT"  			 16059 	false        false   false            00         00   00 ""                                ""                           ""                         
+

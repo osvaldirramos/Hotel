@@ -1,0 +1,182 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+ sodbc15.vrf - V3 version analysis/product configuration script
+		   for Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for the
+	 Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  OWNER
+    R.Srinivasan (srengasa.in)
+
+  MODIFIED       DD-MMM-YY   Reason
+    sthivaka.in  20-Jun-96   modification for ver 1.15
+    sthivaka.in  12-Apr-96   added for prompting to remove old odbc driver
+    abeldalk.in  27-Mar-96   added product_group
+    sthivaka.in  05-Mar-96   Modified for Windows NT
+    LMurphy      27-DEC-94   Modified for v1.11
+    akelley      08-NOV-94   Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+	required_version = product_version(ntinstver);
+	temp             = explode(required_version, ".");
+	required_version = implode(list(first(temp),first(rest(temp)),
+					first(rest(rest(temp))),
+					first(rest(rest(rest(temp))))), ".");
+	signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%%. Please run version %%required_version%% in order to perform this installation.")));
+      }
+  ]     /* This FAILURE will cause 3.0.9.x installer to exit gracefully. */
+
+  if (doit)
+    {
+      /**********************************************************************
+	Set the VRF-INS script "ratchet"
+       ***********************************************************************/
+      vrf_ratchet = "1.15.3.1.0";
+
+      /**********************************************************************
+	Get the WindowsNT system path
+       ***********************************************************************/
+
+      product_group=nls("product_group","Oracle for Windows NT");
+      curr_dir = directory_name(current_script);
+
+      /**********************************************************************
+	Binding Path Variables 
+       ***********************************************************************/
+      odbcini_driver_path = "%ORACLE_HOME%\ODBC\sqo32_73.dll";
+      odbcini_setup_path  = "%ORACLE_HOME%\ODBC\sqo32s73.dll";
+
+      odbcini_help_path   = "%ORACLE_HOME%\MSHELP\DRVORA32.HLP";
+
+      odbcini_cp_setup_path = "%systemroot%\system32\mscpxlt.dll";
+      odbcini_cp_trans_path = "%systemroot%\system32\mscpxlt.dll"; 
+
+
+
+      installing_scripts = nls("installing_scripts",
+			       "Installing %%product_label%% Scripts...");
+      installing_ora = nls("installing_ora",
+			       "Installing %%product_label%%...");
+      installing_odbc = nls("installing_odbc",
+			       "Installing %%product_label%% Manager...");
+      version_check = nls("version_check",
+			       "Performing %%product_label%% File Version Analysis...");
+      registering = nls("registering",
+			       "Registering %%product_label%%...");
+      config_odbc_prompt = instantiate(nls("config_odbc_prompt",
+			       "To complete the configuration of the %%product_label%%, please run the ODBC Administrator utility."));
+      config_odbc_content = nls("config_odbc_content",
+			       "ODBC Configuration");
+      config_odbc_help = instantiate(nls("config_odbc_help",
+			       "Your %%product_label%% installation and configuration must be completed by running the ODBC Administrator utility, odbcadm.exe.  This utility can also be launched by double-clicking the ODBC Administrator icon in your Oracle7 ODBC program group."));
+
+      config_set_prompt = instantiate(nls("config_set_prompt", "%config_odbc_prompt%
+
+%set_path_prompt%"));
+
+      config_set_help = instantiate(nls("config_set_help", "%config_odbc_help%
+
+%set_path_help%"));
+
+      config_set_content = instantiate(nls("config_set_content", "%config_odbc_content%"));
+
+      set_path_prompt = instantiate(nls("set_path_prompt",
+			       "In order to use the %%product_label%%, please make sure that the PATH variable includes the %ORACLE_HOME%\BIN directory."));
+
+      set_path_help = instantiate(nls("set_path_help",
+			       "%%product_label%% requires that the PATH variable include the %ORACLE_HOME%\BIN directory.  Please modify your AUTOEXEC.BAT file to add this directory to the PATH."));
+
+     rsf_info_msg = instantiate (nls("rsf_info_msg" ,"Please Install Required Support Files Ver 7.3 before installing this version of %%product_label%%"));
+     rsf_info_title = instantiate (nls("rsf_info_title","Dependent product"));
+
+     jap_eng_msg = instantiate (nls("jap_eng_msg","Do you want to install the ODBC driver for single byte languages"));
+     jap_eng_msg_hlp = instantiate (nls("jap_eng_msg_hlp","You have selected the japanese language in language selection and have selected single byte ODBC driver in PRD file. If you want to install the single byte ODBC driver, select YES in the dialog box. "));
+     jap_eng_msg_title = instantiate (nls("jap_eng_msg_title","Confirmation"));
+
+     unreg_jap_msg = instantiate (nls("unreg_jap_msg","Deinstall the Japanese ODBC driver before installing the single byte ODBC driver"));
+     unreg_jap_title = instantiate (nls("unreg_jap_msg","Notification"));
+     unreg_jap_hlp = instantiate (nls("unreg_jap_hlp","Single byte and Japanese ODBC drivers cannot coexist, deinstall the Japanese ODBC driver before installing the single byte ODBC driver"));
+    
+     unreg_old_msg = instantiate (nls("unreg_old_msg","Deinstall the existing ODBC driver before installing this ODBC driver"));
+     unreg_old_title = instantiate (nls("unreg_old_msg","Notification"));
+
+     both_sel_msg = instantiate (nls("both_sel_msg", "Select one ODBC dirver only"));
+     both_sel_title = instantiate (nls("both_sel_title","Notification"));
+     both_sel_hlp = instantiate (nls("both_sel_hlp","Single byte and Japanese ODBC drivers cannot coexist, select any one of the ODBC driver"));
+
+      /**********************************************************************
+	Return size of files to install...
+       ***********************************************************************/
+
+/* checking for Japanese language driver */
+if (registered("ntsodbcj15"))
+	{
+	signal('failure,unreg_jap_msg,unreg_jap_title,unreg_jap_hlp);
+	doit = FALSE;
+	return(0); 
+	}
+
+/* checking for old drivers */
+ if (registered("ntsodbc72") || registered("ntodbcj72") || registered("ntsodbcj13") || registered("ntsodbc13"))
+	{
+	signal ('failure, unreg_old_msg,unreg_old_title);
+	doit = FALSE;
+	return(0); 
+	} 
+
+/* following code for deleting Oracle72 is added, since 1.13 installer doesn't remove Oracle72 key
+     bug no 380299 
+if (win32_key_exists ("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle72"))
+	{
+	win32_get_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\ODBC Drivers\Oracle72",Oracle72value);
+	}
+	[
+	'DEFAULT :
+		win32_delete_key ("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle72");
+	]
+*/
+
+/*
+if (not(registered("w32rsf73")))
+   {
+     signal ('failure, rsf_info_msg,rsf_info_title);
+     doit = FALSE;
+     return(0); 
+   }
+*/
+
+/* Add path message and Admin Utility message to remind_list */
+	reminder_msg = TRUE;
+	{ remind_list = remind_list; }
+	[ 'UNBOUND_VARIABLE: reminder_msg = FALSE; ]
+	{ remind_helps = remind_helps; }
+	[ 'UNBOUND_VARIABLE: reminder_msg = FALSE; ]
+
+/*  moved to INS scripts BUG 380434 
+	if (reminder_msg)
+	{
+		add(remind_list, config_odbc_prompt);
+		add(remind_helps, config_odbc_help);
+	}
+
+*/  
+
+/* verification of file versions done in .ins therefore, assume all but
+   files to be verified will be copied */
+
+     return(verify(w32rsf73) +
+	sum(deinst,ora,odbc,odbca,odbci,odbcihlp,odbctst));
+    }
+  else
+    {
+      refresh_map_file = FALSE;
+      return(0);
+    }
+}

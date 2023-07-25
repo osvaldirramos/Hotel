@@ -1,0 +1,193 @@
+/* Copyright (c) Oracle Corporation 1992, 1996.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    nets23.dei
+    
+  DESCRIPTION
+    This script removes the Windows 32 SQL*Net files and un-registers the
+    product.
+
+  OWNER
+    Mason Ng
+
+  MODIFIED    DD-MMM-YY  Reason
+    dstiefel  22-FEB-96  Merge NT/95 for 2.3.2
+    ljiang    09/95      Modified for Easy Configuration
+    vraja     08-22-95  Delete Service for TNS Listener on deinstall
+    dlau      07-AUG-95  Modified for SQLNET 2.2
+    eflores   04-APR-94  Modified for 2.1.2
+    mng       05-JAN-94  Modified for NT.
+    zkhan     11-AUG-93  Modified for SQLNET and for using V3.0.9.3.2 or later
+                         of the installer.
+    trodgers  10-APR-92  Created.
+*****************************************************************************/
+{
+  {
+  /* Check Product Dependencies */
+   doit = execute("%installer_home%\%operating_system%.dei");
+  } [
+     'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2", "The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+    ]
+
+  if (doit)
+  {
+    net2_deinstall_registry = nls("net2_deinstall_registry","Unregistering %%registry_label%%...");
+    net2_deinstall_script = nls("net2_deinstall_script","Deinstalling %%registry_label%% Installation Scripts...");
+    net2_deinstall_message = nls("net2_deinstall_message","Deinstalling %%registry_label%% Message Files...");
+    net2_deinstall_exe = nls("net2_deinstall_exe","Deinstalling %%registry_label%% Executables...");
+    net2_deinstall_dll = nls("net2_deinstall_dll","Deinstalling %%registry_label%% DLL's...");
+    net2_deinstall_tns = nls("net2_deinstall_tns","Deinstalling %%registry_label%% DLL's...");
+    net2_deinstall_sample = nls("net2_deinstall_sample","Deinstalling %%registry_label%% Sample Files...");
+
+    service_prompt = instantiate( nls("service_prompt","Stop all Oracle Listeners before deinstalling %%registry_label%%."));
+    service_content = nls("service_content","Stop Listeners");
+    service_help = instantiate( nls("service_help","Use the Oracle utility, LSNRCTL, to stop all Oracle Listeners that are running on this machine before deinstalling %%registry_label%%.") );
+
+    ui_product(registry_label);
+
+    if (platform() == "nt")
+    {
+      {
+        nt_stop_service("OracleTNSListener");
+        /*spawn("net stop OracleTNSListener");*/
+      }
+      [ 'default: continue();]
+    }
+
+    /* check to see if all listeners are shutdown */
+
+    ui_action(instantiate(net2_deinstall_exe));
+    { remove(exe); }
+    ['PERMISSION_DENIED:{
+            information_dialog(service_prompt, service_content,
+            service_help);
+            signal('FAILURE, "Deinstallation terminated.  Please stop all Oracle Listeners.");
+            }
+    ]
+
+    app_prompt = instantiate(nls("app_prompt","Stop all Oracle applications that are using %%registry_label%% before continuing with deinstallation."));
+    app_content = instantiate(nls("app_content","Stop Applications"));
+    app_help = instantiate(nls("app_help","%%registry_label%% is being used. Stop all Oracle applications that are using %%registry_label%% before continuing with deinstallation."));
+
+    ui_action(instantiate(net2_deinstall_dll));
+    { remove(dll); }
+    ['PERMISSION_DENIED:{
+            information_dialog(app_prompt, app_content, app_help);
+            signal( 'FAILURE, instantiate("Deinstallation terminated.  Please stop all Oracle applications that are using %%registry_label%%.") );
+            }
+    ]
+ 
+    if (platform() == "nt")
+    {
+    /* Delete the NT service for the SQL*Net V2 Listener */
+    failure_of_deltns = nls("service_error","Unable to delete the NT Service for the SQL*Net V2 Listener") ;
+     {
+      nt_delete_service("OracleTNSListener") ;
+     }
+    [
+     'SERVICE_DOES_NOT_EXIST,
+     'INVALID_SERVICE_NAME         : continue() ;
+     'PERMISSION_DENIED, 'OS_ERROR,
+     'INVALID_SERVICE_NAME         : {information_dialog(failure_of_deltns) ; continue() ;}
+    ]
+    }
+    
+/*    chkdeinst_prompt = nls("chkdeinst_prompt","You may have SQL*Net Client software installed. Removing %%registry_label%% will disable SQL*Net Client software. If you continue to deinstall %%registry_label%%, you should also deinstall SQL*Net Client.");
+*/ 
+    chkdeinst_prompt = nls("chkdeinst_prompt","You may have Oracle Names Server software installed. Removing %%registry_label%% will disable Oracle Names Server. If you continue to deinstall %%registry_label%%, you should also deinstall Oracle Names Server.");
+    complain = false;
+
+    if (platform() == "nt")
+    {
+    if (registered("ntnames20"))
+      if (not(member(registration("selected_registries"),registration("ntnames20"))))
+        information_dialog(instantiate(chkdeinst_prompt));
+    }
+
+    complain = false;
+    if (registered("w32netclt23"))
+	    complain = true;
+
+    if (complain)
+      { /* Leave common stuff */
+      }
+    else
+    {
+      ui_action(instantiate(net2_deinstall_message));
+      remove(msb);
+
+      ui_action(instantiate(net2_deinstall_tns));
+      remove(tns);
+
+      ui_action(instantiate(net2_deinstall_sample));
+      remove(sample);
+
+      if (exists("%oracle_home%\network\admin\sqlnet.ora"))
+      {
+        remove_file("%oracle_home%\network\admin\sqlnet.ora");
+      }
+      ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+
+     } /* common */
+
+    permit_retry_operations = TRUE;
+    {
+      if (exists("%oracle_home%\network\admin\sample\listener.ora"))
+         remove_file("%oracle_home%\network\admin\sample\listener.ora");
+    }
+    ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+
+    permit_retry_operations = FALSE;
+    /* Do not remove the listener.ora file */
+/*
+    {
+      remove_file("%oracle_home%\network\admin\listener.ora");
+    }
+     ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+*/
+    {
+      remove_file("%oracle_home%\network\admin\listener.old");
+    }
+     ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+    {
+      remove_file("%oracle_home%\network\trace\listener.trc");
+    }
+     ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+    {
+      remove_file("%oracle_home%\network\log\listener.log");
+    }
+     ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR: continue();]
+
+   /* Deinstall Dependent Products */
+    if (platform() == "nt")
+    {
+      if ( registered("ntnetsrv23") )
+      {
+        if (registered("w32rsf73"))
+        {
+          dependent = registration("w32rsf73");
+          unreference(dependent, current_registry);
+          deinstall(dependent);
+        }
+        if (registered("ntnames20"))
+        {
+          dependent = registration("ntnames20");
+          unreference(dependent, current_registry);
+          deinstall(dependent);
+        }
+      }
+    }
+
+    ui_action(instantiate(net2_deinstall_script));
+    remove(deinstl);
+
+    ui_action(instantiate(net2_deinstall_registry));
+    unregister(current_registry);
+
+    permit_retry_operations = FALSE;
+  }
+}
+
+
+
+

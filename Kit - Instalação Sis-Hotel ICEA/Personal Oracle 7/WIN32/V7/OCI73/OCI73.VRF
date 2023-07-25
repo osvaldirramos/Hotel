@@ -1,0 +1,76 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    oci73.vrf - V3 version analysis/product configuration script
+                for Windows 95 and Windows NT OCI 7.3
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for the
+    installation of Windows 95 and Windows NT OCI 7.3
+
+  MODIFIED    DD-MMM-YY  Reason
+    echien    19-APR-95  Creation for Windows 3.1
+    mclose    19-JUL-95  Adopted from Windows 3.1 and modified for Windows 95
+
+*****************************************************************************/
+
+{
+  if (operating_system == "win95")
+  {
+	prod_prefix = "w95";
+  }
+  else
+  {
+	prod_prefix = "nt";
+  }
+
+
+  /***********************************************************************
+      Set the VRF-INS script "ratchet"
+   ***********************************************************************/
+  vrf_ratchet = "7.3.2.1.0";
+
+  { doit = execute("%installer_home%\%operating_system%.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(evaluate("%prod_prefix%instver"));
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+  ]
+
+  if (doit)
+    {
+      
+      /***********************************************************************
+         Bind path variables...
+      ************************************************************************/
+
+      installing_scripts = nls("installing_scripts",
+                               "Installing %%product_label%% Scripts...");
+      installing_ocifiles = nls("installing_ocifiles",
+                                "Installing %%product_label%% Files...");
+      installing_ocisamples = nls("installing_ocisamples",
+                                "Installing %%product_label%% Sample Programs...");
+      modifying_config = nls("modifying_config",
+                             "Modifying Registry...");
+      registering = nls("registering","Registering %%product_label%%...");
+      rsf_version_msg = nls("rsf_version_msg","This product requires the installation of Required Support Files 7.3.2.0.0 or later.  The Required Support Files that you have installed are earlier than this.  Please install Required Support Files 7.3.2.0.0 or later and then proceed with the installation of %%product_label%%.");
+
+      /***********************************************************************
+           Return total size of files depending upon which options were
+           selected for installation...
+      ************************************************************************/
+
+      return(sum(deinstl,ocifiles,ocisamples) + verify(w32rsf73));
+    }
+  else
+    {
+      refresh_map_file = FALSE;
+      return(0);
+    }
+}

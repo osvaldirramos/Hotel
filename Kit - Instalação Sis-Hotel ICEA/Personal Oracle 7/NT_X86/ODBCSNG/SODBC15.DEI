@@ -1,0 +1,100 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+ sodbc15.dei - V3 deinstallation script for Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  DESCRIPTION
+    This script deinstalls Oracle7 ODBC 32bit Driver v1.15.3.1.0
+
+  OWNER
+    R.Srinivasan (srengasa.in)
+
+  MODIFIED    DD-MMM-YY  Reason
+    sthivaka.in  20-Jun-96   modification for ver 1.15
+    abeldalk.in  27-Mar-96   added product_group
+    sthivaka.in  05-Mar-96  Modified for Windows NT
+    LMurphy      27-DEC-94  Modified for v1.11
+    akelley      08-NOV-94  Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+	Get the Windows\System path...
+       ***********************************************************************/
+
+      product_group=nls("product_group","Oracle for Windows NT");
+      
+      /**********************************************************************
+	Bind all NLS deinstall strings here...
+       ***********************************************************************/
+
+      unregistering = nls("unregistering",
+			  "Unregistering %%registry_label%%...");
+      deinst_odbc = nls("deinst_odbc",
+			"Removing %%registry_label%% Driver Managers...");
+      deinst_ora = nls("deinst_ora",
+		       "Removing %%registry_label%% Drivers...");
+      deinst_script = nls("deinst_script",
+			  "Removing %%registry_label%% Installation Scripts...");
+      modify_config = nls("modify_config", "Modifying %%registry_label%% Environment Variables...");
+
+    }
+      /**********************************************************************
+	   Continue with the deinstallation
+       ***********************************************************************/
+
+  if (doit)
+    {
+
+      ui_product(registry_label);
+
+      permit_retry_operations = TRUE;
+
+      /*********************
+      Unregister the product
+      **********************/
+
+       if (registered("w32rsf73"))
+      {
+	dependent = registration("w32rsf73");
+	unreference(dependent,current_registry);
+	/* deinstall(dependent); */
+      }
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+
+
+      /********************
+      Deinstall the product
+      *********************/
+      ui_action(instantiate(deinst_odbc));
+	
+      remove(odbcaicon);
+      remove(odbctst);
+
+      ui_action(instantiate(deinst_ora));
+	
+      remove(ora);
+
+      ui_action(instantiate(deinst_script));
+	
+      remove(deinst);
+
+      ui_action(instantiate(modify_config));
+
+	win32_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\ODBC Drivers",
+			"Oracle73","");        
+	
+	win32_delete_key ("HKEY_LOCAL_MACHINE","SOFTWARE\ODBC\ODBCINST.INI\Oracle73");
+
+
+      permit_retry_operation = FALSE;
+    }
+}

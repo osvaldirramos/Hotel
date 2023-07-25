@@ -1,0 +1,99 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    po7.dei - V3 deinstall script for the Windows 95 PO7
+	      parent product
+
+  DESCRIPTION
+    This script deinstalls Windows 95 PO7 parent product
+
+  OWNER
+    Rajesh Bansal
+
+  MODIFIED    DD-MMM-YY  Reason
+   mrlai      10/22/96   Modified for PO7 7.3.2.2.0
+   ctow	      04/26/96	 Modified for PO7 7.3 Release
+   LMurphy    06/01/95	 Modified for use with Windows 95 PO7
+   LMurphy    24-JAN-94  Modified for use with On-Line Help
+   rbansal    12-DEC-94  Created
+*****************************************************************************/
+{
+    if (operating_system == "win95")
+        prod_pref = "w95";
+    else
+        prod_pref = "nt";
+
+    { doit = execute("%installer_home%\%operating_system%.dei"); }
+    [
+        'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2",
+                                                           "The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these Product(s).")));
+    ]
+
+    installed_version = registry_version(current_registry);
+    display_registry_label = "%registry_label%";
+
+    if (doit)
+    {
+
+        /*************************************
+   	    Bind all NLS deinstall strings here...
+        **************************************/
+
+	deinstall_components    = nls("deinstall_components", "Deinstalling %%registry_label%% Components...");
+        deinstall_unregister    = nls("deinstall_unregister", "Unregistering %%registry_label%%...");
+	unreference_dependencies= nls("unreference_dependencies", "Unreferencing %%registry_label%% Dependencies...");
+        deinstall_scripts           = nls("deinstall_scripts", "Removing %%registry_label%% Installation Scripts...");
+
+	/************************************
+	Unregister & Deinstall Child Products
+	*************************************/
+
+        ui_product(instantiate(display_registry_label));
+	ui_action(instantiate(deinstall_components));
+
+	if(member(registration("selected_registries"), current_registry))
+	/* remove all child products if parent product was selected */
+	{
+		if (registered("%prod_pref%rdbms73"))
+		{
+			dependent = registration("%prod_pref%rdbms73");
+			unreference(dependent, current_registry);
+			unreference(dependent);
+			/* unset the child's self-reference */
+			deinstall(dependent);
+		}
+		if (registered("w32util73"))
+		{
+			dependent = registration("w32util73");
+			unreference(dependent, current_registry);
+			unreference(dependent);
+			deinstall(dependent);
+		}
+	}
+	/********************
+	Deinstall the product
+	*********************/
+
+	ui_product(instantiate(display_registry_label));
+	ui_action(instantiate(deinstall_scripts));
+	remove(deinst, nls_abbreviation);
+
+        if (registered("w32hlpdoc73") && not(registered("w32dbint72")))
+        {
+		dependent = registration("w32hlpdoc73");
+		unreference(dependent,current_registry);
+		deinstall(dependent);
+        }
+		
+	/*********************
+	Unregister the product
+	**********************/
+
+        ui_product(instantiate(display_registry_label));
+	ui_action(instantiate(deinstall_unregister));
+	unregister(current_registry);
+
+	permit_retry_operations = FALSE;
+    }
+}
+

@@ -1,0 +1,117 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/*****************************************************************************
+  NAME
+    hlpdoc73.vrf - V3 analysis/product configuration script for the
+	      Windows NT hlpdoc73 product
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for the
+    installation of the Windows NT hlpdoc73 product
+	
+  OWNER
+	Bryan Sabol
+
+  MODIFIED	MM/DD/YY	Reason
+	mrlai	09/11/96	Modified for use with PO7 7.3.2.2.0 Windows NT
+	LMurphy 08/31/95	Removed parent hierarchy
+	LMurphy 06/01/95	Modified for use with Windows 95 doc10
+	LMurphy 01/24/94        Modified for use with On-Line Help
+  	bsabol	03/21/94	Created
+*****************************************************************************/
+{
+	{
+			if (operating_system == "win95") {
+				prod_prefix = "w95";
+			}
+	
+			if (operating_system == "nt") {
+				prod_prefix = "nt";
+			}
+	}
+	
+	{ doit = execute("%installer_home%\%operating_system%.vrf"); }
+	[
+	'UNBOUND_VARIABLE:
+	{
+                if (operating_system == "win95") {
+					op_sys_name = "Windows 95";
+                    required_version = product_version(w95instver);
+		}
+                if (operating_system == "nt") {
+					op_sys_name = "Windows NT";
+                    required_version = product_version(ntinstver);
+		}
+                if (operating_system == "windows") {
+                    op_sys_name = "Windows";
+                    required_version = product_version(wininstver);
+		}
+		temp = explode(required_version,".");
+		required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+		signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+	}
+	]
+
+	if (doit)
+	{
+
+		/*****************************
+		Set the VRF-INS script ratchet
+		******************************/
+
+		vrf_ratchet = "7.3.2.1.0";
+
+		{
+		  set_mshelp = FALSE;
+		  mshelp = v7_translate("MSHELP");
+		
+		  if (not(exists(mshelp)))
+			signal('UNBOUND_ENVIRONMENT_VARIABLE);
+		}
+		  [ 'OS_ERROR,'INVALID_FILE_NAME,
+		    'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+		    {
+			mshelp = "%oracle_home%\MSHELP";
+			set_mshelp = TRUE;
+		    }
+		  ]
+
+
+		permit_retry_operations = FALSE;
+
+		{ install_type = install_type; }
+		['UNBOUND_VARIABLE: install_type = nls("custom_install","Custom Install");]
+
+		{ bundle_name = bundle_name; }
+		['UNBOUND_VARIABLE: bundle_name = "";]
+
+		{ oracle_group_name = oracle_group_name; }
+		['UNBOUND_VARIABLE: oracle_group_name = nls("oracle_group_name","Oracle for %%op_sys_name%%");]
+
+
+                po7_hlp_name = nls("po7_hlp_name","Personal Oracle7 Help");
+                orcl7_msg_name = nls("orcl_msg_name","Oracle7 Error Messages");
+                cust_support_name = nls("cust_support_name","Customer Support");
+		installing_scripts = nls("installing_scripts",
+                             "Installing %%product_label%% Scripts...");
+		installing_files = nls("installing_files",
+                             "Installing %%product_label%% Files...");
+		modifying_config = nls("modifying_config",
+                               "Modifying %%op_sys_name%% Registry...");
+		registering = nls("registering","Registering %%product_label%%...");
+
+		/***************************
+		Return appropriate file size
+		****************************/
+
+                return(sum(deinst, nls_abbreviation, doc, nls_abbreviation));
+	}
+	else
+	{
+		refresh_map_file = FALSE;
+		return(0);
+	}
+}
+

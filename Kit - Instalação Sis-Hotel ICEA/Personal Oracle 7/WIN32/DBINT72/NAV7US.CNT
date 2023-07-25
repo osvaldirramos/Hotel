@@ -1,0 +1,233 @@
+:Base nav7.hlp
+:Title Personal Oracle7 Help
+:Index Oracle7 Messages and Codes=ORA.hlp
+:Link po7help.hlp
+1 Introduction
+2 About the Oracle Navigator=IOC_About_the_Oracle_Navigator>infowin
+2 Personal Oracle7
+3 Introduction to Personal Oracle7=IOC_Introduction_to_Personal_Oracle7>infowin
+3 What is Personal Oracle7 Used For?=IOC_PO7_Use>infowin
+3 Who is Personal Oracle7 Designed For?=IOC_Who_Uses>infowin
+3 What are the Components of Personal Oracle7?=IOC_Components>infowin
+3 About Importing and Exporting=IOC_About_Importing_and_Exporting>infowin
+3 About SQL*Loader=IOC_About_SQL*Loader>infowin
+3 About Server Manager=IOC_About_SrvrMgr>infowin
+3 About Projects=IOC_About_Projects>infowin
+3 Getting Started with Personal Oracle7=IOC_Getting_Started_with_Personal_Oracle7>infowin
+2 Personal Oracle Lite
+3 What is Personal Oracle Lite?=IOC_What_is_Personal_Oracle_Lite?>infowin
+3 What Are The Components of Personal Oracle Lite?=IOC_What_Are_The_Components_of_Personal_Oracle_Lite?>infowin
+1 Database Concepts
+3 The Word "Database"=IOC_The_Word_Database>infowin
+3 Starting Up and Shutting Down the Database=IOC_Starting_Up_and_Shutting_Down_the_Database>infowin
+3 The Relational Database=IOC_The_Relational_Database>infowin
+3 The Local Database=IOC_The_Local_Database>infowin
+3 Database Objects=IOC_Database_Objects>infowin
+3 Users, Passwords, Roles, and Privileges=IOC_Users_Passwords_Roles_and_Privileges>infowin
+3 User Name and User Password=IOC_Users_Name_Password>infowin
+3 Privilege=IOC_Privilege>infowin
+3 Default User Names, User Passwords, and Roles=IOC_Default_User>infowin
+3 The Distributed Feature=IOC_The_Distributed_Feature>infowin
+3 Replication=IOC_Replication
+3 Database Connections=IOC_Database_Connections>infowin
+3 Connecting to Remote Databases=IOC_Connecting_to_Remote_Databases>infowin
+3 Connecting to Personal Oracle7=IOC_Connecting_to_Personal_Oracle7>infowin
+3 Connecting to Personal Oracle Lite=IOC_Connecting_to_Personal_Oracle_Lite>infowin
+3 Personal Oracle7 Compared to the Oracle7 Server=IOC_The_Oracle7_Server>infowin
+2 About Database Objects
+3 Database Objects Supported in Personal Oracle7
+4 Database Objects Overview=IOC_Database_Objects_Overview>infowin
+4 About Tables=IOC_About_Tables>infowin
+4 About Views=IOC_About_Views>infowin
+4 About Indexes=IOC_About_Indexes>infowin
+4 About Synonyms=IOC_About_Synonyms>infowin
+4 About Snapshots=IOC_About_Snapshots>infowin
+4 About Database Links=IOC_About_Database_Links>infowin
+4 About Users=IOC_About_Users>infowin
+4 About Roles=IOC_About_Roles>infowin
+4 About Stored Program Units=IOC_About_Stored_Program_Units>infowin
+4 About Triggers=IOC_About_Triggers>infowin
+3 Database Objects Supported in Personal Oracle Lite
+4 Database Objects Overview=IOC_Lite_Database_Objects>infowin
+4 About Tables=IOC_About_Tables>infowin
+4 About Views=IOC_About_Views>infowin
+4 About Indexes=IOC_About_Indexes>infowin
+4 About  Users=IOC_Lite_About_Users>infowin
+1 Step-by-Step Procedures
+2 To get help on property sheets=PRC_To_get_help>procwin
+2 Working with Databases
+3 To disable or enable automatic database startup in Windows 95=PRC_To_disable_or_enable_automatic_database_startup_95>procwin
+3 To disable or enable automatic database startup in Windows NT=PRC_To_disable_or_enable_automatic_database_startup_NT>procwin
+3 To create a database connection=PRC_To_create_a_database_connection>procwin
+3 To configure a SQL*Net connection for Windows 95=PRC_To_configure_a_SQL*Net_connection_95>procwin
+3 To configure a SQL*Net connection for Windows NT=PRC_To_configure_a_SQL*Net_connection_NT>procwin
+3 To change database parameters=PRC_To_change_database_parameters>procwin
+3 To start or stop the database manually in Windows 95=PRC_To_start_or_stop_the_database_manually_95>procwin
+3 To start or stop the database manually in Windows NT=PRC_To_start_or_stop_the_database_manually_NT>procwin
+3 To start the database at Windows 95 startup=PRC_To_start_the_database_at_Windows_95_startup>procwin
+3 To migrate data=PRC_To_migrate_data>procwin
+2 Working with Projects
+3 To create a project=PRC_To_create_a_project>procwin
+3 To add a local object to a project=PRC_To_add_a_database_object_to_a_project>procwin
+3 To add an object to a project by creating a new object=PRC_To_add_an_object_to_a_project_by_creating_a_new_object>procwin
+3 To add an object to a project from the local database=PRC_To_add_an_object_to_a_project_from_the_local_database>procwin
+3 To add an object to a project from another project=PRC_To_add_an_object_to_a_project_from_another_project>procwin
+3 To add a table to a project from a remote database=PRC_To_add_a_table_to_a_project_from_a_remote_database>procwin
+3 To add a snapshot to a project=PRC_To_add_a_snapshot_to_a_project>procwin
+3 To delete a database object from a project=PRC_To_delete_database_objects_from_a_project>procwin
+3 To add a file object to a project=PRC_To_create_a_file_object_in_a_project>procwin
+2 Working with Database Objects
+3 To view data in a table=PRC_To_view_data_in_a_table>procwin
+3 To edit data in a table=PRC_To_edit_data_in_a_table>procwin
+3 To modify the design of a table=PRC_To_modify_the_design_of_a_table>procwin
+3 To print a table, view, or snapshot=PRC_Print_table_view>procwin
+3 To export all tables in the Table folder=PRC_Export_table>procwin
+3 To view a snapshot on the local database=PRC_To_view_a_snapshot>procwin
+3 To edit an updatable snapshot on the Personal Oracle7 local database=PRC_To_edit_an_updatable_snapshot_PO7>procwin
+3 To edit an updatable snapshot on the Personal Oracle Lite local database=PRC_To_edit_an_updatable_snapshot_POL>procwin
+3 To manually refresh a snapshot on the Personal Oracle7 local database=PRC_PO7_To_refresh>procwin
+3 To manually refresh a snapshot on the Personal Oracle Lite local database=PRC_POL_To_refresh>procwin
+3 To grant system privileges to users=PRC_To_grant_system_privileges_to_users>procwin
+3 To grant system privileges to roles=PRC_To_grant_system_privileges_to_roles>procwin
+3 To grant roles to users=PRC_To_grant_roles_to_users>procwin
+3 To grant roles to roles=PRC_To_grant_roles_to_roles>procwin
+3 To grant object privileges on tables, views, snapshots, or stored program units=PRC_To_grant_object_privileges_on_tables_views_or_snapshots>procwin
+3 To change a user password=PRC_To_change_a_user_password>procwin
+3 To view database objects by owner=PRC_To_view_database_objects_by_owner>procwin
+3 To view database objects by type in Personal Oracle7 for Windows 95=PRC_To_view_database_objects_by_type_95>procwin
+3 To view database objects by type in Personal Oracle7 for Windows NT=PRC_To_view_database_objects_by_type_NT>procwin
+3 To select a database object=PRC_To_select_a_database_object>procwin
+3 Creating Database Objects
+4 To create a table using Table Wizard=PRC_To_create_a_table_using_Table_Wizard>procwin
+4 To create a table on the local database=PRC_To_create_a_table_on_the_local_database>procwin
+4 To create a table on a remote database=PRC_To_create_a_table_on_a_remote_database>procwin
+4 To create a table on an Oracle Lite database=PRC_Create_Table_Lite>procwin
+4 To create a copy of multiple tables=PRC_Create_copy_multiple>procwin
+4 To create a view=PRC_To_create_a_view>procwin
+4 To create an index=PRC_To_create_an_index>procwin
+4 To create a trigger=PRC_To_create_a_trigger>procwin
+4 To create a snapshot for Personal Oracle7=PRC_PO7_To_create_a_snapshot>procwin
+4 To create a snapshot for Personal Oracle Lite=PRC_POL_To_create_a_snapshot>procwin
+4 To create a package specification=PRC_To_create_a_package_specification>procwin
+4 To create a package body=PRC_To_create_a_package_body>procwin
+4 To create a procedure=PRC_To_create_a_procedure>procwin
+4 To create a function=PRC_To_create_a_function>procwin
+4 To create a database link=PRC_To_create_a_database_link>procwin
+4 To create a role=PRC_To_create_a_role>procwin
+4 To create a user=PRC_To_create_a_user>procwin
+4 To create a synonym=PRC_To_create_a_synonym>procwin
+4 To select a database object folder=PRC_To_select_a_database_object_folder>procwin
+2 Exporting
+3 To export the Local Database=PRC_Export_db>procwin
+3 To import an export file into the Local Database=PRC_Import_db>procwin
+3 To export a project=PRC_To_export_a_project>procwin
+1 Windows, Dialog Boxes, and Property Sheets
+2 Compilation Errors=IDH_Compile_Err>infowin
+2 Copy Table Dialog Box=IDH_Copy_Table>infowin
+2 Copy Table As Dialog Box=IDH_Copy_Table_As>infowin
+2 Copy Tables Dialog Box=IDH_Copy_Tables>infowin
+2 Create Function Dialog Box=IDH_Create_Func>infowin
+2 Create Package Body Dialog Box=IDH_Create_Bod>infowin
+2 Create Package Specification Dialog Box=IDH_Create_Pack>infowin
+2 Create Procedure Dialog Box=IDH_Create_Proc>infowin
+2 Create Snapshot Dialog Box=IDH_Create_Snapshot>infowin
+2 {Database Connection} Properties:General Page=IDH_Db_Connection_Prop_Gen>infowin
+2 {Database Link} Properties: General Page=IDH_Link_Prop_Gen>infowin
+2 {Database} Properties: Settings Page=IDH_DB_Set>infowin
+2 Delete Object Dialog Box=IDH_Delete_Object>infowin
+2 {File Object} Properties: General Page=IDH_File_Prop_Gen>infowin
+2 {Function} Properties: General Page=IDH_Func_Prop_Gen>infowin
+2 {Index} Properties: General Page=IDH_Index_Prop_Gen>infowin
+2 Local Database Properties: General Page=IDH_Local_DB_Gen>infowin
+2 Local Database Properties: Tablespace Page=IDH_Local_DB_Table>infowin
+2 Master Site Connection dialog box=IDH_Master_Site_Conn>infowin
+2 New Database Connection Properties: General Page=IDH_New_Db_Connection>infowin
+2 New Database Link Properties: General Page=IDH_New_DB_Link>infowin
+2 New Function Properties: General Page=IDH_New_Func_Prop>infowin
+2 New Index Properties: General Page=IDH_New_Index>infowin
+2 New Oracle Lite Database Properties: General Page=IDH_New_OLite_DB>infowin
+2 New Package Body Properties: General Page=IDH_New_Bod_Prop>infowin
+2 New Package Specification Properties: General Page=IDH_New_Pack_Prop>infowin
+2 New Procedure Properties: General Page=IDH_New_Proc_Prop>infowin
+2 New Role Properties: General Page=IDH_New_Role>infowin
+2 New Snapshot Properties: General Page=IDH_New_Snap>infowin
+2 New Snapshot Properties: Condition Page=IDH_New_Snap_Condition>infowin
+2 New Synonym Properties: General Page=IDH_New_Synonym>infowin
+2 New Table Dialog Box=IDH_New_Table_Choose>infowin
+2 New Table Properties: Design Page=IDH_New_Table_Design>infowin
+2 New Table Properties: General Page=IDH_New_Table_Gen>infowin
+2 New Trigger Properties: Body Page=IDH_New_Trig_Body>infowin
+2 New Trigger Properties: General Page=IDH_New_Trig>infowin
+2 New User Properties: General Page=IDH_New_User>infowin
+2 New View Properties: Design Page=IDH_New_View_Design>infowin
+2 New View Properties: General Page=IDH_New_View>infowin
+2 {Object} Properties: Object Privilege Page=IDH_Object_Prop_Priv>infowin
+2 {Oracle Lite Database} Properties: General Page=IDH_OLite_DB_Prop_Gen>infowin
+2 Oracle Navigator Menu Bar=IDH_Oracle_Nav_Menu_Bar>infowin
+2 Oracle Navigator Overview=IDH_Oracle_Nav_Overview>infowin
+2 Oracle Navigator Toolbar=IDH_Oracle_Nav_Tool>infowin
+2 Oracle Navigator Window=IDH_Oracle_Nav_Window>infowin
+2 {Package Body} Properties: General Page=IDH_Bod_Prop_Gen>infowin
+2 {Package Specification} Properties: General Page=IDH_Pack_Prop_Gen>infowin
+2 Password Dialog Box=IDH_Password_db>infowin
+2 {Procedure} Properties: General Page=IDH_Proc_Prop_Gen>infowin
+2 {Project} Properties: General Page=IDH_Proj_Prop_Gen>infowin
+2 Role/Privilege Page=IDH_Sys_Role_Priv>infowin
+2 {Role} Properties: General Page=IDH_Role_Prop_Gen>infowin
+2 {Snapshot} Properties: Definition Page=IDH_Snap_Prop_Def>infowin
+2 {Snapshot} Properties: General Page=IDH_Snap_Prop_Gen>infowin
+2 {Synonym} Properties: General Page=IDH_Synonym_Prop_Gen>infowin
+2 {Table} Properties: Design Page=IDH_Table_Prop_Design>infowin
+2 {Table} Properties: General Page=IDH_Table_Prop_Gen>infowin
+2 {Trigger} Propeties: Body Page=IDH_Trig_Prop_Body>infowin
+2 {Trigger} Properties: General Page=IDH_Trig_Prop_Gen>infowin
+2 {User} Properties: General Page=IDH_User_Prop_Gen>infowin
+2 {View} Properties: General Page=IDH_View_Prop_Gen>infowin
+2 {View} Properties: Query Page=IDH_View_Prop_Query_Page>infowin
+1 Reference
+2 Initialization Parameters
+3 Initialization Parameter File: Definition=APX_Def_Init_Param>infowin
+3 The Sample Initialization Parameter File:  Definition=APX_Def_Sample_Init_Param>infowin
+3 What is the Initialization Parameter File Used For?=APX_Use_Init_Param>infowin
+3 Where is the Initialization Parameter File Located?=APX_Where_Init_Param>infowin
+3 Initialization Parameter File Names=APX_Init_Param_File>infowin
+3 Initialization Parameters to Check When Creating a New Database=APX_Check_Init_Param>infowin
+3 To edit the sample initialization parameter file=APX_Edit_Sample_Init_Param>infowin
+3 Initialization Parameter Names and Values=APX_Init_Param_Name>infowin
+2 Configuration Parameters
+3 Configuration Parameters and the Windows 95 Registry=APX_Configuration_Parameters_and_the_Windows_Registry>infowin
+3 Editing Personal Oracle7 for Windows 95 Configuration Parameters=APX_Editing_Personal_Oracle7_Configuration_Parameters_95>infowin
+3 Editing Personal Oracle7 for Windows NT Configuration Parameters=APX_Editing_Personal_Oracle7_Configuration_Parameters_NT>infowin
+3 General Configuration Parameters for Personal Oracle7 for Windows 95=APX_General_Configuration_Parameters_95>infowin
+3 General Configuration Parameters for Personal Oracle7 for Windows NT=APX_General_Configuration_Parameters_NT>infowin
+3 Networking Configuration Parameters for Personal Oracle7 for Windows NT=APX_Networking_Configuration_Parameters_NT>infowin
+2 Server Manager
+3 Starting Server Manager=APX_Starting_SvrMgr>infowin
+3 Server Manager: Hosting to the Operating System=APX_Hosting_to_the_Operating_System>infowin
+3 Server Manager: Defining Display Characteristics=APX_Defining_Display_Characteristics>infowin
+3 Server Manager: Saving Output from a Server Manager  Session=APX_Saving_Output_from_a_Server_Manager_Session>infowin
+2 The Oracle Call Interface (OCI)
+3 Oracle Call Interface: Overview=APX_Oracle_Call_Interface_Overview>infowin
+3 Oracle Call Interface: Implementation=APX_Oracle_Call_Interface_Implementation>infowin
+3 Oracle Call Interface: Platform-Specific Details=APX_Oracle_Call_Interface_Platform_Specific_Details>infowin
+3 Oracle Call Interface: Building OCI Applications=APX_Oracle_Call_Interface_Building_OCI_Applications>infowin
+3 Oracle Call Interface: Compiling OCI Applications=APX_Oracle_Call_Interface_Compiling_OCI_Applications>infowin
+3 Oracle Call Interface: Linking OCI Applications=APX_Oracle_Call_Interface_Linking_OCI_Applications>infowin
+3 Oracle Call Interface: Non-blocking Connections=APX_Oracle_Call_Interface_Non_blocking_Connections>infowin
+2 National Language Support (NLS)
+3 What is National Language Support? (NLS)=APX_NLS_Intro>infowin
+3 NLS: NLS_LANG Parameter=APX_NLS_LANG_Param>infowin
+3 NLS: What is the Default Language?=APX_NLS_Default>infowin
+3 NLS:Default Language, Territory, and Character Sets=APX_NLS_Terr>infowin
+3 NLS: Alternate Values for NLS_LANG=APX_NLS_Select>infowin
+3 NLS: Possible Language, Territory, and Character Sets=APX_NLS_Param_Lists>infowin
+2 Personal Oracle7 Database Security
+3 Personal Oracle7 Security: Database Passwords=APX_PO7_SECURITY_DATABASE_SECURITY>infowin
+3 Personal Oracle7 Security: Changing the Database Password=APX_PO7_SECURITY_CHANGE_DB_PASS>infowin
+3 Personal Oracle7 for Windows 95 Security: How to Start the Database without a Password=APX_PO7_95_SECURITY_DATABASE_START>infowin
+3 Personal Oracle7 for Windows NT Security: How to Start the Database without a Password =APX_PO7_NT_SECURITY_DATABASE_START>infowin
+3 Personal Oracle7 Security: User Account Password=APX_PO7_SECURITY_USER_ACCOUNT_PASSWORD>infowin
+:include ORA.CNT
+1 Glossary
+2 Glossary=PO7_GLOSSARY>infowin
+:include ORCSPT.CNT

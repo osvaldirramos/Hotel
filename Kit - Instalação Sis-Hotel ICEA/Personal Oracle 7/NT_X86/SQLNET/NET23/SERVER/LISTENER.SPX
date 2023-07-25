@@ -1,0 +1,5 @@
+        (ADDRESS= 
+          (COMMUNITY= SPX.world)
+          (PROTOCOL= SPX)
+          (Service= %host_name%_lsnr)
+        )

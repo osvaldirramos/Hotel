@@ -1,0 +1,409 @@
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:36:50
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:37:22
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:37:30
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:37:58
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 61
+    nt OS err code: 0
+  Time: 14-JUL-04 11:37:58
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 61
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:38:17
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+  Time: 14-JUL-04 11:38:17
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:39:03
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 61
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:39:09
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 61
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 14-JUL-04 11:39:57
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 19-JUL-04 11:08:56
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 19-JUL-04 11:09:02
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 16:57:38
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 16:57:43
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 16:57:44
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 16:57:44
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 17:01:34
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12560
+    TNS-12560: TNS:protocol adapter error
+    ns secondary err code: 0
+    nt main err code: 538
+    TNS-00538: Message 538 not found;  product=NETWORK; facility=TNS
+
+    nt secondary err code: 65
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal OSN connect error 12203, connecting to:
+ (DESCRIPTION=(CONNECT_DATA=(SID=ipv)(CID=(PROGRAM=P_Log_Hotel.exe)(HOST=Windows NT PC)(USER=OsvaldirRamos)))(ADDRESS_LIST=(ADDRESS=(PROTOCOL=ipc)(KEY=Hotel.world))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1521))(ADDRESS=(COMMUNITY=tcp.world)(PROTOCOL=TCP)(Host=192.168.8.30)(Port=1526))))
+
+  VERSION INFORMATION:
+	TNS for 32-bit Windows: Version 2.3.2.1.0 - Production
+	Windows 32 Named Pipes IPC NT Protocol Adaptor for 32-bit Windows: Version 2.3.2.1.3 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 32-bit Windows: Version 2.3.2.1.3 - Production
+  Time: 20-JUL-04 17:02:16
+  Tracing not turned on.
+  Tns error struct:
+    nr err code: 12203
+    TNS-12203: TNS:unable to connect to destination
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 61
+    nt OS err code: 0

@@ -1,0 +1,247 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+  dbint72.ins - V3 installation script
+
+  DESCRIPTION
+    This script installs
+
+  OWNER
+    Zakia Zerhouni
+
+  MODIFIED    DD-MMM-YY  Reason
+  LMurphy     25-APR-96  Modified for 7.3
+  LMurphy     11-DEC-95  Modified for Windows NT and 95
+  LMurphy     19-JUN-95  Modified for Windows 95 GUI
+  LMurphy     23-JAN-95  Modified for use with SQL*Net help
+  zzerhoun    04-JAN-95  Created.
+*****************************************************************************/
+{
+
+  if (doit)
+  {
+      /*****************************
+      Set the VRF-INS script ratchet
+      ******************************/
+      bmp_home = directory_name(current_script);
+      { ui_graphics("%bmp_home%\nav.bmp"); }
+      [ 'DEFAULT: continue(); ]
+
+      ins_ratchet = "7.3.2.1.2";
+
+      ui_product(product_label);
+
+      permit_retry_operations = TRUE;
+
+      execute("%installer_home%\%scr_prefix%.ins");
+
+    /* the list of old versions to check for */
+    old_prod_list = list("%prefix%dbint72");
+
+    /* run the upgrade script */
+    execute("%product_home%\upgrade.ins");
+
+    /* delete old icons */
+    {
+        windows_delete_icons(oldpo7);
+    }
+    [ 'DEFAULT: continue(); ]
+
+     install(w32rsf73);
+      install(evaluate("w32hlpdoc73"));
+
+      /******************
+      Install the product
+      *******************/
+
+      ui_action( instantiate(installing_scripts) );
+      copy(deinst);
+
+      ui_action( instantiate(installing_executables) );
+      copy(exe);
+
+      ui_action( instantiate(installing_dlls) );
+/* remove any old (7.2) language files */
+      remove_file("%ORACLE_HOME%\BIN\poresar.dll");
+      remove_file("%ORACLE_HOME%\BIN\porescs.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresd.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresdk.dll");
+      remove_file("%ORACLE_HOME%\BIN\porese.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresel.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresf.dll");
+      remove_file("%ORACLE_HOME%\BIN\poreshu.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresi.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresja.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresko.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresn.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresnl.dll");
+      remove_file("%ORACLE_HOME%\BIN\porespl.dll");
+      remove_file("%ORACLE_HOME%\BIN\porespt.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresptb.dll");
+      remove_file("%ORACLE_HOME%\BIN\poresru.dll");
+      remove_file("%ORACLE_HOME%\BIN\poress.dll");
+      remove_file("%ORACLE_HOME%\BIN\poressf.dll");
+      remove_file("%ORACLE_HOME%\BIN\poressk.dll");
+      remove_file("%ORACLE_HOME%\BIN\porestr.dll");
+      remove_file("%ORACLE_HOME%\BIN\poreszhs.dll");
+      remove_file("%ORACLE_HOME%\BIN\poreszht.dll");
+      copy(dll,nls_abbreviation);
+      copy(smpldir);
+      copy(ocx);
+
+      if (copy_sample)
+      {
+    	copy(sample, "");
+        if (under_win_95)
+    	{
+    		copy(sample, "95");
+    	}
+      }
+
+      if (exists("%ORACLE_HOME%\HELP\po7.gid"))
+	    remove_file("%ORACLE_HOME%\HELP\po7.gid");
+
+      if (exists("%ORACLE_HOME%\HELP\nav7.gid"))
+	    remove_file("%ORACLE_HOME%\HELP\nav7.gid");
+
+      ui_action( instantiate(installing_doc) );
+      copy(help,nls_abbreviation);
+
+      permit_retry_operations = FALSE;
+
+      ui_action( instantiate(registering_ocx) );
+      { spawn("%ORACLE_HOME%\bin\regsvr32.exe /s %ORACLE_HOME%\bin\mmtx32.ocx"); }
+      [ 'NO_RESPONSE: continue();
+	  'INVALID_FILE_NAME, 'OS_ERROR:
+	  {
+		information_dialog(ocx_err);
+	  }
+      ]
+
+      permit_retry_operations = TRUE;
+
+      ui_action( instantiate(modifying_config) );
+
+      { win32_create_key("HKEY_CURRENT_USER", "Software\ORACLE"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_create_key("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_create_key("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Local"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_set_value("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Local", "Connection", "PO7/PO7@2:"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_create_key("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Olite"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_set_value("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Olite", "DefSchema", "OOT_SCH"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      { win32_set_value("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Olite", "POL_DSRC", "POLite"); }
+      [ 'INVALID_KEY, 'PERMISSION_DENIED, 'OS_ERROR: continue(); ]
+
+      /*************************
+      Modify Configuration files
+      **************************/
+	
+      permit_retry_operations = FALSE;
+
+      if (set_nav72)
+      {
+	    modify("NAV72",nav72,ora_config,(product_filename(current_product)));
+      }
+
+      if (set_mshelp)
+      {
+	    ui_action(instantiate(modifying_config));
+	    modify("MSHELP",mshelp,ora_config,(product_filename(current_product)));
+      }
+
+      permit_retry_operations = FALSE;
+      map_line_to_add = "%quotation_mark%%quotation_mark%       %quotation_mark%PO7.EXE%quotation_mark%    %quotation_mark%%%oracle_home%%\BIN\%quotation_mark% 435200 false        false   false            00         00   00 %quotation_mark%%nav_group_name%%quotation_mark%            %quotation_mark%%ora_navigate%%quotation_mark%           %quotation_mark%%%oracle_home%%\BIN\PO7.exe%quotation_mark%";
+      dependent_keys = "NAV72";
+      { execute("%installer_home%\registry.ins");}
+      [ 'DEFAULT(a,b): CONTINUE(); ]
+
+      if (registered("%prod_prefix%rdbms72"))
+      {
+          {
+          rdbms72_ver = registry_version(registration("%prod_prefix%rdbms72"));
+          if (under_win_95)
+            if (same_version(rdbms72_ver,"7.2.2.3.1", 4))
+              modify("PO7","YES",ora_config, product_filename(current_product));
+          }
+          [
+            'DEFAULT(a,b): continue();
+          ]
+
+      }
+
+      if (registered("%prod_prefix%po7"))
+      {
+         if (registered("%prod_prefix%dbint72") && not(version_status == 'reinstall))
+         {
+             if (win32_key_exists("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Personal Oracle7 Navigator"))
+             {
+                  loc = product_location(current_product);
+                  spawn("%product_home%\%loc%\nav72ren.exe");
+             }
+
+              windows_delete_icons(oldpo7);
+              windows_create_icons(newpo7);
+
+             unreference(registration("%prod_prefix%po7"),registration("%prod_prefix%dbint72"));
+             if (not(registered("%prod_prefix%rdbms72") || registered("%prod_prefix%util72")))
+             {
+				if (registered("%prod_prefix%hlpdoc72"))
+				{
+						  unreference(registration("%prod_prefix%hlpdoc72"),registration("%prod_prefix%po7"));
+				}
+		
+                unregister(registration("%prod_prefix%po7"));
+                {
+                  remove_file("%installer_home%\po7.map");
+                  remove_file("%installer_home%\po7.dei");
+                }
+                [ 'DEFAULT: continue(); ]
+             }
+		
+	         if (under_win_95)
+                map_line_to_add = "%quotation_mark%%quotation_mark%  %quotation_mark%PO7.EXE%quotation_mark%    %quotation_mark%%%oracle_home%%\BIN\%quotation_mark% 435200 false        false   false            00         00   00 %quotation_mark%Personal Oracle7 for Windows 95%quotation_mark% %quotation_mark%%ora_navigate%%quotation_mark%           %quotation_mark%%%oracle_home%%\BIN\PO7.exe%quotation_mark%";
+             else
+                map_line_to_add = "%quotation_mark%%quotation_mark%  %quotation_mark%PO7.EXE%quotation_mark%    %quotation_mark%%%oracle_home%%\BIN\%quotation_mark% 435200 false        false   false            00         00   00 %quotation_mark%Personal Oracle7 for Windows NT%quotation_mark% %quotation_mark%%ora_navigate%%quotation_mark%           %quotation_mark%%%oracle_home%%\BIN\PO7.exe%quotation_mark%";
+             dependent_keys = "NAV72";
+             { execute("%installer_home%\registry.ins");}
+             [ 'DEFAULT(a,b): CONTINUE(); ]
+
+      }
+     }
+
+     if (registered("%prod_prefix%hlpdoc73") )
+	     {
+                unregister(registration("%prod_prefix%hlpdoc73"));
+	     }
+
+	 if (registered("%prod_prefix%dbint72") )
+	     {
+                unregister(registration("%prod_prefix%dbint72"));
+	     }
+
+
+      /*******************
+        Register the product
+      ********************/
+      ui_action( instantiate(registering) );
+      register(current_product);
+
+      if (member(selected_products,current_product))
+        reference(current_product);
+	
+      reference(w32rsf73, current_product);
+      reference(evaluate("w32hlpdoc73"), current_product);
+    }
+}
+

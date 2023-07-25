@@ -1,0 +1,400 @@
+... 
+... $Header: explain.doc 7000500.1 91/05/30 13:18:18 v7dev Generic<base> $ explain.doc 
+... 
+
+
+
+EXPLAIN Facility
+
+MOTIVATION
+
+    There is a need for users to be able to determine the steps the system
+takes in performing various operations on a database. The EXPLAIN facility
+provides users with a convenient mechanism for getting this information.
+The facility stores this information in a standard database table that can
+be manipulated with standard SQL statements.
+
+
+
+SYNTAX 
+
+    The following syntax is based on the syntax used by DB2 for their
+EXPLAIN facility:
+
+	EXPLAIN PLAN [SET STATEMENT_ID [=] <string literal>]
+	[INTO <table_name>]
+	FOR <sql_statement>
+
+where
+
+	STATEMENT_ID - a unique optional identifier for the statement;
+
+	INTO - allows user to save the results of the analysis in
+	  the specified table.  The table must conform to the format
+	  for the table used to store the analysis ( see TABLE FORMATS
+	  section for a description of the table format ).  If this 
+	  clause is not specified, the system will then attempt to store
+	  the information in a table named <user_id>.PLAN_TABLE .  If
+	  the explicit or implicit table does not exist the EXPLAIN
+	  command will fail.
+          
+	<sql statement> - an insert, delete, update, or query statement;
+	  
+
+TABLE FORMATS
+
+Core Table Format
+
+The core table used to represent the plan information consists of the
+following fields:
+
+STATEMENT_ID - An identifier associated with the statement.  If not set by
+    the user, the identifier will be NULL.  Note that a user may 
+    identify a statement by the timestamp field.
+
+TIMESTAMP - The date and time when the statement was analyzed.
+
+REMARKS - Any comment the user wishes to associate with this step of
+	  the analysis.
+
+OPERATION - the name of the operation being performed.  The following table
+    provides a listing of the operations described by the facility.
+
+   	Operation	Description
+	---------------------------------------------------------------
+	And-Equal	A retreival utilizing intersection of
+			  rowids from index searches
+	Connect by	A retrieval that is based on a tree walk
+	Concatenation	A retrieval from a group of tables.  It is
+			essentially a UNION ALL operation of the
+			sources.  Used for OR operations.
+	Counting	A node that is used to count the number of 
+			  rows returned from a table.  Used for queries
+			  that use the ROWNUM meta-column.
+	Filter		A restriction of the rows returned from a table
+	First Row	A retrieval of only the first row
+	For Update      A retreval that is used for updating
+	Index		A retrieval from an index
+	Intersection	A retrieval of rows common to two tables
+	Merge Join	A join utilizing merge scans
+	Minus		A retrieval of rows in Source 1 table but not in
+			  Source 2 table
+	Nested Loops	A join utilizing nested loops.  Each value in the
+			  first subnode is looked up in the second subnode.
+			  This is often used when one table in a join is 
+			  indexed and the other is not.
+	Project		A retrieval of a subset of columns from a table
+	Remote		A retrieval from a database other than the current
+			  database
+	Sequence	An operation involving a sequence table
+	Sort		A retrieval of rows ordered on some column or group
+			  of columns
+	Table		A retrieval from a base table
+	Union		A retrieval of unique rows from two tables
+	View		A retrieval from a virtual table
+	-------------------------------------------------------------------
+
+Note that the operation shown when counting the number of rows
+returned by a query (i.e. select count(*)) is SORT.  This is due to
+the way that COUNT is implemented internally.  The table will not
+really be sorted.
+
+	
+OPTIONS - an option that modifies the operation, e.g., 
+	OUTER option on join operations, rationale for sorting, type
+	of index scan, type of filter, etc.  The following table
+	provides a list of the options for the operations that have
+	options.
+
+	OPERATION    OPTIONS               DESCRIPTION
+        ---------------------------------------------------------------------
+        Index        UNIQUE KEY         Unique key lookup on index
+                     RANGE              Index range scan
+        Merge Join   OUTER              Join is an outer join
+        Nested Loops OUTER              Join is an outer join
+        Sort         DISTINCT           Sort is to produce distinct values
+                     GROUP BY           Sort is for grouping operation
+                     JOIN               Sort is for merge join
+                     ORDER BY           Sort is for order by
+        Table        BY ROWID           Table scan is by rowid
+                     FULL               Sequential table scan
+                     CLUSTER            Table scan by cluster key
+        ---------------------------------------------------------------------
+
+OBJECT_NODE - the name of the node that owns the database object.
+
+OBJECT_OWNER - the name of the schema the owns the database object.
+
+OBJECT_NAME - the name of the database object.
+
+OBJECT_TYPE - a modifier that provides descriptive information about
+    the database object, e.g., NON-UNIQUE for indexes, etc.
+
+OBJECT_INSTANCE - a number corresponding to the ordinal position of the
+    object as it appears in the original query.  The numbering proceeds
+    from left to right, outer to inner with respect to the original 
+    query text.  Note that at this level, view expansion will result in
+    rather interesting object instance numbers.  We will be addressing this
+    issue fully in future releases.
+
+
+SEARCH_COLUMNS - the number of leading columns used when searching an
+    index.
+
+ID - a number assigned to this operation in the tree.
+    Corresponds to a preorder traversal of the row source tree.
+
+PARENT_ID - the number assigned to the previous operation that
+    recieves information from this operation.  This field combined with the
+    ID field allows users to do a treewalk of the specified
+    plan with the CONNECT BY statement.
+
+POSITION - the position this database object occupies for the previous 
+    operation.
+
+OTHER - other information that is specific to the row source that a user
+    may find useful.  For example, the select statement to a remote node, etc.
+
+Sample Table Definition
+
+
+create table PLAN_TABLE (
+	statement_id 	char(30),
+	timestamp    	date,
+	remarks      	char(80),
+	operation    	char(30),
+	options        	char(30),
+	object_node  	char(30),
+	object_owner 	char(30),
+	object_name  	char(30),
+	object_instance numeric,
+	object_type     char(30),
+	search_columns  numeric,
+	id		numeric,
+	parent_id	numeric,
+	position	numeric
+	other           long);
+
+An SQL script to create this table resides in file xplainpl.sql in the same
+directory containing the file catalog.sql.  This table must reside in the
+current schema unless you use the optional INTO clause of the EXPLAIN
+command.
+
+EXAMPLES
+
+    Suppose we issue the following statements:
+
+	EXPLAIN PLAN 
+	SET STATEMENT_ID = 'query1'
+	INTO QUERY_PLANS
+	FOR SELECT * FROM T1,T2,T3 WHERE T1.F1 = T2.F1 AND T2.F2 = T3.F2;
+
+	SELECT OPERATION, OPTIONS, OBJECT_NAME, ID, 
+	  PARENT_ID, POSITION
+          FROM QUERY_PLANS 
+	  WHERE STATEMENT_ID = 'query1'
+          ORDER BY ID;
+
+The following output would be created:
+
+OPERATION     OPTIONS  OBJECT_NAME      ID          PARENT_ID     POSITION
+--------------------------------------------------------------------------
+MERGE JOIN                      	1
+MERGE JOIN                              2              1           1
+SORT          JOIN                      3              2           1
+TABLE ACCESS  FULL    T1                4              3           1
+SORT          JOIN                      5              2           2
+TABLE ACCESS  FULL    T2                6              5           1
+SORT          JOIN                      7              1           1
+TABLE ACCESS  FULL    T3                8              7           1
+
+8 RECORDS selected
+
+
+   Suppose that an index is created on field F1 on table T1 and the
+following statements are issued:
+
+	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query2'
+	INTO QUERY_PLANS
+	FOR SELECT * FROM T1 WHERE F1 > 1;
+
+ 	
+ 	SELECT OPERATION, OPTIONS, OBJECT_NAME, OBJECT_TYPE, SEARCH_COLUMNS, 
+	  ID, PREVIOUS_ID
+ 	  FROM QUERY_PLANS WHERE
+	  STATEMENT_ID='query2'
+          ORDER BY ID;
+
+The following output is produced:
+
+OPERATION   OPTIONS  OBJECT_NAME OBJECT_TYPE SEARCH_COLUMNS    ID    POSITION
+-----------------------------------------------------------------------------
+TABLE SCAN   BY ROWID T1                                       1
+INDEX SCAN   RANGE    IT1        NON-UNIQUE     1              2           1
+
+2 RECORDS selected
+
+
+    With the same conditions as before, suppose we issue the following
+which demonstrates an index only retrieval:
+
+	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query3'
+	INTO QUERY_PLANS
+	FOR SELECT F1 FROM T1 WHERE F1 > 1;
+
+ 	SELECT OPERATION, OPTIONS, OBJECT_NAME, OBJECT_TYPE, SEARCH_COLUMNS,
+	  ID
+	  FROM QUERY_PLANS WHERE
+	  STATEMENT_ID='query3';
+
+The following output is produced: 
+
+OPERATION   OPTIONS  OBJECT_NAME   OBJECT_TYPE  SEARCH_COLUMNS ID
+--------------------------------------------------------------------------
+INDEX SCAN   RANGE    IT1          NON-UNIQUE        1
+
+1 RECORDS selected
+
+    The next example illustrates the output if a grouping operation is
+specified in the statement:
+
+	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query4'
+	INTO QUERY_PLANS
+	FOR SELECT AVG(F1),F2 FROM T1 GROUP BY F2;
+
+	SELECT OPERATION, OPTIONS, OBJECT_NAME, ID,
+	  PARENT_ID
+	  FROM QUERY_PLANS WHERE STATEMENT_ID = 'query4'
+	  ORDER BY ID;
+
+OPERATION     OPTIONS    OBJECT_NAME            ID          PARENT_ID
+---------------------------------------------------------------------
+SORT	      GROUP BY                          1
+TABLE SCAN    FULL	T1	   	        2             1
+
+2 RECORDS selected
+
+    The next example illustrates the ouptut if DISTINCT is specified in the
+statement:
+
+	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query5'
+	INTO QUERY_PLANS
+	FOR SELECT DISTINCT F1 FROM T1;
+
+	SELECT OPERATION, OPTIONS, OBJECT_NAME, ID,
+	  PREVIOUS_ID
+	  FROM QUERY_PLANS WHERE STATEMENT_ID = 'query5'
+	  ORDER BY ID;
+
+OPERATION     OPTIONS    OBJECT_NAME           ID   PREVIOUS_ID
+--------------------------------------------------------------
+SORT	      DISTINCT                         1
+TABLE SCAN    FULL	T1                     2         1
+
+2 RECORDS selected
+
+    The next example illustrates the output if a subquery is specified in
+the statement:
+
+	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query6'
+	INTO QUERY_PLANS
+	FOR SELECT * FROM T1 WHERE F1 < ( SELECT F2 FROM T2 WHERE F1=3);
+
+	SELECT OPERATION, OPTIONS, OBJECT_NAME, ID,
+	  PARENT_ID, POSITION
+	  FROM QUERY_PLANS WHERE STATEMENT_ID = 'query6'
+	  ORDER BY ID;
+
+OPERATION     OPTIONS  OBJECT_NAME        ID          PARENT_ID  POSITION
+-------------------------------------------------------------------------
+FILTER          OUT                       1
+TABLE SCAN      FULL  T1                  2            1          1
+TABLE SCAN      FULL  T2                  3            1          2
+
+3 RECORDS selected
+
+The final example displays a complex query whose output is sent to the
+default plan table. ( It is assumed that this table has been created before
+issuing the statement.)
+
+  	EXPLAIN PLAN
+	SET STATEMENT_ID = 'query7'
+	FOR SELECT * FROM T1,T2 WHERE T1.F1 = T2.F1 UNION
+	    SELECT * FROM T2,T3 WHERE T2.F1 = T3.F1;
+
+	SELECT OPERATION, OPTIONS, OBJECT_NAME, ID, PARENT_ID, POSITION
+	  FROM PLAN_TABLE WHERE STATEMENT_ID = 'query7'
+	  ORDER BY ID;
+
+The following output is produced:
+
+OPERATION  OPTIONS     OBJECT_NAME     ID          PARENT_ID      POSITION
+--------------------------------------------------------------------------
+PROJECTION                             1
+UNION                                  2             1              1
+SORT        DISTINCT                   3             2              1
+NEST LOOP                              4             3              1
+TABLE SCAN  BY ROWID   T1              5             4              1
+INDEX SCAN  RANGE      IT1             6             5              1
+TABLE SCAN  FULL       T2              7             4              2
+SORT        DISTINCT                   8             2              2
+MERGE JOIN                             9             8              1
+SORT        JOIN                       10            9              1
+TABLE SCAN  FULL       T2              11            10             1
+SORT        JOIN                       12            9              2
+TABLE SCAN  FULL       T3              13            12             1
+
+13 RECORDS selected
+
+The following example is based on the previous query.  It illustrates the
+use of the treewalking capability in Oracle's version of SQL.
+
+        SELECT LPAD(' ',2*LEVEL)||OPERATION,OPTIONS, OBJECT_NAME
+	FROM PLAN_TABLE WHERE STATEMENT_ID='query7'
+	CONNECT BY PRIOR ID = PARENT_ID
+           and STATEMENT_ID = 'query7'
+ 	START WITH ID = 1
+           and STATEMENT_ID = 'query7'
+	ORDER BY ID;
+
+
+LPAD(' ',2*LEVEL)||OPERATION  
+------------------------------------------------------------------------------
+                 OPTIONS   OBJECT_NAME 
+-------------------------------------
+PROJECTION                        
+
+  UNION                           
+
+    SORT
+                 DISTINCT
+      NEST LOOP                   
+
+        TABLE SCAN
+                 BY ROWID      T1 
+      	    INDEX SCAN
+                 RANGE         IT1 
+        TABLE SCAN
+	         FULL          T2    
+    SORT
+                 DISTINCT
+      MERGE JOIN                     
+
+        SORT   
+                 JOIN
+          TABLE SCAN  
+                 FULL           T2  
+        SORT
+                 JOIN
+          TABLE SCAN 
+                  FULL          T3  
+
+13 RECORDS selected
+
+
+

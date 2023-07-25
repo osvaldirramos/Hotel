@@ -1,0 +1,25 @@
+select vo.FICHA, vo.ANO, vo.TIPO, vo.CONTROLE, vo.TERMO, vo.DATACADASTRO, vo.USUARIOCADASTRO, vo.EXPIROU, 
+       vo.DATAEXPIRACAO, vo.USUARIOEXPIRACAO, vo.EXTRAVIO, vo.DATAEXTRAVIO, vo.DATACANCELAMENTOSI, vo.USUARIOEXTRAVIO,
+       vv.Posto, vv.nome 
+From Voucher vo, Voucher_View vv
+Where vo.FICHA = vv.FICHA
+and   vo.ANO = vv.ANO
+
+
+
+Select * from Voucher_View
+
+
+
+
+
+
+Create View Voucher_View
+as
+Select hi.IDENTIDADE, hi.FICHA, hi.ano, hi.PREDIO, hi.APTO, hi.DATAENTRADA, hi.DATASAIDA, hi.USUARIO_ENTRADA, ho.NOME, ho.NOME_GUERRA,
+       ho.CPF, ho.POSTO, ho.EMAIL, ho.OM_ORIGEM, ho.TELEFONE_RESIDENCIAL, ho.TELEFONE_FUNCIONAL, ho.TELEFONE_CELULAR
+From  historico hi, hospede ho
+Where hi.IDENTIDADE = ho.IDENTIDADE
+
+
+

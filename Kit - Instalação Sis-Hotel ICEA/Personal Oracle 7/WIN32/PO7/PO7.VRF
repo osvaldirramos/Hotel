@@ -1,0 +1,86 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/*****************************************************************************
+  NAME
+    po7.vrf - V3 analysis/product configuration script for the
+	      Windows 95 PO7 parent product
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for the
+    installation of the Windows 95 PO7 parent product
+	
+  OWNER
+	Bryan Sabol
+
+  MODIFIED	MM/DD/YY	Reason
+    mrlai   10/22/96    Modified for PO7 7.3.2.2.0 release(files shared between NT & 95)
+    ctow    04/25/96	Modified for PO7 7.3 Release
+	LMurphy 06/01/95	Modified for use with Windows 95 PO7
+	LMurphy 01/24/94        Modified for use with On-Line Help
+  	bsabol	03/21/94	Created
+*****************************************************************************/
+
+{
+    if (operating_system == "win95")
+        prod_pref = "w95";
+    else
+        prod_pref = "nt";
+
+    { doit = execute("%installer_home%\%operating_system%.vrf"); }
+	[
+	'UNBOUND_VARIABLE:
+	{
+		required_version = product_version(evaluate("%prod_pref%instver"));
+		temp = explode(required_version,".");
+		required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+		signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+	}
+	]
+
+	if (doit)
+	{
+
+
+        	/*****************************
+		Set the VRF-INS script ratchet
+		******************************/
+
+        vrf_ratchet = "7.3.2.2.0";
+
+		permit_retry_operations = FALSE;
+
+		installing_scripts = nls("installing_scripts",
+                               "Installing %%product_label%% Scripts...");
+		installing_components = nls("installing_components",
+                               "Installing %%product_label%% Components...");
+		registering = nls("registering","Registering %%product_label%%...");
+		total_sum = 0;
+
+		/***************************
+		Return appropriate file size
+		****************************/
+
+		child_products = all_child_products(current_product);
+
+
+                if(member(selected_products, current_product))
+		{
+                        while(not(empty(child_products)))
+			{
+				total_sum = total_sum + verify(first(child_products));
+				child_products = rest(child_products);
+			}
+                }
+
+		child_products = all_child_products(current_product);
+                return(sum(deinst, nls_abbreviation) + verify(w32hlpdoc73) + total_sum);
+	}
+	else
+	{
+		refresh_map_file = FALSE;
+		return(0);
+	}
+}
+

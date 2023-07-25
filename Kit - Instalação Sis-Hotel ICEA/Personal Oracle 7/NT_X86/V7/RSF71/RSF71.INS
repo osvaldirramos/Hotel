@@ -1,0 +1,183 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rsf71.ins - WinNT V3 installation script for ORACLE Required Support Files.
+
+  DESCRIPTION
+    This script installs the RSF files.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    DD-MMM-YY Reason
+    vraja     08/13/96  Modified for installable 7.1.3.3.23
+    syau      07/01/94  7.1.3
+    HA!       04/28/94  7.1.2 and 3.0.10.2
+    trodgers  10-APR-92 Created.
+*****************************************************************************/
+{
+  /**************************************************************************
+      Start main logic...
+   **************************************************************************/
+  if (doit)
+    {
+      ins_ratchet = "7.1.3.3.24";
+
+      execute("%installer_home%\%operating_system%.ins");
+
+      permit_retry_operations = TRUE;
+
+      ui_action(instantiate(installing_scripts));
+      copy(deinstl);
+       
+      if (registered("ntrsf70"))
+        copy(deinstl70);
+
+      /* On Windows95 we don't copy ORASPAWN.DLL as part of the RSFs. Do this */
+      /* only for Windows NT. The same goes for the .SYM files                */
+      if ( platform() == "nt")
+      {
+       ui_action(instantiate(installing_dlls));
+       permit_retry_operations = FALSE;
+       if (not(registered("ntrdbms72")) && not(registered("ntrdbms73")) && 
+           not(registered("ntrdbms80")))
+       {
+           copy_oraspwn = TRUE ;        
+       }
+       else
+       {
+           copy_oraspwn = FALSE ;        
+       }
+
+       if ( copy_oraspwn == TRUE){ copy(oraspwn); }
+       [ 
+        'WRITE_ERROR: signal('FAILURE, "Installation terminated. Please stop all Oracle services and applications before installing.");
+       ]
+       { copy(dll); }
+       [  
+        'WRITE_ERROR: signal('FAILURE, "Installation terminated. Please stop all Oracle services and applications before installing.");
+       ]
+
+       permit_retry_operations = TRUE;
+       ui_action(instantiate(installing_sym));
+       copy(sym);
+      }
+      else  /* Windows95 */
+      {
+        ui_action(instantiate(installing_dlls));
+        permit_retry_operations = FALSE;
+        { copy(dll); }
+        [  
+         'WRITE_ERROR: signal('FAILURE, "Installation terminated. Please stop all Oracle applications before installing.");
+        ]                   
+        permit_retry_operations = TRUE;
+      }
+
+      /* check if MSVC Runtime DLLs MSVCRT10.DLL we have is newer than the one that are already there */
+      ui_action(instantiate(installing_msvcdlls));
+      copy(msvcdlls) ;
+      msvcrt10 = "%winsys%\msvcrt10.dll";
+      msvcrt10new = "%winsys%\msvcrt10.new";
+      msvcrt10old = "%winsys%\msvcrt10.old";
+      msvcrt20 = "%winsys%\msvcrt20.dll";
+      msvcrt20new = "%winsys%\msvcrt20.new";
+      msvcrt20old = "%winsys%\msvcrt20.old";
+
+      if (not(exists(msvcrt10)))
+      {
+	{ move_file(msvcrt10new, msvcrt10); }
+	[ 'DEFAULT: copy_file(msvcrt10new, msvcrt10); ]
+      }
+      else
+      {
+	{ version_no = windows_file_version(msvcrt10); }
+	[ 'OS_ERROR: version_no = "0.0.0.0.0.0.0"; ]
+
+	{ version_new = windows_file_version(msvcrt10new); }
+	[ 'OS_ERROR: version_new = "0.0.0.0.0.0.0"; ]
+
+	if (earlier_version(version_no, version_new))
+	{
+	  {
+  	   move_file(msvcrt10, msvcrt10old);
+	   move_file(msvcrt10new, msvcrt10);
+	  }
+	  [ 'DEFAULT: copy_file(msvcrt10new, msvcrt10); ]
+	}
+	else
+	{
+	  { remove_file(msvcrt10new); }
+	  [ 'DEFAULT: continue(); ]
+	}
+      }
+
+      if (not(exists(msvcrt20)))
+      {
+	{ move_file(msvcrt20new, msvcrt20); }
+	[ 'DEFAULT: copy_file(msvcrt20new, msvcrt20); ]
+      }
+      else
+      {
+	{ version_no = windows_file_version(msvcrt20); }
+	[ 'OS_ERROR: version_no = "0.0.0.0.0.0.0"; ]
+
+	{ version_new = windows_file_version(msvcrt20new); }
+	[ 'OS_ERROR: version_new = "0.0.0.0.0.0.0"; ]
+
+	if (earlier_version(version_no, version_new))
+	{
+	  {
+	  move_file(msvcrt20, msvcrt20old);
+	  move_file(msvcrt20new, msvcrt20);
+	  }
+	  [ 'DEFAULT: copy_file(msvcrt20new, msvcrt20); ]
+	}
+	else
+	{
+	  { remove_file(msvcrt20new); }
+	  [ 'DEFAULT: continue(); ]
+	}
+      }
+      
+      ui_action(instantiate(installing_msbs));
+      copy(msg, nls_abbreviation);
+
+      ui_action(instantiate(installing_sql));
+      copy(sql);
+
+      if ( platform() == "nt")
+      {    
+        if (doSmartStart)
+        {
+          ss_decrypt_file(product_key,
+                          "%s_location%%operating_system%/V7/RSF/CORENT23.DLL",
+                          "%oracle_home%\bin\CORENT23.DLL");
+          if (copy_oraspwn)
+          {
+            ss_decrypt_file(product_key,
+                            "%s_location%%operating_system%/V7/RSF/ORASPAWN.DLL",
+                            "%oracle_home%\bin\ORASPAWN.DLL");
+          }
+        }
+      }
+
+      if (set_rdbms71)
+        {
+          ui_action(instantiate(modifying_config));
+          modify("RDBMS71",RDBMS71,ora_config,"=");
+        }
+
+      if (set_plsql21)
+        {
+          ui_action(instantiate(modifying_config));
+          modify("PLSQL21",PLSQL21,ora_config,"=");
+        }
+
+      ui_action(instantiate(registering));
+      register(current_product);
+      if (member(selected_products,current_product))
+        reference(current_product);
+
+      permit_retry_operations = FALSE;
+    }
+}

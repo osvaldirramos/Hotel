@@ -1,0 +1,133 @@
+object Form_ManualOnLine: TForm_ManualOnLine
+  Left = 64
+  Top = 209
+  Width = 945
+  Height = 341
+  BorderIcons = []
+  Caption = 'Sis-Hotel --> Manual On-Line'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -10
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  Icon.Data = {
+    0000010001002020100000000000E80200001600000028000000200000004000
+    0000010004000000000080020000000000000000000000000000000000000000
+    000000008000008000000080800080000000800080008080000080808000C0C0
+    C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF000FFF
+    FFFFFFF8BBBBBBB8FFFFFFFFFF000FFFFFFFFBBBB77887BBBBFFFFFFFF000FFF
+    FFFBBB8888FF88888BB8FFFFFF000FFFFFBB7E888EEEEE88887BBFFFFF000FFF
+    FBBEFE777788888778FEBBFFFF000FFFBBE88E88888788888E8FEB8FFF000FF8
+    BEFEE86F88F78FF8E8E8F7BFFF000FFB788E8EC788878886CC8E88BBFF000F8B
+    E8E8ECEC8888887CECE8EE8BFF000FBB88EECECC688888CCCECEE88BFF000FB7
+    8E8CEECEC87786CECE6C8887BF000FB88EECECECC883FCC6ECECEEF8BF0008B8
+    8EECECECCECCCECCECCCEE88BF0008BE8EECCC8EEF8CCCE88E8CE888BF0008BE
+    E8688F8CEC8F8CE8888CE8E7BF0008BEE8E7C88CE77E88E8876E68E8BF0008BE
+    EEE66CEEECCCC6CEEEECEEE8BF0008BEEE867CE8C8EE88C6ECC88EE8BF0008BE
+    EE8C68EEEE88EECECECC8EE8BF0008BEEEE8EEECEE776EECEEC8EEE8BF0008BE
+    EEEE8ECECC787CCEECE8EEE8BF0008BEEEEE8ECCEC898EECCE8EEEE8BF0008BE
+    EEEEEE8CCC888CCC88EEEEE8BF0008BEEEEEEEE88E8F8E88EEEEEEE8BF0008BE
+    8888888888E8E888888888E8BF0008B7777777777777777777777777BF0008BC
+    CCC3CCCC88C8FEC88FCFCE86BF0008BCC63336CC88EF6FCFEECFFFE6BF0008BC
+    6336336C888FCCCF88C88FC7BF0008BC3666663C88CFFFCF88CCF8C6BF0008B6
+    666666666666666666666667BF0008BBBBBBBBBBBBBBBBBBBBBBBBBBBF008000
+    0003800000038000000380000003800000038000000380000003800000038000
+    0003800000038000000380000003800000038000000380000003800000038000
+    0003800000038000000380000003800000038000000380000003800000038000
+    000380000003800000038000000380000003800000038000000380000003}
+  OldCreateOrder = False
+  Position = poScreenCenter
+  WindowState = wsMaximized
+  OnActivate = FormActivate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ToolBar_BotoesIniciais: TToolBar
+    Left = 0
+    Top = 0
+    Width = 929
+    Height = 34
+    ButtonHeight = 30
+    ButtonWidth = 33
+    Caption = 'ToolBar_BotoesIniciais'
+    Flat = True
+    Images = DM.ImageList_Principal
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    object ToolButton_Separator1: TToolButton
+      Left = 0
+      Top = 0
+      Width = 14
+      Caption = 'ToolButton_Separator1'
+      ImageIndex = 5
+      Style = tbsSeparator
+    end
+    object ToolButton_Relatorio: TToolButton
+      Left = 14
+      Top = 0
+      Hint = 'Imprime o Manual On-Line'
+      Caption = 'ToolButton_Relatorio'
+      ImageIndex = 0
+      OnClick = ToolButton_RelatorioClick
+    end
+    object ToolButton1: TToolButton
+      Left = 47
+      Top = 0
+      Width = 18
+      Caption = 'ToolButton1'
+      ImageIndex = 4
+      Style = tbsSeparator
+    end
+    object ToolButton_Retornar: TToolButton
+      Left = 65
+      Top = 0
+      Hint = 'Retornar para Janela anterior.'
+      Caption = 'ToolButton_Retornar'
+      ImageIndex = 2
+      OnClick = ToolButton_RetornarClick
+    end
+    object ToolButton_Windows: TToolButton
+      Left = 98
+      Top = 0
+      Hint = 'Sai do sistema e retorna para sistema operacional.'
+      Caption = 'ToolButton_Windows'
+      ImageIndex = 3
+      OnClick = ToolButton_WindowsClick
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Top = 34
+    Width = 929
+    Height = 268
+    Align = alClient
+    BevelInner = bvLowered
+    BorderWidth = 9
+    TabOrder = 1
+    object WebBrowser_Fig: TWebBrowser
+      Left = 11
+      Top = 11
+      Width = 907
+      Height = 246
+      Cursor = crCross
+      Align = alClient
+      TabOrder = 0
+      ControlData = {
+        4C000000BE5D00006D1900000000000000000000000000000000000000000000
+        000000004C000000000000000000000001000000E0D057007335CF11AE690800
+        2B2E126208000000000000004C0000000114020000000000C000000000000046
+        8000000000000000000000000000000000000000000000000000000000000000
+        00000000000000000100000000000000000000000000000000000000}
+    end
+  end
+  object PrintDialog1: TPrintDialog
+    Left = 240
+    Top = 120
+  end
+  object PageProducer_Fig: TPageProducer
+    HTMLFile = 'C:\Ensino\MANUAL_Usuario.htm'
+    Left = 385
+    Top = 114
+  end
+end

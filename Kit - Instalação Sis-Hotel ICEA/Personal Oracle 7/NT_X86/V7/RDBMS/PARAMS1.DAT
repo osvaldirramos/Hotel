@@ -1,0 +1,152 @@
+always_anti_join 2 NESTED_LOOPS
+audit_trail 2 NONE
+background_dump_dest 2 SRVR
+bitmap_merge_area_size 3 1048576
+blank_trimming 1 FALSE
+cache_size_threshold 3 DRV
+checkpoint_process 1 FALSE
+cleanup_rollback_entries 3 20
+close_cached_open_cursors 1 FALSE
+commit_point_strength 3 1
+compatible 2 7.3.0.0.0
+compatible_no_recovery 2
+control_files 2 SRVR
+cpu_count 3 NOCHG
+create_bitmap_area_size 3 8388608
+cursor_space_for_time 1 FALSE
+db_block_buffers 3 32
+db_block_checkpoint_batch 3 8
+db_block_checksum 1 FALSE
+db_block_lru_extended_statistics 3 0
+db_block_lru_latches 3 DRV
+db_block_lru_statistics 1 FALSE
+db_block_size 3 SRVR
+db_domain 2 WORLD
+db_file_multiblock_read_count 3 8
+db_file_simultaneous_writes 3 4
+db_file_standby_name_convert 2
+db_files 3 SRVR
+db_name 2 SRVR
+dblink_encrypt_login 1 FALSE
+delayed_logging_block_cleanouts 1 TRUE
+discrete_transactions_enabled 1 FALSE
+distributed_lock_timeout 3 60
+distributed_recovery_connection_hold_time 3 200
+distributed_transactions 3 DRV
+dml_locks 3 DRV
+enqueue_resources 3 DRV
+event 2
+fixed_date 2
+gc_db_locks 3 0
+gc_files_to_locks 2
+gc_freelist_groups 3 NA
+gc_lck_procs 3 1
+gc_releasable_locks 3 DRV
+gc_rollback_locks 3 20
+gc_rollback_segments 3 20
+gc_save_rollback_locks 3 20
+gc_segments 3 10
+gc_tablespaces 3 5
+global_names 1 FALSE
+hash_area_size 3 0
+hash_join_enabled 1 TRUE
+hash_multiblock_io_count 3 8
+ifile 4
+instance_number 3 0
+job_queue_interval 3 60
+job_queue_keep_connections 1 FALSE
+job_queue_processes 3 0
+license_max_sessions 3 0
+license_max_users 3 0
+license_sessions_warning 3 0
+log_archive_buffer_size 3 127
+log_archive_buffers 3 4
+log_archive_dest 2 %RDBMS73%\
+log_archive_format 2 %%ORACLE_SID%%%S.%T
+log_archive_start 1 FALSE
+log_block_checksum 1 FALSE
+log_buffer 3 SRVR
+log_checkpoint_interval 3 SRVR
+log_checkpoint_timeout 3 0
+log_checkpoints_to_alert 1 FALSE
+log_file_standby_name_convert 2
+log_files 3 255
+log_simultaneous_copies 3 DRV
+log_small_entry_max_size 3 80
+max_commit_propagation_delay 3 NOCHG
+max_dump_file_size 3 500
+max_enabled_roles 3 20
+max_rollback_segments 3 30
+max_transaction_branches 3 8
+mts_dispatchers 2
+mts_listener_address 2 (address=(protocol=ipc)(key=%s))
+mts_max_dispatchers 3 5
+mts_max_servers 3 20
+mts_multiple_listeners 1 FALSE
+mts_servers 3 0
+mts_service 2
+nls_currency 2
+nls_date_format 2
+nls_date_language 2
+nls_iso_currency 2
+nls_language 2 AMERICAN
+nls_numeric_characters 2
+nls_sort 2
+nls_territory 2 AMERICA
+open_cursors 3 50
+open_links 3 4
+optimizer_mode 2 CHOOSE
+optimizer_percent_parallel 3 0
+oracle_trace_collection_name 2 oracle73
+oracle_trace_collection_path 2 %RDBMS73%\
+oracle_trace_collection_size 3 5242880
+oracle_trace_enable 1 FALSE
+oracle_trace_facility_name 2 oracle73
+oracle_trace_facility_path 2 %RDBMS73%\ADMIN\
+os_authent_prefix 2 OPS$
+os_roles 1 FALSE
+parallel_default_max_instances 3 0
+parallel_max_servers 3 5
+parallel_min_percent 3 0
+parallel_min_servers 3 0
+parallel_server_idle_time 3 5
+partition_view_enabled 1 FALSE
+pre_page_sga 1 NOCHG
+processes 3 25
+recovery_parallelism 3 0
+remote_dependencies_mode 2 timestamp
+remote_login_passwordfile 2 NONE
+remote_os_authent 1 FALSE
+remote_os_roles 1 FALSE
+resource_limit 1 FALSE
+rollback_segments 2
+row_cache_cursors 3 10
+row_locking 2 always
+sequence_cache_entries 3 10
+sequence_cache_hash_buckets 3 7
+serializable 1 FALSE
+session_cached_cursors 3 0
+sessions 3 DRV
+shared_pool_reserved_min_alloc 3 5000
+shared_pool_reserved_size 3 0
+shared_pool_size 3 3500000
+snapshot_refresh_interval 3 60
+snapshot_refresh_keep_connections 1 FALSE
+snapshot_refresh_processes 3 0
+sort_area_retained_size 3 DRV
+sort_area_size 3 65536
+sort_direct_writes 2 AUTO
+sort_read_fac 3 20
+sort_spacemap_size 3 512
+sort_write_buffer_size 3 32768
+sort_write_buffers 3 2
+sql92_security 1 FALSE
+sql_trace 1 FALSE
+temporary_table_locks 3 DRV
+text_enable 1 FALSE
+thread 3 0
+timed_statistics 1 FALSE
+transactions 3 DRV
+transactions_per_rollback_segment 3 30
+user_dump_dest 2 SRVR
+utl_file_dir 2

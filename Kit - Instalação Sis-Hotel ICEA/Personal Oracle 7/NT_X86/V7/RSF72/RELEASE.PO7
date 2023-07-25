@@ -1,0 +1,306 @@
+
+Personal Oracle7 for Windows NT
+Version 7.2 Production
+Release Notes  March 1996
+A43545-1
+
+This document provides various installation and late-breaking
+product information for Personal Oracle7 for Windows NT.
+
+ADDITIONAL INSTALLATION INSTRUCTIONS
+
+SQL*NET Easy Configurations
+---------------------------
+To avoid problems with networking, do not modify the TCP/IP
+sample files, TNSNAMES.ORA, or SQLNET.ORA.  To configure a
+client to connect with an Oracle server that has been 
+configured with Oracle Network Manager for Windows, choose
+Add Database Alias instead of Modify Database Alias in the
+SQL*Net Easy Configuration menu.
+
+  
+Connecting 16-bit Applications
+------------------------------
+Most products running on Windows NT machines (including 
+Personal Oracle7 for Windows NT and the SQL*Net Listener)
+are 32-bit Windows NT applications.
+
+However, you can also use the Windows NT subsystem-Windows
+on Win32 (WOW)-to use 16-bit Oracle Windows tools or your 
+16-bit applications. (Windows on Win32 is installed 
+automatically when you install the Windows NT operating
+system.). 
+
+The interaction between the 16-bit applications for Windows
+running on WOW and your local Personal Oracle7 database for
+Windows NT is called loopback. You must install the same 
+version of SQL*Net (V1 or V2) along with the appropriate
+protocol adapter software for both Windows NT and Windows
+in order for loopback to occur. 
+
+Additional Information:  You can always achieve loopback
+by using SQL*Net V2 along with the Oracle Named Pipes
+Protocol Adapter or the Oracle TCP/IP Protocol Adapter 
+for Windows NT and Windows. Remember that you need a 
+network card if you use SQL*Net V2 with the TCP/IP 
+protocol adapter.
+
+
+KNOWN PROBLEMS
+
+Using AUTOEXTEND
+-----------------
+On both FAT and NTFS, the database filesize limit 
+is 2 gigabytes. This limit may be violated auto-
+matically by a datafile that is originally below
+2 gigabytes, but crosses the supported limit due
+to the use of AUTOEXTEND.
+ 
+In order to avoid this, when you turn on the 
+AUTOEXTEND feature, make sure that you specify 
+MAXSIZE 2047M (instead of MAXSIZE UNLIMITED, 
+which is the default).
+
+
+Personal Oracle7 Navigator
+--------------------------
+In the data grid, the maximum data length for each
+column is 1000.  If a column has more data than 1000
+bytes, it will be truncated to 1000.  Also, you 
+cannot enter more than 1000 bytes to a column.
+ 
+Columns with the following data types will not 
+display the data.  Instead, the whole column will 
+show an "N/A" string.  Further, the column is 
+read-only, i.e., you cannot enter data into the column. 
+•   RAW 
+•   LONGRAW 
+•   LONG 
+
+Non-alphabetic characters are not supported if they are
+used as the starting character of an object name. For 
+example, the object name _EMP is not accepted. Also 
+quotation marks in the object name are not supported.  
+For example, the object name "abc" is not supported. 
+
+
+Replication 
+-----------
+A problem has been identified in the statements being used
+to propagate 'D'-style replication transactions.  This is a
+known problem that has been fixed in DBMS version 7.2.3.  
+The problem may manifest itself as a performance problem 
+under specific heavy load conditions in the deferred RPC
+queue. This will NOT effect data integrity; it will merely
+slow performance.
+
+A temporary (partial) patch can be implemented to alleviate
+the problem by creating an index.  Use the following SQL 
+statement: 
+
+create index system.def$_partialbugfix284431 on system.def$_calldest
+(deferred_tran_id, dblink); 
+
+
+Creating Snapshots
+-------------------
+You can only create one kind (either updatable or read-only)
+of snapshot for a particular table. 
+
+
+DOCUMENTATION
+
+Oracle7 Documentation Library
+------------------------------
+The Oracle7 Server Documentation Library is provided in Adobe
+Acrobat-readable files.  If you choose the "Application 
+Developer" option when installing Personal Oracle7 for Windows NT,
+this Documentation set is installed automatically.  If you choose
+the "Runtime (Database only)" option, it is not installed.  
+To view this documentation you must install the Adobe Acrobat
+reader.  You can do this by running Adobe's installation 
+program, Acroread.exe, located in the Acrobat directory of your
+release media.
+ 
+If you wish to access these documentation files off the CD
+rather than installing them on your hard disk (to save space,
+for instance), you may do so by using the following steps: 
+
+1) Install Adobe Acrobat as described above.
+
+2) After installation is complete, navigate to your CD-ROM
+   drive and double-click on the Library PDF file located 
+   in the NT_X86\DOC\PDFDOC72 directory of your release media. 
+
+
+Online Help
+-----------
+If you click on Using Help in the Help drop-down menu, the
+following message appears: 
+ 
+"Cannot find the C:\ORANT\BIN\po7.hlp file. Do you want to
+find this file yourself?"
+
+The location for the po7.hlp file is C:\ORANT\MSHELP.
+
+MISCELLANEOUS
+
+Import, Export, SQL*Loader, and SQL*DBA
+----------------------------------------
+Import, Export, SQL*Loader, and SQL*DBA are installed with
+this product. For information on how to use these utilities,
+please refer to Oracle7 Server Utilities, available online
+as an Adobe Acrobat-readable file.
+
+Differences between Windows 95 and Windows NT
+---------------------------------------------
+In the Windows 95 version of this product, the database 
+starts up whenever you first access the Local Database 
+in the Navigator. This is not the case in Windows NT. 
+Instead, you may get the following error message:
+  
+"ORA 9352 - Windows 32-bit two task driver to spawn new 
+Oracle task." 
+
+This error message indicates that you need to start the
+database. To start the database in Windows NT, you must 
+click the Start Database icon in the Personal Oracle7 
+for Windows NT program group.
+
+
+Migration
+----------
+To successfully migrate data from 7.1 to 7.2, set 
+the remote_login_passwordfile parameter to SHARED in your 
+INITsid.ORA file.
+
+
+Nonblocking Functionality
+-------------------------
+Personal Oracle7 does not provide for a local nonblocking 
+connection to be made.  Thus Oracle7 nonblocking features, 
+such as OCI nonblocking function calls, will not work using 
+a normal local connection to a local Personal Oracle7 database. 
+
+However, a local nonblocking connection to Personal Oracle7 
+can be made using a special SQL*Net TCP/IP loopback connection.  
+This requires that you have Microsoft TCP/IP installed and 
+configured and that you installed Personal Oracle7 after this 
+was configured.  If this is not the case, please see the 
+Incoming Connections section of this release note for 
+information on configuration of incoming and TCP/IP loopback
+connections.
+
+To make a TCP/IP loopback connection, you must connect to 
+Personal Oracle7 as if you are connecting to a remote database.  
+You need to use a special connect string or database alias.  
+This database alias must have "127.0.0.1" as the TCP/IP host 
+name.  For your convenience, SQL*Net Easy Configuration 
+provides the database alias TCP-loopback already configured 
+with this information for connecting to the Personal Oracle7 
+database.  If you are not using SQL*Net Easy Configuration 
+to configure SQL*Net connections, then ask your network 
+administrator to set up such a SQL*Net configuration for you.  
+You must have Microsoft TCP/IP installed and configured on 
+Windows NT before installing Personal Oracle7. 
+
+
+Incoming Connections
+---------------------
+At installation, Personal Oracle7 will try to configure 
+itself for an incoming connection to provide support for 
+distributed features such as two-phase commit.  This is only 
+done if you already have installed and configured Microsoft 
+TCP/IP or Microsoft SPX networking protocol support.  The 
+Named Pipes protocol is not supported for this incoming 
+connection.  Configuration is done as follows:
+ 
+If no Microsoft TCP/IP or Microsoft SPX networking is 
+installed for Windows NT when Personal Oracle7 is installed, 
+then the assumption is made that this is a stand-alone PC 
+and network access is not available.  If Microsoft TCP/IP 
+or Microsoft SPX networking is installed after Personal 
+Oracle7 is installed, then you will need to rerun the Personal
+Oracle7 installation, choose a custom installation and choose 
+to install the SQL*Net Add-On software. 
+
+If Microsoft TCP/IP networking is already installed when 
+Personal Oracle7 for Windows NT is installed, then 
+configuration will be done for a TCP/IP incoming connection. 
+
+If both Microsoft TCP/IP networking and Microsoft SPX 
+networking are installed when Personal Oracle7 for Windows NT 
+is installed, then the configuration will be done for both 
+TCP/IP and SPX, but only TCP/IP will be enabled, making TCP/IP 
+the default. 
+
+If support for an SPX incoming connection is also desired, 
+it is possible to enable the SPX configuration by removing the 
+comment marks "#" in the SPX section of the incoming connection 
+configuration file.  This file is called LISTENER.ORA and is 
+located in the <ORACLE_HOME>\NETWORK\ADMIN directory.  For this 
+change to take effect, the database must be shut down and 
+restarted. 
+
+Incoming connections are only supported for distributed features 
+such as two-phase commit.  Other incoming connections are not 
+supported and may be rejected with the following error message 
+returned:
+ 
+  ORA-12500: TNS:listener failed to start a dedicated server 
+  process 
+
+In all cases where incoming connections for TCP/IP are 
+configured, a special TCP/IP loopback connection will be 
+configured.  This loopback connection is provided to support the 
+Oracle OCI nonblocking feature and must be used when a 
+nonblocking connection to Personal Oracle7 is required.  Some 
+applications may require nonblocking or provide enhanced 
+functionality when a nonblocking connection is available.  
+You will also need this TCP/IP loopback connection if you will 
+be writing OCI programs that use OCI nonblocking calls.  To 
+use this TCP/IP loopback connection, you must specify 
+127.0.0.1 as the TCP/IP Host Name when creating a database 
+alias for this connection.  For your convenience, SQL*Net 
+Easy Configuration provides the database alias TCP-loopback 
+already configured with this host name by default. 
+
+Configuration for incoming and TCP/IP loopback connections 
+assumes that the database instance name, or SID, of the 
+Personal Oracle7 database is ORCL; this is the SID used for 
+the Starter Database.  If you create your own database that 
+uses a SID other than ORCL, then you must modify the 
+incoming connection configuration information.  Edit the 
+configuration file LISTENER.ORA, changing the "SID_NAME = ORCL" 
+entry, located toward the end of the file, to specify a SID 
+other than ORCL.  Note that SIDs can only be four characters 
+in length.  For this change to take effect, the database must 
+be shutdown and re-started.
+
+
+OCI
+---
+This version of OCI supports the Microsoft Visual C++ 2.x 
+compiler.  Programs created with this version of OCI will 
+run on both Windows 95 and Windows NT.
+
+OCI nonblocking functionality is supported against Oracle7 
+version 7.2 databases and requires that you use SQL*Net 
+version 2.2 on both the client and server if you are running 
+against a remote database.  With Personal Oracle7 for Windows 
+NT, nonblocking functionality is only supported using a 
+SQL*Net loopback connection.  For more information please see 
+the Nonblocking Functionality section of this release note.
+
+OCI sample programs are built by opening the make file 
+provided with each sample program in Microsoft Visual C++ 
+and doing a project build. 
+
+This version of OCI provides a more flexible way of linking 
+your OCI applications.  However, if you must link using the 
+old methodology (no longer recommended), an ORA72.LIB 
+located in the <ORACLE_HOME>\OCI\LIB\OLD directory is 
+provided.
+
+
+

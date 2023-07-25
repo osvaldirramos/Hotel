@@ -1,0 +1,76 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+
+  NAME
+    plus33.ins - V3.0.20.2.0 installation script for SQL*Plus for Windows 3.2
+
+  DESCRIPTION
+    This script installs SQL*Plus for Windows 3.2
+
+  OWNER
+    Edan Kabatchnik
+
+  MODIFIED    DD-MMM-YY  Reason
+    Aedsinge  06/06/95     Converted to Sql*Plus 3.2.2 script for NT/95
+    AEdsinge  27-APR-95  Modified for shared Oracle, Windows Sql*Plus 3.1.3.7.2
+    LMurphy   08-SEP-94  Modified for Windows SQL*Plus 3.1.3.5.x
+    LMurphy   23-MAY-94  Modified for Windows SQL*Plus 3.1.2.2.6
+    shall     04-FEB-93  Created from RSF 7.0 script.
+*****************************************************************************/
+{
+	if (doit)
+	{
+		ins_ratchet = "3.3.2.0.2";
+		execute("%installer_home%\%operating_system%.ins");
+		permit_retry_operations = TRUE;
+
+		ui_action(instantiate(prod_label));
+                /*************************************************************/
+                /* Shared Oracle code */
+		modify("SQLPATH", sqlpath, "$oracle", (product_filename(current_product)));
+
+		modify("PLUS33", plus33, "$oracle", (product_filename(current_product)));
+
+		modify("EXECUTE_SQL", "PLUS33", "$oracle", (product_filename(current_product)));
+
+		modify("PLUS_DFLT", "PLUS33", "$oracle", (product_filename(current_product)));
+
+		                /* end Shared Oracle code */
+                /*************************************************************/
+
+		ui_action(instantiate(installing_scripts));
+			copy(deinstl);
+
+		
+
+		ui_action(instantiate(installing_msbs));
+			copy(msg, nls_abbreviation);
+
+		ui_action(instantiate(installing_sql));
+			copy(sql);
+		
+		ui_action(instantiate(installing_help));
+			copy(prefs);
+
+		ui_action(instantiate(installing_exec));
+			copy(exe);		
+
+
+		permit_retry_operations = FALSE;
+
+		install(w32rsf73);
+
+		ui_product(product_label);
+
+		permit_retry_operations = TRUE;
+
+		ui_action(instantiate(registering));
+
+		register(current_product);
+		if (member(selected_products, current_product))
+			reference(current_product);
+		reference(w32rsf73, current_product);
+
+		permit_retry_operations = FALSE;
+	}
+}

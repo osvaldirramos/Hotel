@@ -1,0 +1,150 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rdbms70.dei - Windows NT V3 de-installation script for ORACLE7.
+
+  DESCRIPTION
+    This script removes the Windows NT ORACLE7 files and un-registers
+    the product.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    DD-MMM-YY Reason
+   syau        09/14/94 - Don't deinstall sqlnttt.dll if post 7.0 exists.
+   Hartenstine 04/20/93 - WIN_NT: Adapt for Windows NT
+    Colello    10/09/92 - DESKTOP: remove doc and demo files as well
+    trodgers  01-APR-92 Created.
+*****************************************************************************/
+{
+  unknown_rdbms70_prompt = nls("unknown_rdbms70_prompt","It is not possible to remove %%product_label%% because of a problem with the RDBMS70 variable in your NT Registry.");
+  unknown_rdbms70_content = nls("unknown_rdbms70_content","Configuration Problem");
+  unknown_rdbms70_help = nls("unknown_rdbms70_help","In order to remove %%product_label%%, it is necessary to have a correct value for the RDBMS70 variable in the NT Registry. The RDBMS70 variable should point to the directory to which Oracle7 was installed.");
+
+  { rdbms70 = v7_translate("RDBMS70"); }
+    [ 'UNBOUND_ENVIRONMENT_VARIABLE:
+        information_dialog(instantiate(unknown_rdbms70_prompt),
+                           instantiate(unknown_rdbms70_content),
+                           instantiate(unknown_rdbms70_help));
+    ]
+
+/****************************************************************************
+  Bind all variables here...
+ ****************************************************************************/
+
+  remove_prompt = instantiate( nls("remove_prompt","Do you wish to remove the database in %%RDBMS70%%?") );
+  remove_content = instantiate( nls("remove_content","Remove Database") );
+  remove_help = instantiate( nls("remove_help","If you would like to remove the database in datafile %%RDBMS70%%\dbs1.ora, choose 'YES'. If you would like to retain this database, choose 'NO' and the datafiles will not be removed.") );
+
+  registry = registration("ntrdbms70");
+  registry_label = registry_interface_label(registry);
+
+  unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+  remove_database = nls("remove_database","Removing Database...");
+  deinst_doc = nls("deinst_doc","Deinstalling %%registry_label%% Documentation files...");
+  deinst_dll = nls("deinst_dll","Deinstalling %%registry_label%% Dynamic Link Libraries...");
+  deinst_exe = nls("deinst_exe","Deinstalling %%registry_label%% Executables...");
+  deinst_script = nls("deinst_script","Deinstalling %%registry_label%% Installation Scripts...");
+
+  service_prompt = nls("service_prompt","You must stop all oracle services in order to deinstall the database.");
+  service_content = nls("service_content","Stop Oracle Services");
+  service_help = nls("service_help","You should use the orasrv utility or go into the services control panel application and stop all services starting with Oracle.");
+/****************************************************************************
+  Proceed with deinstallation
+ ****************************************************************************/
+
+  ui_product(registry_label);
+
+  doit = FALSE;
+	 
+  if (unreferenced(registry))
+    doit = TRUE;
+  else if (not(internally_called))
+    if (uniquely_self_referenced(registry))
+      doit = TRUE;
+    else
+      doit = yesno_dialog(instantiate(deinstall_prompt01));
+
+  if (doit)
+  {
+  /* check to see if all of the oracle services are shutdown */
+    { remove_file("%ORACLE_HOME%\bin\ora7dist.dll"); }
+    ['PERMISSION_DENIED:{ 
+	    information_dialog(service_prompt, service_content,
+	    service_help);
+	    signal('FAILURE, "Installation terminated.  Please stop all Oracle services.");
+	    }
+    ]
+
+
+    if (exists("%rdbms70%\dbs1.ora"))
+      remove_db = yesno_dialog(remove_prompt,remove_content,remove_help);
+    else
+      remove_db = FALSE;
+
+    ui_product(registry_label);
+
+
+    if (remove_db)
+    {
+      ui_action( instantiate(remove_database) );
+      remove(seed);
+      {nt_set_value("HKEY_LOCAL_MACHINE","SOFTWARE\ORACLE\SECURITY","","");}
+      ['FILE_NOT_FOUND : continue();]
+    }
+
+    ui_action( instantiate( deinst_doc ) );
+    remove(doc);
+
+    ui_action( instantiate( deinst_dll ) );
+
+    if (not(registered("ntrdbms71")) && not(registered("ntrdbms72")) &&
+        not(registered("ntrdbms73")) && not(registered("ntrdbms80")))
+      remove(dll);
+    else
+    {
+      move_file("%ORACLE_HOME%\bin\sqlnttt.dll","%ORACLE_HOME%\bin\sqlnttt.701");
+      remove(dll);
+      move_file("%ORACLE_HOME%\bin\sqlnttt.701","%ORACLE_HOME%\bin\sqlnttt.dll");
+    }
+
+    ui_action( instantiate( deinst_exe ) );
+    remove(exec);
+
+    ui_action( instantiate( deinst_script ) );
+    remove(deinstl);
+
+
+    if (registered("ntutil70"))
+    {
+      dependent = registration("ntutil70");
+      unreference(dependent, registry);
+    }
+
+    if (registered("ntrsf70"))
+    {
+      dependent = registration("ntrsf70");
+      unreference(dependent,registry);
+      deinstall(dependent);
+    }
+
+    ui_action( instantiate(unregistering) );
+    unregister(registry);
+
+    if (not(registered("ntutil70")) && not(registered("ntrsf70")) &&
+    	not(registered("ntrdbms70")))
+    {
+      if (registered("ntrdbms71") || registered("ntrdbms72") || 
+          registered("ntrdbms73") || registered("ntrdbms80"))
+      {
+        rdbms70 = v7_translate("RDBMS70");
+        remove_file("%RDBMS70%\admin\v7rename.sql");
+        remove_directory("%RDBMS70%\admin");
+      }
+      modify("RDBMS70","",ora_config,"=");
+      modify("PLSQL20","",ora_config,"=");
+    }
+
+    modify("ORACLE_EXECUTABLE","",ora_config,"=");
+  }
+}

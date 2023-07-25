@@ -1,0 +1,91 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/*****************************************************************************
+  NAME
+    hlpdoc73.ins - V3 installation script for Windows hlpdoc73 product
+
+  DESCRIPTION
+    This script installs the Windows hlpdoc73 product
+
+  OWNER
+	Bryan Sabol
+	
+  MODIFIED	MM/DD/YY	Reason
+	mrlai	09/12/96	Made script generic for both NT and Win95
+	LMurphy 08/31/95	Removed parent hierarchy
+	LMurphy 06/01/95	Modified for use with Windows 95 doc10
+	LMurphy 01/24/94        Modified for use with On-Line Help
+  	bsabol	03/21/94	Created
+*****************************************************************************/
+
+{
+	if (doit)
+	{
+
+	/*****************************
+	Set the VRF-INS script ratchet
+	******************************/
+
+	ins_ratchet = "7.3.2.1.0";
+							
+	execute("%installer_home%\%operating_system%.ins");
+		
+    /* the list of old versions to check for */
+    old_prod_list = list("%prod_prefix%hlpdoc72", "%prod_prefix%hlpdoc73");
+
+    /* run the upgrade script */
+    execute("%product_home%\upgrade.ins");
+
+	permit_retry_operations  = TRUE;
+
+	/******************
+	Install the product
+	*******************/
+
+	ui_product(product_label);
+
+	if (exists("%ORACLE_HOME%\HELP\sqlnet.gid"))
+		remove_file("%ORACLE_HOME%\HELP\sqlnet.gid");
+
+	if (exists("%ORACLE_HOME%\HELP\po7.gid"))
+		remove_file("%ORACLE_HOME%\HELP\po7.gid");
+
+	if (exists("%ORACLE_HOME%\HELP\ora.gid"))
+		remove_file("%ORACLE_HOME%\HELP\ora.gid");
+
+	if (exists("%ORACLE_HOME%\HELP\orcspt.gid"))
+		remove_file("%ORACLE_HOME%\HELP\orcspt.gid");
+
+	/* unregister the previous version of help file if necessary */
+	if (registered("%prod_prefix%hlpdoc73"))
+	{
+		unregister(registration("%prod_prefix%hlpdoc73"));
+	}
+
+	ui_action(instantiate(installing_scripts));
+        copy(deinst, nls_abbreviation);
+
+	ui_action(instantiate(installing_files));
+        copy(doc, nls_abbreviation);
+
+	if (set_mshelp)
+        {
+           ui_action(instantiate(modifying_config));
+	   modify("MSHELP",mshelp,ora_config,(product_filename(current_product)));
+        }
+
+
+	/*******************
+	Register the product
+	********************/
+
+	ui_action(instantiate(registering));
+	register(current_product);
+
+	if (member(selected_products,current_product))
+		reference(current_product);
+
+	permit_retry_operations = FALSE;
+	}
+}
+

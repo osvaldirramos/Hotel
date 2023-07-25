@@ -1,0 +1,62 @@
+... 
+... $Header: idxstat.doc 7001200.1 92/12/20 17:46:52 twang Generic<base> $ idxstat.doc 
+... 
+File     : UTL$:IDXSTAT.DOC
+Modification history:
+	glumpkin 12/20/92	changed sql scripts names
+        Porter  09/21/89        Changed to 8 character filenames
+        Porter  03/29/89        Created
+
+OVERVIEW:
+
+  Very often, when an application is running slowly, the reason will be the
+  presence of an unneeded index or the absence of a needed one.  These scripts
+  help in pinpointing those situations.
+
+SCRIPTS:
+
+  Three scripts allow analysis of a user's indexes, or indexed columns:
+
+  UTLSIDXS.SQL           - The main script
+  UTLOIDXS.SQL           - Run for ONE index
+  UTLDIDXS.SQL          - Display statistics
+  
+  UTLSIDXS.SQL - This script runs UTLOIDXS.SQL on multiple tables and 
+  columns.  It takes two parameters, the table name and the column name to 
+  run it on.  It will not accept a column that is not part of a non-unique
+  index.
+
+  UTLOIDXS.SQL - This script takes two parameters, the table name and 
+  the column name to do the analysis on.  It will accept any column of
+  any table. It should be used to analyze possible new candidates for 
+  indexes.
+  
+  UTLDIDXS.SQL - This script reports the index statistics generated
+  by the previous two scripts.  It takes the same two parameters, either
+  of which may be wildcarded in standard SQL fashion (%, for example).
+
+USE: 
+
+  Normally, the user should run UTLSIDXS.SQL on their current application,
+  then run UTLDIDXS.SQL, looking for tables with a large amount
+  of BADNESS or very non-distinct keys.
+
+  Then, if the user wishes to check on new index columns, use
+  UTLOIDXS.SQL on those columns.
+
+  Since the scripts create two tables (see below), the user should
+  remember to drop them when the analysis is finished.
+  
+NOTES:
+  
+  Two tables are created by the scripts - INDEX$INDEX_STATS, which
+  holds global statistics for each table, and INDEX$BADNESS_STATS, which
+  holds the badness tables for each table. 
+
+  All scripts must be run from within SQLPLUS, version 3.0.3.1 or later. 
+  This is to obtain the code the treats the NEW_VALUE clause correctly.
+  
+  The code currently does not understand concatenated indexes.  
+  
+  The code should go and see how many rows per block are being used in the
+  table, and this would allow better statistics about db_block_gets to be made.

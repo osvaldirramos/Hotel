@@ -1,0 +1,232 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+  dbint72.vrf - V3 version analysis/product configuration script
+
+  DESCRIPTION
+    This script checks dependencies and environment settings
+
+  OWNER
+    Zakia Zerhouni
+
+  MODIFIED    DD-MMM-YY  Reason
+  mrlai	      09/13/96	 Modified to make the program group generic for NT and 95
+  LMurphy     12/11/95   Modified for Windows NT and 95
+  LMurphy     06/19/95   Modified for Windows 95 GUI
+  LMurphy     23-JAN-95  Modified for use with SQL*Net v1.1 help
+  zzerhoun    04-JAN-95  Created.
+*****************************************************************************/
+{
+  plat = platform();
+  if (plat == "win95")
+  {
+	under_win_95 = TRUE;
+	prod_prefix = "w95";
+	scr_prefix = "win95";
+  }
+  else
+  {
+	under_win_95 = FALSE;
+	prefix = "nt";
+	prod_prefix = "nt";
+	scr_prefix = "nt";
+  }
+  ms_ver = operating_system_version();
+  ms_ver_list = explode(ms_ver, ".");
+  ms_ver_major = first(ms_ver_list);
+  ms_ver_minor = first(rest(ms_ver_list));
+  {
+    doit = execute("%installer_home%\%scr_prefix%.vrf");
+  }
+  [
+    'UNBOUND_VARIABLE:
+    {
+      required_version = product_version(evaluate("%prod_prefix%instver"));
+      temp             = explode(required_version, ".");
+      required_version = implode(list(first(temp),
+                                      first(rest(temp)), 
+                                      first(rest(rest(temp))),
+                                      first(rest(rest(rest(temp))))), ".");
+      signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%%. Please run version %%required_version%% in order to perform this installation."))); 
+     }
+  ]     /* This FAILURE will cause 3.0.9.x installer to exit gracefully. */
+
+/* Check to make sure that Windows NT version is 3.51 or later */
+
+  if (doit)
+  {
+   if (not(under_win_95))
+   {
+	if (ms_ver < "3.51")
+	{
+		nt_version_too_early = instantiate(nls("nt_version_too_early","The Oracle Installer has detected that the Windows NT operating system version is %%ms_ver%%.  The %%product_label%% requires Windows NT version 3.51 or higher to function."));
+		information_dialog(nt_version_too_early);
+		doit = FALSE;
+	}
+   }
+  }
+
+  if (doit)
+  {
+      {
+        set_nav72 = FALSE;
+        nav72 = v7_translate("NAV72");
+
+        if (not(exists(nav72)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            nav72 = "%oracle_home%\NAV72";
+            set_nav72 = TRUE;
+          }
+        ]
+
+       {
+	  set_mshelp = FALSE;
+	  mshelp = v7_translate("MSHELP");
+	
+	  if (not(exists(mshelp)))
+		signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	}
+	  [ 'OS_ERROR,'INVALID_FILE_NAME,
+	    'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+	    {
+		mshelp = "%oracle_home%\MSHELP";
+		set_mshelp = TRUE;
+	    }
+	  ]
+
+        ora_navigate = "Oracle Navigator";
+        nav72_expl = nls("nav72_expl", "%%product_label%% (PO7.EXE) is currently running on this machine. Please close this application before installing %%product_label%%.
+
+Silent mode installation of %%product_label%% terminated.");
+        nav72_inst = instantiate(nls("nav72_inst", "%%product_label%% (PO7.EXE) is currently running on this machine. Please close this application before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+        "));
+        nav72_inst_term = instantiate(nls("nav72_inst_term", "%%product_label%% installation terminated."));
+        nav72_inst_content = instantiate(nls("nav72_inst_content", "%%product_label%% Running"));
+        nav72_inst_help = instantiate(nls("nav72_inst_help", "The Oracle Installer has detected that %%product_label%% (PO7.EXE) is currently running on this machine.  Please close this application before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+        "));
+
+
+        /* check to see if the po7 app is closed */
+        {
+    	   done = FALSE;
+           while(not(done))
+           { move_file("%ORACLE_HOME%\bin\PO7.EXE", "%ORACLE_HOME%\bin\PO7.EXE"); done = TRUE;}
+              [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+               {
+                 if (silent_mode)
+                   signal('FAILURE, instantiate(nav72_expl));
+                 else
+                   information_dialog(instantiate(nav72_inst), nav72_inst_content, instantiate(nav72_inst_help));
+               }
+                'FILE_NOT_FOUND:
+                 done = TRUE;
+              ]
+        }
+
+
+	/*****************************
+	Set the VRF-INS script ratchet
+	******************************/
+
+    vrf_ratchet = "7.3.2.1.2";
+
+	permit_retry_operations = FALSE;
+
+	/***************************************
+	Bind string variables and prompt strings
+	****************************************/
+
+	{ install_type = install_type; }
+        ['UNBOUND_VARIABLE: install_type = nls("custom_install","Custom Install");]
+
+        { bundle_name = bundle_name;}
+        [ 'UNBOUND_VARIABLE: 
+	     if (operating_system == "win95")
+	      	bundle_name = "Personal Oracle7 for Windows 95";
+	     else
+		bundle_name = "Personal Oracle7 for Windows NT";
+	]
+
+	if (operating_system == "win95")
+      nav_group_name = "Personal Oracle7 for Windows 95";
+	else
+	  nav_group_name = "Personal Oracle7 for Windows NT";
+	
+    po7_hlp_name = nls("po7_hlp_name","Personal Oracle7 Help");
+
+	if (operating_system == "win95")
+		nav_restore = nls("nav_restore", "Personal Oracle7 for Windows 95");
+	else
+		nav_restore = nls("nav_restore", "Personal Oracle7 for Windows NT");
+
+	win_sys_dir = windows_system_directory();
+	win_dir = windows_directory();
+
+	installing_scripts = nls("installing_scripts",
+                             "Installing %%product_label%% Scripts...");
+
+    installing_executables = nls("installing_executables",
+                                 "Installing %%product_label%% Executables...");
+
+	installing_dlls = nls("installing_dlls",
+                               "Installing %%product_label%% Dynamic Link Libraries...");
+
+    installing_doc = nls("installing_doc",
+                               "Installing %%product_label%% Help Files...");
+	registering = nls("registering","Registering %%product_label%%...");
+
+	registering_ocx = nls("registering_ocx","Registering OLE Control...");
+
+	ocx_err = nls("ocx_err","Unable to register OLE Control");
+	
+	if (under_win_95)
+                modifying_config = nls("modifying_95_config", "Modifying Windows 95 Registry...");
+	else
+                modifying_config = nls("modifying_nt_config", "Modifying Windows NT Registry...");
+
+	copy_sample = FALSE;
+	sum_sample = 0;
+
+	{ init_value = win32_get_value("HKEY_CURRENT_USER", "Software\ORACLE\Personal Oracle7 Navigator\Settings", "Init"); }
+	[ 'INVALID_KEY, 'OS_ERROR, 'FILE_NOT_FOUND: init_value = 0;
+	]
+        if (init_value == 0)
+        { init_value = win32_get_value("HKEY_CURRENT_USER", "Software\ORACLE\Oracle Navigator\Settings", "Init"); }
+	[ 'INVALID_KEY, 'OS_ERROR, 'FILE_NOT_FOUND: init_value = 0;
+	]
+
+    /* Should check for init_value == 0 but Installer bug returns "" for 0 - it cannot translate DWORDs out of the registry */
+
+	if ((init_value == "") || (init_value == 0))
+	{
+		copy_sample = TRUE;
+		if (under_win_95)
+			sum_sample = sum(sample, "95") + sum(sample, "32");
+		else
+			sum_sample = sum(sample, "32");
+	}
+
+	/***************************************
+	Return total size of files when required
+	***************************************/
+
+    return(verify(w32rsf73) + verify(evaluate("w32hlpdoc73")) + sum(deinst,nls_abbreviation,exe,ocx,dll,nls_abbreviation,help,nls_abbreviation) + sum_sample); 
+  }
+  else  /* if (doit) */
+  {
+	refresh_map_file = FALSE;
+	return(0);
+  }
+}

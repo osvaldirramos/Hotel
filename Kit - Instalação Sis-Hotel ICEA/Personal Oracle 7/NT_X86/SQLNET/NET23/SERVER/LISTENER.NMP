@@ -1,0 +1,6 @@
+        (ADDRESS=
+          (COMMUNITY= NMP.world)
+          (PROTOCOL= NMP)
+          (SERVER= %computer_name%)
+          (PIPE= ORAPIPE)
+        )

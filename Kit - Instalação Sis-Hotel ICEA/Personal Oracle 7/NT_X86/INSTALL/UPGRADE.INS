@@ -1,0 +1,73 @@
+/* Copyright (c) Oracle Corporation 1996.  All Rights Reserved */
+
+/************************************************************************
+  NAME
+    upgrade.ins - user-defined script to define how an upgrade is done
+
+  DESCRIPTION
+    This script allows users define how an upgrade is done.
+
+  MODIFIED    	MM/DD/YY  Reason
+    mrlai	    11/1/96   Created with PO7 7.3.2.2.0 in mind.
+**************************************************************************/
+{
+    { old_prod_list = old_prod_list; }
+    ['UNBOUND_VARIABLE:
+        old_prod_list = list();
+    ]
+
+
+    /* find if an old product is registered first */
+    temp = old_prod_list;
+    found = false;
+    while(not(empty(temp)))
+    {
+        old_prod_name = first(temp);
+
+        if (registered(old_prod_name))
+        {
+            found = true;
+            break();
+        }
+
+        temp = rest(temp);
+    }
+
+    if (found)
+    {
+
+        old_prod_reg = registration(old_prod_name);
+        old_prod_ref_list = registry_references(old_prod_reg);
+
+        /* now remove all references to the old product */
+        while (not(empty(old_prod_ref_list)))
+        {
+            old_prod_ref_reg = first(old_prod_ref_list);
+            old_prod_ref_name = registry_name(old_prod_ref_reg);
+
+            if (registered(old_prod_ref_name))
+            {
+                unreference(old_prod_ref_reg,old_prod_reg);
+            }
+
+            old_prod_ref_list = rest(old_prod_ref_list);
+        }
+
+        /* unregister the old product */
+        unregister(old_prod_reg);
+
+        old_prod_filename = registry_filename(old_prod_reg);
+        /* remove old deinstallation script and map file */
+        {
+          remove_file("%installer_home%\%old_prod_filename%.map");
+        }
+        [ 'DEFAULT: continue(); ]
+
+        /* remove old deinstallation script and map file */
+        {
+          remove_file("%installer_home%\%old_prod_filename%.dei");
+        }
+        [ 'DEFAULT: continue(); ]
+    }
+}
+

@@ -1,0 +1,16 @@
+
+# The following parameters are needed for the Advanced Replication Option
+
+global_names = TRUE
+
+job_queue_processes = %init_job_queue_processes%
+job_queue_interval = %init_job_queue_interval%
+job_queue_keep_connections = false
+
+distributed_lock_timeout = %init_distributed_lock_timeout%
+distributed_transactions = %init_distributed_transactions%
+
+open_links = %init_open_links%
+
+snapshot_refresh_interval = %init_snapshot_refresh_interval%
+snapshot_refresh_keep_connections=false

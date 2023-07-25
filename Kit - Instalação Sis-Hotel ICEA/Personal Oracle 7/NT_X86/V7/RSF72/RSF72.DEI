@@ -1,0 +1,254 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rsf72.dei - WinNT V3 de-installation script for ORACLE Required Support Files.
+
+  DESCRIPTION
+    This script removes the Windows NT ORACLE RSF files and un-registers the
+    product.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    DD-MMM-YY Reason
+    ljiang    07/21/95  7.2
+    syau      07/01/94  7.1.3
+    HA!       04/29/94  7.1.2 and 3.0.10.2
+    trodgers  01-APR-92 Created.
+*****************************************************************************/
+{
+
+  { doit = execute("%installer_home%\nt.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+         Ensure that the necessary environment variables are bound
+       **********************************************************************/
+
+      {
+        rdbms72 = translate("rdbms72", ora_config, registry_filename(current_registry));
+        if (not(exists(rdbms72)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+      [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+        'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+          variable = "rdbms72";
+          information_dialog(instantiate(deinstall_prompt02),
+                             instantiate(deinstall_content02),
+                             instantiate(deinstall_help02));
+          doit = FALSE;
+        }
+      ]
+
+      {
+        plsql22 = translate("plsql22", ora_config, registry_filename(current_registry));
+        if (not(exists(plsql22)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+      [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+        'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+          variable = "plsql22";
+          information_dialog(instantiate(deinstall_prompt02),
+                             instantiate(deinstall_content02),
+                             instantiate(deinstall_help02));
+          doit = FALSE;
+        }
+      ]
+
+      {
+        pro17 = translate("pro17", ora_config, registry_filename(current_registry));
+        if (not(exists(pro17)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+      [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+        'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+          variable = "pro17";
+          information_dialog(instantiate(deinstall_prompt02),
+                             instantiate(deinstall_content02),
+                             instantiate(deinstall_help02));
+          doit = FALSE;
+        }
+      ]
+
+      {
+        nlsrtl31 = translate("nlsrtl31", ora_config, registry_filename(current_registry));
+        if (not(exists(nlsrtl31)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+      [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+        'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+          variable = "nlsrtl31";
+          information_dialog(instantiate(deinstall_prompt02),
+                             instantiate(deinstall_content02),
+                             instantiate(deinstall_help02));
+          doit = FALSE;
+        }
+      ]
+    }
+
+  if (doit)
+    {
+      /**********************************************************************
+         Bind all NLS deinstall strings here...
+       **********************************************************************/
+
+      unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+      deinst_sql = nls("deinst_sql","Deinstalling %%registry_label%% SQL Scripts...");
+      deinst_msb = nls("deinst_msb","Deinstalling %%registry_label%% Message Files...");
+      deinst_dll = nls("deinst_dll","Deinstalling %%registry_label%% Dynamic Link Libraries...");
+      deinst_script = nls("deinst_script","Deinstalling %%registry_label%% Installation Scripts...");
+
+      /**********************************************************************
+         Continue with the deinstallation
+       **********************************************************************/
+
+      ui_product(registry_label);
+
+      /*********************** stop all the services **********************/
+      {
+        nt_stop_service("oracletnslistener");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclenmplistenerorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracletcplistener");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclestartorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracleserviceorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracleservice"); /* for 70 */
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclenmplistener"); /* for 70, ? */
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+/*
+      spawn("net stop oracletnslistener");
+      spawn("net stop oraclenmplistenerorcl");
+      spawn("net stop oracletcplistener");
+      spawn("net stop oracleserviceorcl");
+      spawn("net stop oracleservice"); /o for 70 o/
+      spawn("net stop oraclenmplistener"); /o for 70, ? o/
+*/
+
+      /* check to see if all of the other oracle services are shutdown */
+
+      permit_retry_operations = FALSE; /* this should be the default */
+      {
+        copy_file("%oracle_home%\bin\oraspawn.dll", "%oracle_home%\bin\oraspawn.sav");
+      }
+      [
+        'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+          continue();
+        'READ_ERROR,'WRITE_ERROR:
+          signal('FAILURE, nls("failure_of_copy", "Deinstallation terminated because %oracle_home%\bin\oraspawn.dll could not be copied."));
+      ]
+      {
+        move_file("%oracle_home%\bin\oraspawn.sav", "%oracle_home%\bin\oraspawn.dll");
+      }
+      [
+        'OS_ERROR:
+          signal('FAILURE, nls("failure_of_service", "Deinstallation terminated.  Please stop all Oracle services before deinstalling."));
+        'DEFAULT:
+          continue();
+      ]
+
+      {
+        copy_file("%oracle_home%\bin\ora72dis.dll", "%oracle_home%\bin\ora72dis.sav");
+      }
+      [
+        'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+          continue();
+        'READ_ERROR,'WRITE_ERROR:
+          signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\ora72dis.dll could not be copied."));
+      ]
+      {
+        move_file("%oracle_home%\bin\ora72dis.sav", "%oracle_home%\bin\ora72dis.dll");
+      }
+      [
+        'OS_ERROR:
+          signal('FAILURE, nls("failure_of_service", "Installation terminated.  Please stop all Oracle services before installing."));
+        'DEFAULT:
+          continue();
+      ]
+
+      /************************** remove files ****************************/
+
+      remove(nlsdata);
+
+      if (not(registered("w32rsf73")) && not(registered("w32rsf80")))
+      {
+        ui_action(instantiate(deinst_sql));
+        remove(sql);
+      }
+
+      ui_action(instantiate(deinst_msb));
+      remove(msg);
+
+      ui_action(instantiate(deinst_dll));
+      remove(dll);
+
+      ui_action(instantiate(deinst_script));
+      remove(deinstl);
+
+      /***************************** modify registry *************************/
+
+      if (not(registered("ntrdbms72")) && not(registered("ntutil72")))
+        modify("RDBMS72","",ora_config,registry_filename(current_registry));
+
+      if (not(registered("ntutil72")))
+        modify("PLSQL22","",ora_config,registry_filename(current_registry));
+
+      if (not(registered("ntprocob17")))
+        modify("PRO17","",ora_config,registry_filename(current_registry));
+
+      modify("NLSRTL31","",ora_config,registry_filename(current_registry));
+
+      modify("ORA_NLS","",ora_config,registry_filename(current_registry));
+
+      /***************************** unregister ******************************/
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+    }
+}

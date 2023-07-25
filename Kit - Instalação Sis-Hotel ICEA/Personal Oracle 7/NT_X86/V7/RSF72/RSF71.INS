@@ -1,0 +1,86 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rsf71.ins - WinNT V3 installation script for ORACLE Required Support Files.
+
+  DESCRIPTION
+    This script installs the RSF files.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    DD-MMM-YY Reason
+    syau      07/01/94  7.1.3
+    HA!       04/28/94  7.1.2 and 3.0.10.2
+    trodgers  10-APR-92 Created.
+*****************************************************************************/
+{
+  /**************************************************************************
+      Start main logic...
+   **************************************************************************/
+  if (doit)
+    {
+      ins_ratchet = "7.1.3.3.6";
+
+      execute("%installer_home%\nt.ins");
+
+      permit_retry_operations = TRUE;
+
+      ui_action(instantiate(installing_scripts));
+      copy(deinstl);
+
+      if (registered("ntrsf70"))
+        copy(deinstl70);
+
+      ui_action(instantiate(installing_dlls));
+      permit_retry_operations = FALSE;
+      { copy(oraspwn); }
+      [ 'WRITE_ERROR: signal('FAILURE, "Installation terminated. Please stop all Oracle services before installing.");
+      ]
+      permit_retry_operations = TRUE;
+      copy(dll);
+
+      ui_action(instantiate(installing_msbs));
+      copy(msg, nls_abbreviation);
+
+      ui_action(instantiate(installing_sql));
+      copy(sql);
+
+      /* copy release notes */
+      permit_retry_operations = false;
+
+      { copy(user, user_release_grp) ;}
+      [ 'DEFAULT : continue() ; ]
+      permit_retry_operations = true;
+
+      if (doSmartStart)
+        {
+          ss_decrypt_file(product_key,
+                          "%s_location%NT_X86/V7/RSF/CORENT23.DLL",
+                          "%oracle_home%\bin\CORENT23.DLL");
+          ss_decrypt_file(product_key,
+                          "%s_location%NT_X86/V7/RSF/ORASPAWN.DLL",
+                          "%oracle_home%\bin\ORASPAWN.DLL");
+        }
+
+
+      if (set_rdbms71)
+        {
+          ui_action(instantiate(modifying_config));
+          modify("RDBMS71",RDBMS71,ora_config,"=");
+        }
+
+      if (set_plsql21)
+        {
+          ui_action(instantiate(modifying_config));
+          modify("PLSQL21",PLSQL21,ora_config,"=");
+        }
+
+      ui_action(instantiate(registering));
+      register(current_product);
+      if (member(selected_products,current_product))
+        reference(current_product);
+
+      permit_retry_operations = FALSE;
+    }
+}

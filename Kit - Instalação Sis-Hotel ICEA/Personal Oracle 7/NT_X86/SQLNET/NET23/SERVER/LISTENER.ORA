@@ -1,0 +1,49 @@
+################
+# Filename......: listener.ora
+# Node..........: local.world
+# Date..........: 24-MAY-95 13:23:20
+################
+LISTENER =
+  (ADDRESS_LIST =
+        (ADDRESS=
+          (PROTOCOL= IPC)
+          (KEY= oracle.world)
+        )
+        (ADDRESS=
+          (PROTOCOL= IPC)
+          (KEY= ORCL)
+        )
+        (ADDRESS= 
+          (COMMUNITY= TCP.world)
+          (PROTOCOL= TCP)
+          (Host= inventory.us.company.com)
+          (Port= 1521)
+        )
+        (ADDRESS= 
+          (COMMUNITY= TCP.world)
+          (PROTOCOL= TCP)
+          (Host= inventory.us.company.com)
+          (Port= 1526)
+        )
+        (ADDRESS= 
+          (COMMUNITY= SPX.world)
+          (PROTOCOL= SPX)
+          (Service= inventory_lsnr)
+        )
+        (ADDRESS=
+          (COMMUNITY= NMP.world)
+          (PROTOCOL= NMP)
+          (SERVER= nt_inventory_box)
+          (PIPE= ORAPIPE)
+        )
+  )
+STARTUP_WAIT_TIME_LISTENER = 0
+CONNECT_TIMEOUT_LISTENER = 10
+TRACE_LEVEL_LISTENER = ADMIN
+SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = ORCL)
+    )
+  )
+

@@ -1,0 +1,65 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    oci73.ins - V3 installation script for Windows 95 and Windows NT OCI 7.3
+
+  DESCRIPTION
+    This script installs Windows 95 and Windows NT OCI 7.3
+
+  MODIFIED    DD-MMM-YY  Reason
+    echien    19-APR-95  Creation for Windows 3.1
+    mclose    19-JUL-95  Adopted from Windows 3.1 and modified for Windows 95
+
+*****************************************************************************/
+{
+  /**************************************************************************
+      Start main logic...
+   **************************************************************************/
+
+  if (doit)
+    {
+      ins_ratchet = "7.3.2.1.0";
+
+      execute("%installer_home%\%operating_system%.ins");
+
+    /* the list of old versions to check for */
+    old_prod_list = list("%prod_prefix%oci72");
+
+    /* run the upgrade script */
+    execute("%product_home%\upgrade.ins");
+
+
+      permit_retry_operations = TRUE;
+
+      install(w32rsf73);
+
+      ui_product(product_label);
+
+      ui_action(instantiate(installing_scripts));
+      copy(deinstl);
+
+      ui_action(instantiate(installing_ocifiles));
+      copy(ocifiles);
+
+      ui_action(instantiate(installing_ocisamples));
+      copy(ocisamples);
+
+      permit_retry_operations = FALSE;
+
+      ui_product(product_label);
+
+      rsf_registry = registration("w32rsf73");
+      if (earlier_version(rsf_registry,"7.3.2.0.0"))
+         signal('FAILURE,(instantiate(rsf_version_msg)));
+
+      ui_action(instantiate(registering));
+
+      permit_retry_operation = TRUE;
+
+      register(current_product);
+      reference(w32rsf73,current_product);
+
+      permit_retry_operation = FALSE;
+  }
+}
+

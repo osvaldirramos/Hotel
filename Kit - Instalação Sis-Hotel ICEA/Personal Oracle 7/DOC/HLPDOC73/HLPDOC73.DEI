@@ -1,0 +1,136 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    hlpdoc73.dei - V3 deinstall script for the Windows hlpdoc73 product
+
+  DESCRIPTION
+    This script deinstalls Windows hlpdoc73 product
+
+  OWNER
+    Rajesh Bansal
+
+  MODIFIED    DD-MMM-YY  Reason
+   mrlai      09/13/96	 Modified for use with NT
+   LMurphy    08/31/95	 Removed parent hierarchy
+   LMurphy    06/01/95	 Modified for use with Windows 95 doc10
+   LMurphy    24-JAN-94  Modified for use with On-Line Help
+   rbansal    12-DEC-94  Created
+*****************************************************************************/
+{
+    { doit = execute("%installer_home%\%operating_system%.dei"); }
+    [
+        'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2",
+                                                           "The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these Product(s).")));
+    ]
+
+    if (doit)
+    {
+
+      /**********************************************************************
+         Ensure that the necessary environment variables are bound
+       **********************************************************************/
+
+      {
+	oracle_group_name = v7_translate("ORACLE_GROUP_NAME");
+      }
+	[
+	  'UNBOUND_ENVIRONMENT_VARIABLE, 'OS_ERROR:
+	  {
+	    variable = "ORACLE_GROUP_NAME";
+	    information_dialog(instantiate(deinstall_prompt02),
+			       instantiate(deinstall_content02),
+			       instantiate(deinstall_help02));
+	    doit = FALSE;
+	  }
+	]
+
+      {
+        mshelp = v7_translate("MSHELP");
+        {
+          if (not(exists(mshelp)))
+            signal('UNBOUND_ENVIRONMENT_VARIABLE);
+        }
+          [ 'OS_ERROR: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+            'INVALID_FILE_NAME: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+            'PERMISSION_DENIED: signal('UNBOUND_ENVIRONMENT_VARIABLE); ]
+      }
+        [
+          'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            variable = "MSHELP";
+            information_dialog(instantiate(deinstall_prompt02),
+                               instantiate(deinstall_content02),
+                               instantiate(deinstall_help02));
+            doit = FALSE;
+          }
+        ]
+    }
+    
+    if (doit)
+    {
+
+        /*************************************
+   	    Bind all NLS deinstall strings here...
+        **************************************/
+
+        po7_hlp_name = nls("po7_hlp_name","Personal Oracle7 Help");
+        orcl7_msg_name = nls("orcl_msg_name","Oracle7 Error Messages");
+        cust_support_name = nls("cust_support_name","Customer Support");
+
+        deinstall_unregister    = nls("deinstall_unregister", "Unregistering %%registry_label%%...");
+	unreference_dependencies= nls("unreference_dependencies", "Unreferencing %%registry_label%% Dependencies...");
+        deinstall_scripts           = nls("deinstall_scripts", "Removing %%registry_label%% Installation Scripts...");
+        deinstall_files           = nls("deinstall_files", "Removing %%registry_label%% Files...");
+
+	/********************
+	Deinstall the product
+	*********************/
+
+	ui_action(instantiate(deinstall_scripts));
+	remove(deinst);
+
+	ui_action(instantiate(deinstall_files));
+	/* *.GID is created when *.HLP is executed */
+	/* They are removed below */
+	{
+	remove_file("%MSHELP%\SQLNET.GID");
+	}
+	[ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+	]
+	{
+	remove_file("%MSHELP%\ORA.GID");
+	}
+	[ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+	]
+	{
+	remove_file("%MSHELP%\ORCSPT.GID");
+	}
+	[ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+	]
+	{
+	remove_file("%MSHELP%\PO7.GID");
+	}
+	[ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+	]
+	remove(doc, nls_abbreviation); 
+
+	/*********************
+	Unregister the product
+	**********************/
+
+	if (not(registered("w95rdbms73")) 
+	    && not(registered("w32dbint72"))
+	    && not(registered("ntrdbms73"))
+	    )
+		modify("MSHELP","",ora_config,registry_filename(current_registry));
+
+	ui_action(instantiate(deinstall_unregister));
+	unregister(current_registry);
+		
+	permit_retry_operations = FALSE;
+    }
+}

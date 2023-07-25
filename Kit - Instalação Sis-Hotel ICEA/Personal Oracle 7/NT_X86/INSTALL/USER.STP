@@ -1,0 +1,178 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/************************************************************************
+  NAME
+    user.stp - user-defined .stp script for Personal Oracle7 for Windows
+    NT
+
+  DESCRIPTION
+    This script allows users access to their own customizable .stp script.
+    It can be used to bypass the installer window and perform a predefined
+    installation (e.g. complete, typical, minimal, or custom)
+    It initializes boolean 'web_install', string 'install_type', and
+    string 'bundle_name' (Personal Oracle7,Personal Oracle7 Entreprise,
+    Workgroup Oracle7 Nt, Workgroup Oracle7 Netware, Entreprise Oracle7 Nt,
+    and Entreprise Oracle7 Netware).
+
+  MODIFIED	MM/DD/YY  Reason
+    mrlai	09/11/96  Modified for use with PO7 Windows NT 7.3.2.2.0
+    ctow	05/08/96  Modified for 7.3 Release
+    LMurphy   	06/13/95  Modified for use with PO7 Windows 95
+    LMurphy   	02/21/95  Added License Agreement check
+    zzerhoun  	01/06/95  Remove Chained Install Type handling
+    zzerhoun  	01/04/95  Set Bundle_name back
+    awinarsk  	01/03/95  Altered default bundle name for testing purposes.
+    zzerhoun  	12/23/94  Updated New bundle names
+    zzerhoun  	12/19/94  Incorporate clients for all bundles
+    zzerhoun  	12/12/94  Created.
+**************************************************************************/
+
+{
+/* resume_logging(); */
+/*************************************************************************/
+/*  Generic Section: Across Bundles                                      */
+/*  Initialize name variables for each product bundle                    */
+/*************************************************************************/
+
+  P_O7 = "Personal Oracle7 for Windows";
+  P_O7_E = "Personal Oracle7 for Windows";
+  P_O7_W_NT = "Personal Oracle7 for Windows NT";
+  W_O7_W_NT = "Oracle7 Workgroup Server for Windows NT";
+  W_O7_NW = "Oracle7 Workgroup Server for Netware";
+  E_O7_W_NT = "Oracle7 Server for Windows NT";
+  E_O7_NW = "Oracle7 Server for Netware";
+  SA_O71_W_NT = "Oracle7 Standalone for Windows NT";
+
+/*************************************************************************/
+/*  Specific Section                                                     */
+/*  Specify if web installation or not: default FALSE                    */
+/*  Specify what product bundle is being shipped: default ""             */
+/*  Initialize name variables for each product in the bundle             */
+/*************************************************************************/
+
+  bundle_name = P_O7_W_NT;
+
+  rdbms = nls("rdbms","Oracle7 Database");
+  util = nls("util","Oracle7 Utilities");
+  oci = nls("oci","Oracle Call Interface");
+  sqlplus = nls("sqlplus","SQL*Plus");
+  sqlnet = nls("sqlnet","SQL*Net V2");
+  framework = nls("framework","Oracle Navigator");
+  online_doc = nls("online_hlp","Online Documentation");
+  ora_inst = nls("ora_inst","Oracle Installer");
+  odbc = nls("odbc", "Oracle7 ODBC Driver");
+  object = nls("object", "Oracle Objects for OLE");
+  
+
+/*************************************************************************/
+/*  Generic Section: Across Platforms                                    */
+/*  Initialize nls strings for all (2) possible install types            */
+/*  Initialize nls strings for install_type help messages                */
+/*                                                                       */
+/*  Initialize nls strings for protocol types                            */
+/*  Initialize nls strings for protocol_type help messages               */
+/*************************************************************************/
+
+  ui_action(nls("install_type_action","Checking Type of Installation..."));
+
+  /* Define install_type NLS scripts */
+  /* Install Type Strings */
+  install_type_prompt = instantiate(nls("install_type_prompt",
+                            "Please choose the installation to be performed.  For a description of the components installed for each option, select Help."));
+
+  install_type_develop = nls("install_type_develop","Application Developer (Complete)");
+  install_type_enduser = nls("install_type_enduser","Runtime (Database Only)");
+  install_type_custom = nls("install_type_custom","Custom");
+  install_type_chained = nls("install_type_chained","Chained Install");
+
+  install_type_content = nls("install_type_content",
+                             "Installation Options");
+
+  install_type_helpdv = instantiate(nls("install_type_helpdv",
+                           "'%%install_type_develop%%' installs all components of Personal Oracle7 for Windows NT.  These components are as follows:%carriage_return%%%install_type_listdv%%%carriage_return%Select this option if you are performing application development and would like to install all necessary components.%carriage_return%"));
+
+  install_type_helpdp = instantiate(nls("install_type_helpdp",
+                           "'%%install_type_enduser%%' installs:%carriage_return%%%install_type_listdp%%%carriage_return%Select this option if you would like to install the minimum number of components necessary to run the Oracle7 Database.  Note that this option does not install the Personal Oracle7 Navigator user interface, nor the networking components.%carriage_return%"));
+  install_type_helpc = instantiate(nls("install_type_helpc",
+                           "'%%install_type_custom%%'%carriage_return%Select this option to choose individual Personal Oracle7 components to install and/or deinstall."));
+
+/*************************************************************************/
+/*  Specific Section                                                     */
+/*  Specify install types to offer user                                  */
+/*  Specify corresponding,overall  help message                          */
+/*************************************************************************/
+
+  if (bundle_name == P_O7_W_NT)
+  {
+   install_type_choices = list(install_type_develop,
+                                install_type_enduser,
+                                install_type_custom);
+    install_type_default = install_type_develop;
+
+    install_type_listdv = implode(list("       %rdbms%",
+                                      "       %util%",
+                				      "       %framework%",
+                                      "       %ora_inst%",
+                                      "       %sqlnet%",
+                                      "       %sqlplus%",
+                                      "       %oci%",
+                                      "       %odbc%",
+                                      "       %object%",
+                                      "       %online_doc%"),
+                                 carriage_return);
+    install_type_listdp = implode(list("       %rdbms%",
+                                      "       %util%",
+                                      "       %ora_inst%",
+                                      "       %online_doc%"),
+                                 carriage_return);
+    {
+    install_type_help = instantiate(instantiate(nls("install_type_help","The following are descriptions of the types of installations that can be performed:%carriage_return%%carriage_return%%install_type_helpdv%%carriage_return%%install_type_helpdp%%carriage_return%%install_type_helpc%")));
+    }
+    [ 'LEXICAL_ERROR: install_type_help = "lexical error: install_type_help";]
+ }
+
+
+
+/*************************************************************************/
+/*  Generic Section: Across Platforms                                    */
+/*  Get user selection of install type                                   */
+/*  Skip user selection if chained installation                          */
+/*************************************************************************/
+
+  {
+    if (install_type != install_type_chained)  
+      signal('UNBOUND_VARIABLE);
+  }
+  ['UNBOUND_VARIABLE: 
+    {
+      install_type = single_selection_dialog(install_type_prompt,
+                                             install_type_choices,
+                                             install_type_default,
+                                             install_type_content,
+                                             install_type_help);
+      continue();
+    }
+  ]
+  if (install_type != install_type_custom)
+  {
+    bootstrap = TRUE;
+
+/*************************************************************************/
+/*  Specific Section                                                     */
+/*  Interpret user selection on install type                             */
+/*  If custom install, always terminate (bring up installer window)      */
+/*  Otherwise always set bootstrap to TRUE                               */
+/*  Specify 'selected_products' based on 'bundle_name' & 'install_type'  */
+/*************************************************************************/
+
+    if (bundle_name == P_O7_W_NT)
+    {
+      if (install_type == install_type_develop)
+        selected_products = list("ntrdbms73","w32util73","ntinstall","w32oci73","ntnetsrv23","w32netclt23","w32hlpdoc73","w32pdfdoc73","w32plus33","w32dbint72","ntsodbc15","ntobject20");
+      else if (install_type == install_type_enduser)
+        selected_products = list("ntinstall","w32util73","ntrdbms73","w32hlpdoc73");
+    }
+
+  }
+/*suspend_logging();*/
+}

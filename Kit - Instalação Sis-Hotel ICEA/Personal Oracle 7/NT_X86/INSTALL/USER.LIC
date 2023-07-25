@@ -1,0 +1,105 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/************************************************************************
+  NAME
+    user.lic - user-defined .lic script
+
+  DESCRIPTION
+    This script allows users access to their own customizable .lic script.
+    It can be used to display license agreement information.
+
+  MODIFIED    MM/DD/YY  Reason
+  zzerhoun    09/28/95  Created.
+**************************************************************************/
+{
+
+
+  trial_install = FALSE;
+  prod_install = TRUE;
+  web_install = FALSE;
+
+/*************************************************************************/
+/* Display license agreement                                               */
+/*************************************************************************/
+
+  license_not_agreed1 = nls("license_not_agreed1", "Oracle Fee-Free 90-day Trial License Agreement not accepted.  Installation terminated.");
+  license_not_agreed2 = nls("license_not_agreed2", "Oracle License Program Terms not accepted.  Installation terminated.");
+  license_not_agreed3 = nls("license_not_agreed3", "License Not Accepted.  Installation terminated.");
+  { trial_install = trial_install; }
+  [ 'UNBOUND_VARIABLE: trial_install = FALSE; ]
+
+  { web_install = web_install; }
+  [ 'UNBOUND_VARIABLE: web_install = FALSE; ]
+
+  { prod_install = prod_install; }
+  [ 'UNBOUND_VARIABLE: prod_install = FALSE; ]
+
+  {
+    if (trial_install && web_install)
+    {
+	display_file_dialog("licwt.txt");
+    }
+    else
+    {
+	if (prod_install && web_install)
+	{
+		display_file_dialog("licwp.txt");	
+	}
+    }
+  }
+  [ 'CANCEL:
+	{
+		if (trial_install)
+		{
+                        license_not_agreed = instantiate(license_not_agreed1);
+		}
+		else
+		{
+			if (prod_install)
+			{
+                                license_not_agreed = instantiate(license_not_agreed2);
+			}
+			else
+			{
+                                license_not_agreed = instantiate(license_not_agreed3);
+			}
+		}
+		signal('FAILURE, license_not_agreed);
+	}
+    'OS_ERROR: continue();
+  ]
+
+
+welcome_screen = instantiate(nls("welcome_screen", "Thank you for choosing Personal Oracle7 for Windows NT.
+
+The Oracle Installer cannot install system files or update shared files if they are in use.  Before proceeding, please close any applications you may be running.
+
+Before using this software, please read the Readme.wri located in the nt_x86 directory of your release media.  This document contains helpful information including how to allow your 16-bit Windows 3.1x applications to connect to a Personal Oracle7 for Windows NT database.
+
+The Personal Oracle7 Product Team
+Server Technologies
+Oracle Corporation"));
+
+welcome_screen_content = instantiate(nls("welcome_screen_content", "Welcome"));
+
+
+welcome_screen_help = instantiate(nls("welcome_screen_help", "It is not possible to write some files when they are in use.  These files are typically files with DLL or EXE extensions, such as ORA73.DLL.  To make sure they are not in use, close all applications before continuing.
+
+The Readme.doc file provides late breaking and other useful information.  You may want to review this information before proceeding with installing Personal Oracle7.  The Readme.doc file specifically provides information in the following two areas:
+
+If you are already a user of Personal Oracle7 for Windows 3.1, you can either move your data from a Personal Oracle7 for Windows 3.1 database to a Personal Oracle7 for Windows NT database or have Personal Oracle7 for Windows NT use database files from Personal Oracle7 for Windows 3.1.
+
+If you want to use existing Windows 3.1x 16-bit applications running on Windows NT with Personal Oracle7 for Windows NT you may do so.  Additional steps are required.  You should first check that the application you want to use is supported on Windows NT."));
+/*
+ welcome_screen_help ="temporarily taken out";
+*/
+/*************************************************************************/
+/* Display 16 bit app warning dialog                                     */
+/*************************************************************************/
+
+ora16_app_warning = instantiate(nls("ora16_app_warning", "Please note:  If you wish to run Oracle for Windows 16 bit applications against the Personal Oracle7 for Windows NT database, after completion of this installation you must upgrade your Oracle for Windows 3.1 Required Support Files.  Please see the Readme.doc located in the nt_x86 directory of your release media."));
+
+{ information_dialog(welcome_screen, welcome_screen_content,welcome_screen_help); }
+
+}
+

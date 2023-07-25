@@ -1,0 +1,15 @@
+################
+# Filename......: listener.ora
+# Node..........: local.world
+# Date..........: 24-MAY-94 13:23:20
+################
+LISTENER =
+  (ADDRESS_LIST =
+        (ADDRESS=
+          (PROTOCOL= IPC)
+          (KEY= oracle.world)
+        )
+        (ADDRESS=
+          (PROTOCOL= IPC)
+          (KEY= ORCL)
+        )

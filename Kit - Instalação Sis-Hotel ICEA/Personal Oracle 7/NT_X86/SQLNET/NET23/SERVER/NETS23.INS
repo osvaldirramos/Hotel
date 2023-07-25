@@ -1,0 +1,250 @@
+/* Copyright (c) Oracle Corporation 1992, 1996.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    nets23.ins
+
+  DESCRIPTION
+    This script performs the installation tasks for the Windows 32 SQL*Net
+    product.
+
+  OWNER
+    Mason Ng
+
+  MODIFIED    DD-MMM-YY  Reason
+    mrlai     05-NOV-96  Checked for Upgrade from 2.2
+    dstiefel  15-JUL-96  Make Service Automatic
+    dstiefel  22-FEB-96  Merge NT/95 for 2.3.2
+    ljiang    9/95       Modified for Easy Configuration
+    LMurphy   07-SEP-95  Modified for Windows 95
+    vraja     22-AUG-95  Create the SQL*Net V2 Listener Service
+    dlau      07-AUG-95  Modified for SQLNET 2.2
+    eflores   06-APR-94  Modified for 2.1.2
+    mng       05-JAN-94  Modified for NT.
+    zkhan     11-AUG-93  Modified for SQLNET and for using V3.0.9.3.2 or later
+			             of the installer.
+    trodgers  10-APR-92  Created.
+*****************************************************************************/
+{
+  if (doit)
+  {
+    /* ptajiki May 13, 96 - Added for Oracle7 Workgroup Server automatic installation */
+    execute("%installer_home%\services.vrf");
+
+    ins_ratchet = "2.3.2.1.4";
+
+    execute("%installer_home%\%operating_system%.ins");
+
+    /* the list of old versions to check for */
+    old_prod_list = list("%prefix%netsrv22");
+
+    /* run the upgrade script */
+    execute("%product_home%\upgrade.ins");
+
+
+    install(w32rsf73);
+
+    if (not(registered("%prefix%install")))
+      install(install_prod);
+    else if (earlier_version(registration("%prefix%install"),product_version(instver_prod)) )
+      install(install_prod);
+
+    permit_retry_operations = TRUE;
+
+    ui_product(product_label);
+
+    ui_action(instantiate(net2_install_tns));
+    {
+      copy(tns);
+      if (platform() == "nt")
+      {
+        if (doSmartStart)
+	      ss_decrypt_file(product_key,
+			"%s_location%NT_X86/SQLNET/NET23/SERVER/SQLTNSNT.DLL",
+			"%oracle_home%\bin\SQLTNSNT.DLL");
+      }
+    }
+    ['WRITE_ERROR:{
+	    information_dialog(instantiate(app_prompt),
+			       app_content,
+			       instantiate(app_help));
+	    signal('FAILURE,instantiate("Installation terminated.  Please stop all Oracle applications that are using %%product_label%%."));
+	    }
+    ]
+
+    ui_action(instantiate(net2_install_dll));
+    { copy(dll); }
+
+     ui_action(instantiate(net2_install_exe));
+    { copy(exe); }
+
+    ['WRITE_ERROR:{
+	    information_dialog(instantiate(service_prompt),
+			       service_content,
+			       service_help);
+	    signal('FAILURE, "Installation terminated.  Please stop Oracle Listeners.");
+	    }
+    ]
+
+    permit_retry_operations = TRUE;
+
+    ui_action(instantiate(net2_install_script));
+    copy(deinstl);
+
+    ui_action(instantiate(net2_install_message));
+    copy(msb,nls_abbreviation);
+
+    ui_action(instantiate(net2_install_sample));
+    copy(sample);
+
+    /* save listener.ora and sqlnet.ora as listener.nnn, etc. */
+    num001 = 1;
+    listener_ora = "%oracle_home%\NETWORK\ADMIN\LISTENER.ORA";
+    sqlnet_ora = "%oracle_home%\NETWORK\ADMIN\SQLNET.ORA";
+    sqlnet_ora_sample = "%oracle_home%\NETWORK\ADMIN\SAMPLE\SQLNET.ORA";
+    while(TRUE)
+    {
+      if (num001 > 99)
+      {
+        listener_001 = "%oracle_home%\NETWORK\ADMIN\LISTENER.%num001%";
+        listener_num = "LISTENER.%num001%";
+        sqlnet_001 = "%oracle_home%\NETWORK\ADMIN\sqlnet.%num001%";
+        sqlnet_num = "sqlnet.%num001%";
+      }
+      else if (num001 > 9)
+      {
+        listener_001 = "%oracle_home%\NETWORK\ADMIN\LISTENER.0%num001%";
+        listener_num = "LISTENER.0%num001%";
+        sqlnet_001 = "%oracle_home%\NETWORK\ADMIN\sqlnet.0%num001%";
+        sqlnet_num = "sqlnet.%num001%";
+      }
+      else
+      {
+        listener_001 = "%oracle_home%\NETWORK\ADMIN\LISTENER.00%num001%";
+        listener_num = "LISTENER.00%num001%";
+        sqlnet_001 = "%oracle_home%\NETWORK\ADMIN\sqlnet.00%num001%";
+        sqlnet_num = "sqlnet.%num001%";
+      }
+      if ( (exists(listener_001)) || (exists(sqlnet_001)) )
+        num001 = num001 + 1;
+      else
+        break();
+    }
+
+    if (exists(listener_ora))
+      {
+        move_file(listener_ora, listener_001);
+      }
+    ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'FILE_NOT_FOUND, 'OS_ERROR: signal('FAILURE, nls("listener_ora_not_moved","%prod_name% is unable to backup your LISTENER.ORA to %%listener_num%%
+
+Please free up the resources to these files before running %prod_name% again.");
+    ]
+
+    if (exists(sqlnet_ora))
+      {
+        move_file(sqlnet_ora, sqlnet_001);
+      }
+    ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'FILE_NOT_FOUND, 'OS_ERROR: continue();]
+
+  if (platform() == "nt")
+  {
+    /* Delete and recreate as automatic.
+     */
+      {
+         nt_delete_service("OracleTNSListener") ;
+      }
+      [
+        'PERMISSION_DENIED,  'OS_ERROR : { signal('FAILURE, failure_of_deltns); }
+        'INVALID_SERVICE_NAME          : { continue(); }
+        'SERVICE_DOES_NOT_EXIST        : { continue(); }
+      ]
+
+/*  May 30, 96 - Create TNSListener as SERVICE_AUTO_START:
+ *** Old:
+     {
+      nt_create_service("%ORACLE_HOME%\BIN\TNSLSNR.EXE","OracleTNSListener") ;
+     }
+**** New: */
+     {
+      winnt_create_service("%ORACLE_HOME%\BIN\TNSLSNR.EXE",
+                           "OracleTNSListener",
+		           SERVICE_ALL_ACCESS,
+		           SERVICE_WIN32_OWN_PROCESS,
+		           SERVICE_AUTO_START,
+		           SERVICE_ERROR_NORMAL,
+		           "LocalSystem",
+		           "");
+     }
+     [
+      'PERMISSION_DENIED , 'OS_ERROR,
+      'INVALID_SERVICE_NAME : signal('FAILURE, failure_of_crttns);
+      'ALREADY_EXISTS       : continue();
+     ]
+
+    permit_retry_operations = TRUE;
+
+    /* Install at least one Protocol adapter */
+    if (install_adp == TRUE) {
+    	install(adp_pkg);
+    }
+
+     /* Finish Server Easy Config */
+
+    permit_retry_operations = TRUE;
+
+    {
+      copy_file(sqlnet_ora_sample, sqlnet_ora);
+    }
+    ['INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'FILE_NOT_FOUND, 'OS_ERROR: continue();]
+
+     /* Sanity check:  if adapter not installed, do not configure listener to use it. */
+    if ( (copy_tcp_lsnr) || (copy_spx_lsnr) || (copy_nmp_lsnr) )
+    {
+       if (not(registered(tcp_name) || member(products_for_installation, tcp_prod)))
+            copy_tcp_lsnr = FALSE;
+       if (not(registered(spx_name) || member(products_for_installation, spx_prod)))
+            copy_spx_lsnr = FALSE;
+       if (not(registered(nmp_name) || member(products_for_installation, nmp_prod)))
+            copy_nmp_lsnr = FALSE;
+    }
+
+    copy(lsnr, "beg");
+    if (copy_nmp_lsnr)
+      copy(lsnr, "nmp");
+    if (copy_tcp_lsnr)
+       copy(lsnr, "tcp");
+    if (copy_spx_lsnr)
+      copy(lsnr, "spx");
+    copy(lsnr, "end");
+
+/*
+   ui_action(starting_of_tns);
+   {
+     nt_start_service("OracleTNSListener");
+   }
+   [ 'default: signal('FAILURE, failure_of_strttns);]
+*/
+
+ } /* NT */
+ else    /* Win 95 */
+ {
+ 	/* Finish Personal Oracle server-side EZ-Config */
+ 	
+ 	if (copy_tcp_lsnr)
+       copy(lsnrp, "tcp");
+    if (copy_spx_lsnr)
+      copy(lsnrp, "spx");
+
+    modify("LISTENER_STARTUP","AUTO",ora_config,(product_filename(current_product)));
+
+ } /* Win 95 */
+
+    permit_retry_operations = FALSE;
+
+    ui_action(instantiate(net2_register));
+    register(current_product);
+    reference(w32rsf73, current_product);
+
+    if (member(selected_products,current_product))
+	reference(current_product);
+  }
+}

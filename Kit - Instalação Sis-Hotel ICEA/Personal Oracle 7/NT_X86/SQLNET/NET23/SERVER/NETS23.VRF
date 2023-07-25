@@ -1,0 +1,415 @@
+/* Copyright (c) Oracle Corporation 1992, 1996.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    nets23.vrf
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for installation
+    of the Windows 32 SQL*Net product.
+
+  OWNER
+    Mason Ng
+
+  MODIFIED    DD-MMM-YY  Reason
+    dstiefel  15-JUL-96  Make Service Automatic
+    dstiefel  22-FEB-96  Merge NT/95 for 2.3.2
+    ljiang    09/95      Modified for Easy Configuration
+    Ekhor     07-SEP-95  Modified for Windows 95
+    dlau      07-AUG-95  Modified for SQLNET 2.2
+    eflores   04-APR-94  Modified for 2.1.2
+    mng       05-JAN-94  Modified for NT.
+    zkhan     11-AUG-93  Modified for SQLNET and for using V3.0.9.3.2 or later
+                         of the installer.
+    trodgers  10-APR-92  Created.
+*****************************************************************************/
+{
+  {
+  /* OS variables */
+   if (platform() == "nt")
+	 prefix = "nt";
+   else
+ 	 prefix = "w95";
+
+   instver_prod = evaluate("%prefix%instver");
+   install_prod = evaluate("%prefix%install");
+
+   doit = execute("%installer_home%\%operating_system%.vrf");
+  }
+   [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(instver_prod);
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+   ]
+
+ if (doit)
+  {
+    vrf_ratchet = "2.3.2.1.4";
+
+    net2_register = nls("net2_register","Registering %product_label%...");
+    net2_install_script = nls("net2_install_script","Installing %product_label% Installation Scripts...");
+    net2_install_message = nls("net2_install_message","Installing %product_label% Message Files...");
+    net2_install_sample = nls("net2_install_sample","Installing %product_label% Sample Files...");
+    net2_install_tns = nls("net2_install_tns","Installing %product_label% DLL's...");
+    net2_install_dll = nls("net2_install_dll","Installing %product_label% DLL's...");
+    net2_install_exe = nls("net2_install_exe","Installing %product_label% Executables...");
+    net2_install_easycfg = nls("net2_install_easycfg","Installing SQL*Net Easy Configuration Files...");
+
+    app_prompt = nls("app_prompt","Stop all Oracle applications that are using %%product_label%% before continuing with this installation.");
+    app_content = nls("app_content","Stop Applications");
+    app_help = nls("app_help","%%product_label%% is being used. Stop all Oracle applications that are using %%product_label%% before continuing with this installation.");
+
+    service_prompt = nls("service_prompt","Stop all Oracle Listeners before installing %%product_label%%.");
+    service_content = nls("service_content","Stop Listeners");
+    service_help = nls("service_help","Use the Oracle utility, oradim, or use the Windows NT service control panel to stop all Oracle Listeners that are running on this machine.");
+
+    failure_of_crttns = nls("service_error","Unable to create the NT Service for the SQL*Net V2 Listener") ;
+    failure_of_deltns = nls("service_error","Unable to delete the NT Service for the SQL*Net V2 Listener") ;
+    failure_of_strttns = nls("service_error","Unable to start the NT Service for the SQL*Net V2 Listener") ;
+    starting_of_tns = nls("service_start","Starting the NT Service for the SQL*Net V2 Listener") ;
+
+    net2_inst_term = instantiate(nls("net2_inst_term", "%%product_label%% installation terminated."));
+
+    use_inst_from_media = nls("use_inst_from_media","SQL*Net Easy Configuration depends on the Oracle Installer. The Oracle Installer you are currently using is not compatible to run SQL*Net Easy Configuration. Please run the Oracle Installer from the release media in order to install the latest version of Oracle Installer and %product_label%.");
+    use_inst_from_media_label = nls("use_inst_from_media_label","Oracle Installer Not Compatible");
+    use_inst_from_media_help_term = nls("use_inst_from_media_help_term","Please run the Oracle Installer from the release media in order to install %product_label%.
+
+OK or CANCEL terminates the %product_label% installation.
+   ");
+
+   use_inst_from_media_help_cont = nls("use_inst_from_media_help_cont","Please run the Oracle Installer from the release media in order to install %product_label%.
+
+OK continues to install other products.
+
+CANCEL terminates the %product_label% installation.
+   ");
+
+    /* The following strings came from win 95 */
+    
+    nets22_expl = nls("nets22_expl", "A %%product_label%% DLL (%%dll_name%%.DLL) is being used on this machine. Please stop all Oracle applications that are using %%product_label%% before installing %%product_label%%.
+
+Silent mode installation of %%product_label%% terminated.");
+    nets22_inst = instantiate(nls("nets22_inst", "A %%product_label%% DLL (%%dll_name%%.DLL) is being used on this machine. Please stop all Oracle applications that are using %%product_label%% before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+    "));
+    nets22_inst_term = instantiate(nls("nets22_inst_term", "%%product_label%% installation terminated."));
+    nets22_inst_content = instantiate(nls("nets22_inst_content", "%%product_label%% DLL Used"));
+    nets22_inst_help = instantiate(nls("nets22_inst_help", "The Oracle Installer has detected that a %%product_label%% DLL (%%dll_name%%.DLL) is being used on this machine.  Please stop all Oracle applications that are using %%product_label%% before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+    "));
+    nets22_exe_expl = nls("nets22_exe_expl", "%%product_label%% (TNSLSNR.EXE) is currently running on this machine. Please stop all Oracle Listeners using Stop Database before installing %%product_label%%.
+
+Silent mode installation of %%product_label%% terminated.");
+    nets22_exe_inst = instantiate(nls("nets22_exe_inst", "%%product_label%% (TNSLSNR.EXE) is currently running on this machine. Please stop all Oracle Listeners using Stop Database before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+    "));
+    nets22_exe_inst_term = instantiate(nls("nets22_exe_inst_term", "%%product_label%% installation terminated."));
+    nets22_exe_inst_content = instantiate(nls("nets22_exe_inst_content", "%%product_label%% Running"));
+    nets22_exe_inst_help = instantiate(nls("nets22_exe_inst_help", "The Oracle Installer has detected that %%product_label%% (TNSLSNR.EXE) is currently running on this machine.  Please stop all Oracle Listeners using Stop Database before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%.
+    "));
+
+    spx_tcp_must_be_installed = nls("spx_tcp_must_be_installed","You must select either the TCP/IP or SPX network protocol which %product_label% support. %product_label% not installed.");
+    spx_tcp_must_be_installed_label = nls("spx_tcp_must_be_installed_label","TCP/IP or SPX Not Installed");
+    spx_tcp_must_be_installed_help = nls("spx_tcp_must_be_installed_help","You must select either the TCP/IP or SPX network protocol which %product_label% support. %product_label% not installed.
+
+OK continues with the installation of other products.
+
+CANCEL terminates the installation of %product_label%.
+    ");
+
+   /* variables and logic */
+
+   netsrv_prod = evaluate("%prefix%netsrv23");
+   netclt_prod = w32netclt23;
+
+   tcp_prod = w32tcp23;
+   spx_prod = w32spx23;
+   nmp_prod = w32nmp23;
+   tcp_name = product_name(tcp_prod);
+   spx_name = product_name(spx_prod);
+   nmp_name = product_name(nmp_prod);
+   adp_pkg = adp23;  /* use the pkg */
+   install_adp = FALSE; /* force protocol adapter install ? */
+
+   total = verify(w32rsf73);
+   
+    /* Easy Configuration */
+
+   if (platform() == "nt")
+   {
+
+   /* Need at least one protocol adapter */   
+
+   if( not(registered(tcp_name)) && not(registered(spx_name)) && not(registered(nmp_name)) )
+   {
+   	 /* OK, if they are being installed */
+   	 if( not(member(selected_products, tcp_prod)) &&
+   	     not(member(selected_products, spx_prod)) && 
+         not(member(selected_products, nmp_prod)) )
+     {
+       if( not(member(products_for_installation, tcp_prod)) &&
+           not(member(products_for_installation, spx_prod)) && 
+           not(member(products_for_installation, nmp_prod)) )
+       {   	
+          install_adp = TRUE;
+          total = total + verify(adp_pkg);
+       }
+     }  /* no adapters selected */
+   } /* no adapters */
+
+   copy_nmp_lsnr = TRUE;     /* always under Win NT */
+   copy_tcp_lsnr = FALSE;
+   copy_spx_lsnr = FALSE;
+   
+   total = total + sum(lsnr);  /* approx:  total size of listener.ora */
+
+   if(win32_key_exists("HKEY_LOCAL_MACHINE", "System\CurrentControlSet\Services\TCPIP"))
+      copy_tcp_lsnr = TRUE;
+
+   if( (win32_key_exists("HKEY_LOCAL_MACHINE","System\CurrentControlSet\Services\NwlnkIpx")) ||
+       (win32_key_exists("HKEY_LOCAL_MACHINE","Software\Novell\IpxSpx")) )  /* Novell NDS Client */
+      copy_spx_lsnr = TRUE;
+
+   /* attempt to "auto-detect" the host name info from the registry */
+      found_host = FALSE;
+      found_computer = FALSE;
+
+     {
+       host_name = nt_get_value("HKEY_LOCAL_MACHINE",
+                               "System\CurrentControlSet\Services\Tcpip\Parameters",
+                               "Hostname");
+       found_host = TRUE;
+     }
+     ['INVALID_KEY, 'FILE_NOT_FOUND, 'OS_ERROR: host_name = "default_host_name";
+     ]
+
+     {
+       computer_name = nt_get_value("HKEY_LOCAL_MACHINE",
+                               "System\CurrentControlSet\Control\ComputerName\ComputerName",
+                               "ComputerName");
+       found_computer = TRUE;
+
+     }
+     ['INVALID_KEY, 'FILE_NOT_FOUND, 'OS_ERROR: computer_name = "default_computer_name";
+     ]
+
+/*  Now set unfound one to other as best guess */
+    if ( (found_host != TRUE) && (found_computer == TRUE) )
+    { host_name=computer_name; }
+
+    if ( (found_computer != TRUE) && (found_host == TRUE) )
+    { computer_name=host_name; }
+
+   }  /* NT */
+   else { /* w95 */
+   {
+     if (install_type == install_type_custom)
+        custom_install = TRUE;
+     else
+        custom_install = FALSE;
+   }
+   [ 'UNBOUND_VARIABLE: custom_install = TRUE; ]
+
+   /* check to see if all listeners are shutdown */
+   done = FALSE;
+   while(not(done))
+   { move_file("%ORACLE_HOME%\bin\TNSLSNR.exe", "%ORACLE_HOME%\bin\TNSLSNR.exe"); done = TRUE; }
+      [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+       {
+         if (silent_mode)
+           signal('FAILURE, instantiate(nets22_exe_expl));
+         else
+           information_dialog(instantiate(nets22_exe_inst), nets22_exe_inst_content, instantiate(nets22_exe_inst_help));
+       }
+        'FILE_NOT_FOUND:
+         done = TRUE;
+      ]                       
+
+   done = FALSE;
+   while(not(done))
+   { move_file("%ORACLE_HOME%\bin\ntpnt.dll", "%ORACLE_HOME%\bin\ntpnt.dll"); done = TRUE;}
+    [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+      {
+        dll_name = "NTPNT";
+        if (silent_mode)
+          signal('FAILURE, instantiate(nets22_expl));
+        else
+          information_dialog(instantiate(nets22_inst), nets22_inst_content, instantiate(nets22_inst_help));
+      }
+      'FILE_NOT_FOUND:
+        done = TRUE;
+    ]                       
+  
+   done = FALSE;
+   while(not(done))
+   { move_file("%ORACLE_HOME%\bin\ntusnt.dll", "%ORACLE_HOME%\bin\ntusnt.dll"); done = TRUE;}
+    [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+      {
+        dll_name = "NTUSNT";
+        if (silent_mode)
+          signal('FAILURE, instantiate(nets22_expl));
+        else
+          information_dialog(instantiate(nets22_inst), nets22_inst_content, instantiate(nets22_inst_help));
+      }
+      'FILE_NOT_FOUND:
+        done = TRUE;
+    ]                       
+
+    {
+      host_name = win32_get_value("HKEY_LOCAL_MACHINE",
+                                  "System\CurrentControlSet\Services\VxD\MSTCP",
+                                  "HostName");
+    }
+    ['INVALID_KEY, 'FILE_NOT_FOUND, 'OS_ERROR: 
+      {
+        host_name = win32_get_value("HKEY_LOCAL_MACHINE",
+                                    "System\CurrentControlSet\Control\ComputerName\ComputerName",
+                                    "ComputerName");
+      }
+      ['INVALID_KEY, 'FILE_NOT_FOUND, 'OS_ERROR: host_name = "default_computer_name";]
+    ]
+
+   copy_nmp_lsnr = FALSE;     /* not supported for Win 95 Server */
+   copy_tcp_lsnr = FALSE;
+   copy_spx_lsnr = FALSE;
+
+   increment = 0;
+   while (increment < 100)
+   {
+     if (increment > 9)
+       increment_string = "%increment%";
+     else
+       increment_string = "0%increment%";
+     temp_string = win32_get_value("HKEY_LOCAL_MACHINE",
+                                   "System\CurrentControlSet\Services\Class\NetTrans\00%increment_string%",
+                                   "DeviceVxDs");
+     temp_list = explode(temp_string,",", 'STRINGSONLY);
+     if (member(temp_list, "vtcp.386"))
+       copy_tcp_lsnr = TRUE;
+     else if (member(temp_list, "nwlink.vxd"))
+       copy_spx_lsnr = TRUE;
+     increment = increment + 1;
+   }
+   ['INVALID_KEY, 'FILE_NOT_FOUND, 'OS_ERROR: increment = increment + 1;]
+/*
+   if(win32_key_exists("HKEY_LOCAL_MACHINE",
+                       "System\CurrentControlSet\Services\VxD\MSTCP"))
+      copy_tcp_lsnr = TRUE;
+
+   if(win32_key_exists("HKEY_LOCAL_MACHINE",
+                       "System\CurrentControlSet\Services\VxD\NWLink"))
+      copy_spx_lsnr = TRUE;
+*/
+   { /* Novell's stack */
+   	 if( not(copy_spx_lsnr) &&
+   	   (win32_key_exists("HKEY_LOCAL_MACHINE","Network\Novell\ProtocolIPX")) )
+   	     copy_spx_lsnr = TRUE;
+   }
+   [ 'default: continue();]
+
+   if ((copy_tcp_lsnr) || (copy_spx_lsnr))
+   {
+     if (copy_tcp_lsnr && copy_spx_lsnr)
+     {
+       if (registered(tcp_name) || member(products_for_installation, tcp_prod))
+            copy_spx_lsnr = FALSE;
+         else
+            copy_tcp_lsnr = FALSE;
+     }
+
+     if ((not(member(products_for_installation, tcp_prod) ||
+             member(products_for_installation, spx_prod))) &&
+          not(registered(tcp_name)) &&  not(registered(spx_name))) 
+
+     {
+       if (member(selected_products, netsrv_prod) && empty(rest(selected_products)))
+         signal('CANCEL,spx_tcp_must_be_installed);
+       else
+       {
+         information_dialog(spx_tcp_must_be_installed,spx_tcp_must_be_installed_label,spx_tcp_must_be_installed_help);
+         doit = FALSE;
+         return(total);
+       }
+     }
+
+     if (copy_tcp_lsnr)
+       total = total + sum(lsnrp,"tcp");
+     else
+       total = total + sum(lsnrp,"spx");
+    }
+   else
+    {
+     information_dialog(nls("no_protocols","The Installer did not detect TCP/IP or SPX protocols on your machine. You need to install either TCP/IP or SPX before installing %product_label%."),
+                        nls("no_protocols_content", "No Protocol Detected"),
+                        nls("no_protocols_hlp","The Oracle Installer did not detect TCP/IP or SPX protocols on your machine.
+
+Please install either TCP/IP or SPX before installing %product_label%.
+
+The TCP/IP network protocol enables data transfer on Local Area Networks (LANs), Wide Area Networks (WANs), and the Internet.
+
+The SPX network protocol enables data transfer in a Novell NetWare environment.
+
+If you are not familiar with network transport protocols, please contact your network administrator."),
+                        'NO_CANCEL);
+     if (custom_install && member(selected_products, netsrv_prod) && empty(rest(selected_products)))
+     {        
+        signal('CANCEL, nets22_inst_term);
+     }
+     else
+     {
+        doit = FALSE;
+        return(0);
+     }
+    }
+   } /* w95 */
+
+   if (not(registered("%prefix%install")))
+      total = total + verify(install_prod);
+   else
+   if (earlier_version(registration("%prefix%install"),product_version(instver_prod)))
+      {
+      total = total + verify(install_prod);
+      }
+      ['FAILURE:
+        {
+          if (member(selected_products, netsrv_prod) && empty(rest(selected_products))) 
+          {
+            information_dialog(use_inst_from_media,use_inst_from_media_label,use_inst_from_media_help_term);
+            signal('CANCEL,net2_inst_term);
+          }
+          else
+          {
+            information_dialog(use_inst_from_media,use_inst_from_media_label,use_inst_from_media_help_cont);
+            doit = FALSE;
+            return (0);
+          }
+        }
+      ]
+
+   return(total + sum(tns,dll,exe,sample,msb,nls_abbreviation,deinstl));
+  }
+ else
+   {
+    refresh_map_file = FALSE;
+    return(0);
+   }
+}
+

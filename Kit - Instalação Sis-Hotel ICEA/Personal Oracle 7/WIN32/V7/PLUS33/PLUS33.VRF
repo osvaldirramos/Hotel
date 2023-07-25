@@ -1,0 +1,141 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    plus33.vrf - V3.0.20.2.0 version analysis/product configuration script
+		 for Sql*Plus for Windows Nt/95 3.3
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for the
+    installation of Sql*Plus for Windows Nt/95 3.3
+
+  OWNER
+    Edan Kabatchnik
+
+  MODIFIED    DD-MMM-YY  Reason
+    MWWOO     05/23/96   Modified for W32RSF73 verification
+    Aedsinge  07/05/95 - Modified for v3.1 of the installer
+    Aedsinge  06/06/95 -  Modified for version 3.3.2, Windows NT/95.
+    Aedsinge  27-APR-95  Modified for Shared Oracle, Windows Sql*Plus 3.1.3.7.2
+    LMurphy   08-SEP-94  Modified for Windows SQL*Plus 3.1.3.5.x
+    LMurphy   23-MAY-94  Modified for Windows SQL*Plus 3.1.2.2.6
+    shall     04-FEB-93  Created from RSF 7 vrf file
+*****************************************************************************/
+/*****************************************************************************
+   Bind string variables & prompt strings...
+*****************************************************************************/
+{
+    if (operating_system == "win95")
+    {
+	prod_prefix = "w95";
+    }
+    else
+    {
+	prod_prefix = "nt";
+    }
+    
+        /*******************************************************************/
+        /* Shared Oracle code */
+        SHARED_ORACLE_COMPLIANT = TRUE;
+        /* end Shared Oracle code */
+        /*******************************************************************/
+	{ doit = execute("%installer_home%\%operating_system%.vrf"); }
+	[
+	'UNBOUND_VARIABLE:
+	{
+	        required_version = product_version(evaluate("%prod_prefix%instver"));
+		temp = explode(required_version,".");
+		required_version = implode(list(first(temp), first(rest(temp)),
+					  first(rest(rest(temp))),
+					  first(rest(rest(rest(temp))))),".");
+		signal('failure, instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%.  The installation you have chosen requires version %%required_version%% or later.  Please run version %%required_version%% or later in order to perform this installation.")));
+	}
+	]
+
+	if (doit)
+	{
+		vrf_ratchet = "3.3.2.0.2";
+
+		{
+		set_plus33 = FALSE;
+
+		plus33 = translate("PLUS33","$oracle");
+
+		if (not(exists(plus33)))
+
+			signal('UNBOUND_ENVIRONMENT_VARIABLE);
+		}
+		[ 'OS_ERROR, 'INVALID_FILE_NAME, 'FILE_NOT_FOUND,
+		'PERMISSION_DENIED, 'UNBOUND_ENVIRONMENT_VARIABLE:
+		{
+			plus33 = "%oracle_home%\PLUS33";
+			set_plus33 = TRUE;
+		}
+		]
+
+		{ oracle_group_name = oracle_group_name; }
+                [ 'UNBOUND_VARIABLE: oracle_group_name = nls("oracle_group_name","Oracle for Windows 95"); ]
+
+		{
+			set_sqlpath = FALSE;
+			sqlpath = translate("SQLPATH","$oracle");
+			if (not(exists(sqlpath)))
+				signal('UNBOUND_ENVIRONMENT_VARIABLE);
+		}
+			[ 'OS_ERROR, 'INVALID_FILE_NAME, 'FILE_NOT_FOUND,
+			'PERMISSION_DENIED, 'UNBOUND_ENVIRONMENT_VARIABLE:
+			{
+			sqlpath = "%ORACLE_HOME%\DBS";
+			set_sqlpath = true;
+			}
+			]
+
+		installing_scripts = nls("installing_scripts", "Installing %%product_label%% Installation Scripts...");
+		installing_exec = nls("installing_exec", "Installing %%product_label%% Executable...");
+		installing_msbs = nls("installing_msbs", "Installing %%product_label%% Message Files...");
+		installing_sql = nls("installing_sql", "Installing %%product_label%% SQL Scripts...");
+		registering = nls("registering", "Registering %%product_label%%...");
+		prod_label = nls("prod_label", "Modifying %%product_label%% Environment Variables...");
+		installing_help = nls("installing_help", "Installing %%product_label%% Help Files...");
+                plus33_expl = nls("plus33_expl", "%%product_label%% (PLUS33.EXE) is currently running on this machine. Please close this application before installing %%product_label%%.
+
+Silent mode installation of %%product_label%% terminated.");
+                plus33_run = instantiate(nls("plus33_run", "%%product_label%% (PLUS33.EXE) is currently running on this machine. Please close this application before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%."));
+                plus33_inst_term = instantiate(nls("plus33_inst_term", "%%product_label%% installation terminated."));
+                plus33_run_content = instantiate(nls("plus33_run_content", "%%product_label%% Running"));
+                plus33_run_help = instantiate(nls("plus33_run_help", "The Oracle Installer has detected that %%product_label%% (PLUS33.EXE) is currently running on this machine.  Please close this application before installing %%product_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the installation of %%product_label%%.
+
+Choose CANCEL to terminate the installation of %%product_label%%."));
+
+                done = FALSE;
+                while(not(done))
+                { move_file("%ORACLE_HOME%\bin\plus33.exe", "%ORACLE_HOME%\bin\plus33.exe"); done = TRUE; }
+                [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+                {
+                        if (silent_mode)
+                                signal('FAILURE, instantiate(plus33_expl));
+                        else
+                                information_dialog(instantiate(plus33_run), plus33_run_content, instantiate(plus33_run_help));
+                }
+                  'FILE_NOT_FOUND:
+                        done = TRUE;
+                ]
+                
+                total = 0;
+
+                if (not(registered("w32rsf73")))
+                   total = total + verify(w32rsf73);
+
+		return(total + sum(msg,nls_abbreviation,sql,deinstl,exe));
+	
+	}
+	else
+		refresh_map_file = FALSE;
+	return(0);
+}
+

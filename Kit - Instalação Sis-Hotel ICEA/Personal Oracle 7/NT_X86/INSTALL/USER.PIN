@@ -1,0 +1,84 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/*****************************************************************************
+  NAME
+    user.pin - custom post-install script
+
+  DESCRIPTION
+    This script is a post-install script for scripters' use
+
+  MODIFIED      MM/DD/YY    Reason
+  zzerhoun      12/30/94    Remove user.pin after use
+  zzerhoun      12/28/94    Executes shut down script if not custom install
+  akelley       09/29/94    Added "In case of floppy" section from MINg's file
+  bsabol        08/17/94    Modified
+  bsabol        04/23/94    Created
+*****************************************************************************/
+{
+  if (user_action == 'install)
+  {
+    { install_type = install_type; }
+    ['UNBOUND_VARIABLE: install_type = "Custom";]
+
+    if (member(selected_products, ntrdbms73))
+	{
+	  {
+		winnt_start_service("oracletnslistener");
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	
+	  {
+		winnt_start_service("oraclenmplistenerorcl");
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	
+	  {
+		winnt_start_service("oracletcplistener");
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	
+	  {
+		winnt_start_service("oraclestartorcl");
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	
+	  {
+		winnt_start_service("oracleserviceorcl");
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	
+	  {
+		winnt_start_service("oracleservice");   /* for v7.0 */
+	  }
+	  [
+		'DEFAULT: continue();
+	  ]
+	}
+
+
+	{ execute("%installer_home%\%operating_system%.pin");}
+    if (install_type == "Custom")
+      signal('success,instantiate(installation_complete));
+    else if (empty(remind_list))
+      signal('success,instantiate(installation_complete));
+    else
+      information_dialog(instantiate(installation_complete),'NO_CANCEL);
+
+    if (install_type != "Custom")
+    { execute("%installer_home%\%operating_system%.shd");}
+    [ 'default: continue();]
+
+    remove_file("%installer_home%\user.pin");
+  }
+}
+

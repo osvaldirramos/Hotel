@@ -1,0 +1,275 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+  dbint72.dei - V3 deinstallation script
+
+  DESCRIPTION
+    This script deinstalls
+
+  OWNER
+    Zakia Zerhouni
+
+  MODIFIED    DD-MMM-YY  Reason
+  mrlai	      16-SEP-96  Modified to work for both NT and 95
+  LMurphy     25-APR-96  Modified for 7.3
+  LMurphy     11-DEC-95  Modified for Windows NT
+  LMurphy     16-JUN-95  Modified for Windows 95
+  LMurphy     23-JAN-95  Modified for use with SQL*Net help
+  zzerhoun    04-JAN-95  Created.
+*****************************************************************************/
+{
+  plat = platform();
+  if (plat == "win95")
+  {
+	under_win_95 = TRUE;
+	prod_prefix = "w95";
+	scr_prefix = "win95";
+  }
+  else
+  {
+	under_win_95 = FALSE;
+	prod_prefix = "nt";
+	scr_prefix = "nt";
+  }
+
+   { doit = execute("%installer_home%\%scr_prefix%.dei"); }
+   [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+   ]
+
+  if (doit)
+  {
+      {
+	    nav72 = v7_translate("NAV72");
+      }
+      [
+    	  'UNBOUND_ENVIRONMENT_VARIABLE,'PERMISSION_DENIED:
+    	  {
+    	    variable = "NAV72";
+    	    information_dialog(instantiate(deinstall_prompt02),
+    			       instantiate(deinstall_content02),
+    			       instantiate(deinstall_help02));
+    	    doit = FALSE;
+    	  }
+	  ]
+
+      {
+	    mshelp = v7_translate("MSHELP");
+      }
+      [
+    	  'UNBOUND_ENVIRONMENT_VARIABLE,'PERMISSION_DENIED:
+    	  {
+    	    variable = "MSHELP";
+    	    information_dialog(instantiate(deinstall_prompt02),
+    			       instantiate(deinstall_content02),
+    			       instantiate(deinstall_help02));
+    	    doit = FALSE;
+    	  }
+	  ]
+  }
+
+  if (doit)
+  {
+    /**********************************************************************
+      Bind all NLS deinstall strings here...
+     ***********************************************************************/
+
+    unregistering = nls("unregistering",
+                        "Unregistering %%registry_label%%...");
+    deinst_script = nls("deinst_script",
+                        "Removing %%registry_label%% Installation Scripts...");
+    deinst_doc = nls("deinst_doc","Deinstalling %%registry_label%% Help Files...");
+    deinst_dll = nls("deinst_dll","Deinstalling %%registry_label%% Dynamic Link Libraries...");
+    deinst_exe = nls("deinst_exe","Deinstalling %%registry_label%% Executables...");
+    unregistering_ocx = nls("unregistering_ocx","Unregistering %%registry_label%% OLE Control...");
+
+    ocx_err = nls("ocx_err","Unable to unregister OLE Control");
+
+    if (under_win_95)
+	resetting_variables = nls("resetting_nt_variables",
+                              "Modifying Windows 95 Registry...");
+    else
+	resetting_variables = nls("resetting_nt_variables",
+                              "Modifying Windows NT Registry...");
+
+    po7_deinst = instantiate(nls("po7_deinst", "%%registry_label%% (PO7.EXE) is currently running on this machine. Please close this application before deinstalling %%registry_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+    "));
+    po7_deinst_term = instantiate(nls("po7_deinst_term", "%%registry_label%% deinstallation terminated."));
+    po7_deinst_content = instantiate(nls("po7_deinst_content", "%%registry_label%% Running"));
+    po7_deinst_help = instantiate(nls("po7_deinst_help", "The Oracle Installer has detected that %%registry_label%% (PO7.EXE) is currently running on this machine.  Please close this application before deinstalling %%registry_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+    "));
+
+    { bundle_name = bundle_name;}
+    [ 'UNBOUND_VARIABLE:
+	if (plat == "win95")
+	  bundle_name = "Personal Oracle7 for Windows 95";
+	else
+	  bundle_name = "Personal Oracle7 for Windows NT";
+    ]
+
+    if (bundle_name == "Personal Oracle Lite")
+    {
+        polite_group_name = "Personal Oracle Lite";
+    }
+
+    if (bundle_name == "Personal Oracle7 for Windows 95")
+    {
+        p_o7_95_group_name = "Personal Oracle7 for Windows 95";
+    }
+
+    if (bundle_name == "Personal Oracle7 for Windows NT")
+    {
+        p_o7_nt_group_name = "Personal Oracle7 for Windows NT";
+    }
+
+   win_sys_dir = windows_system_directory();
+   win_dir = windows_directory();
+
+      permit_retry_operations = FALSE;
+      dependent_keys = "NAV72";
+      { execute("%installer_home%\registry.dei");}
+      [ 'DEFAULT(a,b): CONTINUE(); ]
+
+    /**********************************************************************
+         Continue with the deinstallation
+     ***********************************************************************/
+
+      /********************
+      Deinstall the product
+      *********************/
+
+      if (plat == "win95")
+	nav_group_name = "Personal Oracle7 for Windows 95";
+      else
+	nav_group_name = "Personal Oracle7 for Windows NT";
+
+      ora_navigate = "Oracle Navigator";
+
+      ui_action(instantiate(deinst_exe));
+
+      /* check to see if the po7 app is closed */
+      {
+        done = FALSE;
+        while(not(done))
+        { remove(exe); done = TRUE;}
+        [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+          {
+            if (silent_mode)
+                signal('FAILURE, instantiate(po7_deinst_term));
+            else
+                information_dialog(instantiate(po7_deinst), po7_deinst_content, instantiate(po7_deinst_help));
+          }
+          'FILE_NOT_FOUND:
+            done = TRUE;
+        ]
+      }
+
+      remove(newpo7, operating_system);
+
+      ui_action(instantiate(deinst_dll));
+      remove(dll);
+      {
+          remove(sample);
+      }
+      [ 'DEFAULT: continue(); ]
+
+      ui_action(instantiate(deinst_doc));
+      { remove_file("%MSHELP%\PO7.GID");  }
+      [ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+      ]
+
+      {	remove_file("%MSHELP%\NAV7.GID");  }
+      [ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+		continue();
+      ]
+
+      {
+          remove(help,nls_abbreviation);
+      }
+      [ 'DEFAULT: continue(); ]
+
+      if (exists(instantiate("%ORACLE_HOME%\bin\mmtx32.ocx"))) {
+          ui_action( instantiate(unregistering_ocx) );
+          { spawn("%ORACLE_HOME%\bin\regsvr32 /s /u %ORACLE_HOME%\bin\mmtx32.ocx"); }
+          [ 'NO_RESPONSE: continue();
+    	  'INVALID_FILE_NAME, 'OS_ERROR:
+    	  {
+    		information_dialog(ocx_err);
+    	  }
+          ]
+          remove(ocx);
+      }
+
+      ui_action(instantiate(resetting_variables));
+      if (under_win_95)
+      {
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator");}
+        [ 'DEFAULT: continue();]
+      }
+      else
+      {
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Connections");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Local");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Main");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Olite");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Recent File List");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator\Settings");}
+        [ 'DEFAULT: continue();]
+
+        { win32_delete_key("HKEY_CURRENT_USER","SOFTWARE\ORACLE\Oracle Navigator");}
+        [ 'DEFAULT: continue();]
+
+      }
+      [ 'DEFAULT: continue();]
+
+      if (registered("w32hlpdoc73"))
+      {
+	dependent = registration("w32hlpdoc73");
+	unreference(dependent, current_registry);
+	deinstall(dependent);
+      }
+      if (registered("w32rsf73"))
+      {
+	dependent = registration("w32rsf73");
+	unreference(dependent, current_registry);
+	deinstall(dependent);
+      }
+
+      {
+         modify("NAV72","",ora_config,registry_filename(current_registry));
+      }
+      ['DEFAULT: continue(); ]
+
+      ui_action(instantiate(deinst_script));
+      remove(deinst);
+
+      /*********************
+      Unregister the product
+      **********************/
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+
+      permit_retry_operations = FALSE;
+  }
+}
+

@@ -1,0 +1,145 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    plus33.dei - V3.0.10.3.1 installation script for Sql*Plus for Windows NT/95 V3.3
+
+  DESCRIPTION
+    This script deinstalls Sql*Plus for Windows NT/95 V3.3
+
+  OWNER
+    Edan Kabatchnik
+
+  MODIFIED    DD-MMM-YY  Reason
+    Aedsinge  06/06/95    Converted to v3.3.2 for Nt/95
+    Aedsinge  27-APR-95  Modified for Shared Oracle, Windows Sql*Plus 3.1.3.7.2
+    LMurphy   08-SEP-94  Modified for Windows SQL*Plus 3.1.3.5.x
+    LMurphy   23-MAY-94  Modified for Windows SQL*Plus 3.1.2.2.6
+    shall     04-FEB-93  Created from Browser 10 deinstall script.
+*****************************************************************************/
+{
+  
+  { doit = execute("%installer_home%\%operating_system%.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+  { 
+      plus33_deinst = instantiate(nls("plus33_deinst", "%%registry_label%% (PLUS33.EXE) is currently running on this machine. Please close this application before deinstalling %%registry_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+      "));
+      plus33_deinst_term = instantiate(nls("plus33_inst_term", "%%registry_label%% deinstallation terminated."));
+      plus33_deinst_content = instantiate(nls("plus33_deinst_content", "%%registry_label%% Running"));
+      plus33_deinst_help = instantiate(nls("plus33_deinst_help", "The Oracle Installer has detected that %%registry_label%% (PLUS33.EXE) is currently running on this machine.  Please close this application before deinstalling %%registry_label%%.
+
+Choose OK after you have closed all Oracle applications and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+      "));
+
+
+      done = FALSE;
+      while(not(done))
+      { move_file("%ORACLE_HOME%\bin\plus33.exe", "%ORACLE_HOME%\bin\plus33.exe"); done = TRUE;}
+      [ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+       {
+         information_dialog(instantiate(plus33_deinst), plus33_deinst_content, instantiate(plus33_deinst_help));
+         signal('FAILURE, instantiate(plus33_deinst_term));
+       }
+        'FILE_NOT_FOUND:
+         done = TRUE;
+      ]                       
+      {
+	  plus33 = v7_translate("PLUS33");
+	
+      }
+         [ 'OS_ERROR, 'INVALID_FILE_NAME, 'FILE_NOT_FOUND,
+		'PERMISSION_DENIED, 'UNBOUND_ENVIRONMENT_VARIABLE:
+	   {
+
+	     variable = "PLUS33";
+	     doit = FALSE;
+	     information_dialog(deinstall_prompt02,
+	     			deinstall_content02
+				deinstall_help02);
+	   }
+	 ]
+
+      {
+	oracle_group_name = v7_translate("ORACLE_GROUP_NAME");
+      }
+	[
+	  'UNBOUND_ENVIRONMENT_VARIABLE, 'OS_ERROR:
+	  {
+	    variable = "ORACLE_GROUP_NAME";
+	    information_dialog(instantiate(deinstall_prompt02),
+			       instantiate(deinstall_content02),
+			       instantiate(deinstall_help02));
+	    doit = FALSE;
+	  }
+	]
+
+  }/*doit*/
+ 
+  if (doit)
+  {
+
+
+    if (registered("w32rsf73"))
+    {
+
+	dependent = registration("w32rsf73");
+	unreference(dependent, current_registry);
+	deinstall(dependent);
+    }
+      
+      
+
+  ui_product(registry_label);
+  permit_retry_operations = TRUE;
+
+  ui_action(instantiate(nls("unregistering_product","Unregistering %%registry_label%%...")));
+  unregister(current_registry);  
+
+  ui_action(instantiate(nls("deinst_exec","Removing %%registry_label%% Executables...")));
+      	remove(exe);
+      /* PLUS33.INI is created when PLUS33.EXE is executed */
+      /* *.GID are created when *.HLP are executed */
+      /* They are removed below */
+      {
+      remove_file("%ORACLE_HOME%\PLUS33\PLUS33.INI");
+      /*remove_file("%ORACLE_HOME%\PLUS33\PLUS.GID");
+      remove_file("%ORACLE_HOME%\PLUS33\PLSHELP.GID");
+      remove_file("%ORACLE_HOME%\PLUS33\SQLHELP.GID");
+      remove_file("%ORACLE_HOME%\PLUS33\XLUGW.GID");*/
+      }
+      [ 'INVALID_FILE_NAME, 'PERMISSION_DENIED, 'WRITE_ERROR, 'OS_ERROR:
+        continue();
+      ]
+
+  ui_action(instantiate(nls("deinst_sql","Removing %%registry_label%% SQL Scripts...")));
+      	remove(sql);
+  ui_action(instantiate(nls("deinst_help","Removing %%registry_label%% Help Files...")));
+   	remove(prefs);
+  ui_action(instantiate(nls("deinst_msbs","Removing %%registry_label%% Message Files...")));
+      	remove(msg);
+  
+  ui_action(instantiate(nls("deinst_script","Removing %%registry_label%% Installation Scripts...")));
+      remove(deinstl);
+
+  ui_action(instantiate(nls("env_var", "Modifying %%registry_label%% Environment Variables...")));
+      /*************************************************************/
+      /* Shared Oracle code */
+      modify("SQLPATH", "", "$oracle", (registry_filename(current_registry)));
+      modify("PLUS33", "", "$oracle", (registry_filename(current_registry)));
+      modify("EXECUTE_SQL", "", "$oracle", (registry_filename(current_registry)));
+      modify("PLUS_DFLT", "", "$oracle", (registry_filename(current_registry)));
+
+          /* end Shared Oracle code */
+      /*************************************************************/
+      permit_retry_operations = FALSE;
+   } 
+}   

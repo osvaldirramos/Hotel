@@ -1,0 +1,106 @@
+#
+# $Header: init.ora 1.2 94/10/18 16:12:36 gdudey Osd<desktop/netware> $ init.ora Copyr (c) 1991 Oracle
+#
+##############################################################################
+# Example INIT.ORA file
+#
+# This file is provided by Oracle Corporation to help you customize
+# your RDBMS installation for your site.  Important system parameters
+# are discussed, and example settings given.
+#
+# Some parameter settings are generic to any size installation.
+# For parameters that require different values in different size
+# installations, three scenarios have been provided: SMALL, MEDIUM
+# and LARGE.  Any parameter that needs to be tuned according to
+# installation size will have three settings, each one commented
+# according to installation size.
+#
+# Use the following table to approximate the SGA size needed for the
+# three scenarious provided in this file:
+#
+#                     -------Installation/Database Size------
+#                      SMALL           MEDIUM           LARGE
+#  Block         2K    4500K            6800K           17000K
+#  Size          4K    5500K            8800K           21000K
+#
+# To set up a database that multiple instances will be using, place
+# all instance-specific parameters in one file, and then have all
+# of these files point to a master file using the IFILE command.
+# This way, when you change a public
+# parameter, it will automatically change on all instances.  This is
+# necessary, since all instances must run with the same value for many
+# parameters. For example, if you choose to use private rollback segments,
+# these must be specified in different files, but since all gc_*
+# parameters must be the same on all instances, they should be in one file.
+#
+# INSTRUCTIONS: Edit this file and the other INIT files it calls for
+# your site, either by using the values provided here or by providing
+# your own.  Then place an IFILE= line into each instance-specific
+# INIT file that points at this file.
+###############################################################################
+
+db_name = oracle
+db_files = 20
+%seed_control%
+
+compatible = 7.3.0.0.0
+
+db_file_multiblock_read_count =  %init_db_file_multiblock_read_count% # INITIAL
+# db_file_multiblock_read_count = 8                                   # SMALL
+# db_file_multiblock_read_count = 16                                  # MEDIUM
+# db_file_multiblock_read_count = 32                                  # LARGE
+
+db_block_buffers =  %init_db_block_buffers%                           # INITIAL
+# db_block_buffers = 200                                              # SMALL
+# db_block_buffers = 550                                              # MEDIUM
+# db_block_buffers = 3200                                             # LARGE
+
+shared_pool_size =  %init_shared_pool_size%                           # INITIAL
+# shared_pool_size = 3500000                                          # SMALL
+# shared_pool_size = 6000000                                          # MEDIUM
+# shared_pool_size = 9000000                                          # LARGE
+
+log_checkpoint_interval = 10000
+
+processes =  %init_processes%                                         # INITIAL
+# processes = 50                                                      # SMALL
+# processes = 100                                                     # MEDIUM
+# processes = 200                                                     # LARGE
+
+dml_locks =  %init_dml_locks%                                         # INITIAL
+# dml_locks = 100                                                     # SMALL
+# dml_locks = 200                                                     # MEDIUM
+# dml_locks = 500                                                     # LARGE
+
+log_buffer =  %init_log_buffer%                                       # INITIAL
+# log_buffer = 8192                                                   # SMALL
+# log_buffer = 32768                                                  # MEDIUM
+# log_buffer = 163840                                                 # LARGE
+
+sequence_cache_entries =  %init_sequence_cache_entries%               # INITIAL
+# sequence_cache_entries = 10                                         # SMALL
+# sequence_cache_entries = 30                                         # MEDIUM
+# sequence_cache_entries = 100                                        # LARGE
+
+sequence_cache_hash_buckets =  %init_sequence_cache_hash_buckets%     # INITIAL
+# sequence_cache_hash_buckets = 10                                    # SMALL
+# sequence_cache_hash_buckets = 23                                    # MEDIUM
+# sequence_cache_hash_buckets = 89                                    # LARGE
+
+# audit_trail = true            # if you want auditing
+# timed_statistics = true       # if you want timed statistics
+max_dump_file_size = 10240      # limit trace file size to 5 Meg each
+
+# log_archive_start = true      # if you want automatic archiving
+
+# define directories to store trace and alert files
+background_dump_dest=%%RDBMS73%%\trace
+user_dump_dest=%%RDBMS73%%\trace
+
+db_block_size = 2048
+
+snapshot_refresh_processes = %init_snapshot_refresh_processes%
+
+remote_login_passwordfile = shared
+
+text_enable = true

@@ -1,0 +1,221 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+
+/**************************************************************************** 
+  NAME
+    object10.ins - Windows V3 installation script for the
+		  Oracle Object for Windows.
+
+  DESCRIPTION
+    This script installs the OO4W by copying the appropriate files.
+
+  OWNER
+    Biju Albert
+
+  MODIFIED    DD-MMM-YY Reason
+    gkirsur  08-DEC-94 Removed OLE2 DLLs and libraries
+    balbert  01-DEC-94 Created.
+*****************************************************************************/
+{
+  /************************************************************************** 
+	    Start main logic...                               
+   **************************************************************************/
+  if (doit)
+    {
+
+     /*** This is only for the Beta!!!! This is to unregister the ***/
+     /****older Alpha version which had a diff(incorrect) prd name ****/
+     if (registered("winobject20")) /* If alpha prod has been registered */
+     {
+        alpha_registry = registration("winobject20"); /*get registration */
+       	if (registered("w32rsf73"))
+      	{
+        	dependent = registration("w32rsf73");
+        	unreference(dependent,alpha_registry ); /* derefence depentent prod */
+     	 }
+      
+	 unregister(alpha_registry); /* unregister alpha prod */
+	
+      }
+    /*******************************************************/
+
+      ins_ratchet = "2.0.07.0.0";
+
+      execute("%installer_home%\nt.ins");
+
+      install(w32rsf73);
+     
+
+      ui_product(product_label);             
+
+      permit_retry_operations = TRUE;        
+
+      ui_action(instantiate(installing_scripts));
+      copy(deinstl,nls_abbreviation);
+
+      ui_action(instantiate(installing_class_library));    
+      copy (CPPBMFCEMPEDIT,nls_abbreviation);
+      copy (CPPBMFCEMPEDITRES);
+      copy (CPPBMFCH);
+      copy (CPPBMFCLIB);
+      copy (CPPBMFCLIBD);
+      copy (CPPBMFCSRC);
+/* Commented out for beta */
+      copy (CPPBOWL,nls_abbreviation);
+/*      copy (CPPBOWLEMPEDIT); */
+      copy (CPPBOWLH);
+      copy (CPPBOWLLIB,nls_abbreviation);
+      copy (CPPBOWLLIBD,nls_abbreviation);
+      copy (CPPBOWLSRC); 
+      copy (CPPOWLBIN,nls_abbreviation);
+      copy (CPPOWLBIND,nls_abbreviation);
+      copy (CPPOWLLIB,nls_abbreviation); 
+      copy (CPPOWLLIBD,nls_abbreviation); 
+      copy (CPPDOC,nls_abbreviation);
+      copy (CPPH);
+      copy (CPPMFCBIN);
+      copy (CPPMFCBIND);
+      copy (CPPMFCLIB);
+      copy (CPPMFCLIBD);
+      copy (CPPSRC);
+      copy (CPPWORK,nls_abbreviation);
+      copy (CPPWORKBOUNDVAL);
+      copy (CPPWORKEMPEDT);
+      copy (CPPWORKEMPEDTRES);
+      copy (CPPWORKLOGDLG);
+      copy (CPPWORKPOSADV);
+      copy (CPPDEMOSQL);
+
+/* Copy msb files */
+      ui_action(instantiate(installing_msg));    
+      copy (OIPMSBS);
+
+/*      copy (Files); */
+      ui_action(instantiate(installing_object_server));    
+      copy (OIPBIN);
+      {
+      if (web_install) copy (OIPSRVWEB);
+      else copy (OIPSRV);
+      }
+      ['UNBOUND_VARIABLE: {copy (OIPSRV); continue();}]
+      copy (OIPDOC,nls_abbreviation);
+      copy (OO4W);
+      copy (OO4WREL,nls_abbreviation);
+      ui_action(instantiate(installing_ole_libraries));   
+
+
+/************************ Note ****************************/ 
+/* OLEBIN and OLEREG are now part of the operating system */
+/* So the following lines which check for version and then copy have been commented out */
+
+
+/*      copy (OLEBIN);
+      copy (OLEREG);*/
+
+  /*    system_files = group_files(OLEBIN); */
+  /*    product_directory = implode(list(product_home,
+                                       product_location(current_product)),"\");
+      pathify(product_directory); */
+
+      /*while (not (empty(system_files)))
+      {
+         Set up the filenames and versions
+         current_destination_file = first(system_files);
+         current_source_file = implode(list(product_directory,
+                                            file_name(current_destination_file)),
+                                       "\");
+         pathify(current_source_file);
+
+         source_file_version = windows_file_version(current_source_file);
+         {
+           if ((not(exists(current_destination_file)))
+            || (windows_earlier_version(current_destination_file,
+                                        source_file_version)))
+             signal('FILE_NOT_FOUND);
+	      } ['default: copy_file(current_source_file,current_destination_file); ]
+
+         system_files = rest(system_files);
+
+      }
+
+      system_files = group_files(OLEREG);
+      product_directory = implode(list(product_home,
+                                       product_location(current_product)),"\");
+      pathify(product_directory);
+
+      while (not (empty(system_files)))
+      {
+         Set up the filenames and versions 
+         current_destination_file = first(system_files);
+         current_source_file = implode(list(product_directory,
+                                            file_name(current_destination_file)),
+                                       "\");
+         pathify(current_source_file);
+
+         {
+           if (not(exists(current_destination_file)))
+             signal('FILE_NOT_FOUND);
+	      } ['default: copy_file(current_source_file,current_destination_file); ]
+
+         system_files = rest(system_files);
+
+      }
+      */
+     /****** End Commented section *******/
+
+      ui_action(instantiate(installing_vb_vba));    
+     /* copy (VBBIN); */
+      copy (VBDEPT);
+      copy (VBEMP);
+      copy (VBLOGIN);
+      copy (VBMSG);
+ /*     copy (VBOBJ); */
+      copy (VBPARM);
+/*      copy (VBQUOTE); 
+      copy (VBRAISE); 
+      copy (VBSQL); */
+      copy (VBQT);
+      copy (XSAMP);
+       
+/*
+      if (set_mshelp)
+      {
+	ui_action(instantiate(modifying_config));
+	modify("MSHELP",mshelp,ora_config,"Oracle");
+      }
+     if (install_plsql)
+     {
+      if (set_plsql21)
+      {
+	ui_action(instantiate(modifying_config));
+	modify("PLSQL21",plsql21,ora_config,"Oracle");
+      }
+     }
+	{
+	spawn("%ORACLE_HOME%\bin\vsdpw.exe PASSWORD=%dba_password%", 'MINIMIZE);
+	}
+	[ 'NO_RESPONSE: continue();
+	  'INVALID_FILE_NAME, 'OS_ERROR: information_dialog(pwmerr);
+	]
+*/
+
+      permit_retry_operations = FALSE;
+      ui_action(instantiate(registering));
+      {
+      /*Not required for NT and Win95 */
+      /*spawn("%WINSYS%\REGEDIT.EXE /s %WINSYS%\OLE2.REG");*/
+      }
+      ['UNKNOWN_ERROR, 'NO_RESPONSE: continue();]
+      {
+      spawn("%WINDIR%\REGEDIT.EXE /s %WINSYS%\ORAIPSRV.REG");
+      }
+      ['UNKNOWN_ERROR, 'NO_RESPONSE: continue();]
+      register(current_product);
+      if (member(selected_products,current_product))
+	reference(current_product);
+
+      reference(w32rsf73, current_product);
+
+      permit_retry_operations = FALSE;
+    }
+}
+

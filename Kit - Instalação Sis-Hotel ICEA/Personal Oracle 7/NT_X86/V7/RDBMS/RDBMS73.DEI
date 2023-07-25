@@ -1,0 +1,371 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rdbms73.dei - Windows NT V3 de-installation script for ORACLE7.
+
+  DESCRIPTION
+    This script removes the Windows NT ORACLE7 files and un-registers
+    the product.
+
+  OWNER
+
+
+  MODIFIED    DD-MMM-YY Reason
+    mrlai	   10/1/96 	Modified for PO7 NT 7.3.2.2.0
+	ljiang     07/21/95 Create based on previous versions.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+         Ensure that the necessary environment variables are bound
+       **********************************************************************/
+      {
+        rdbms73 = translate("rdbms73", ora_config, registry_filename(current_registry));
+        if (not(exists(rdbms73)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+      [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+        'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+          variable = "rdbms73";
+          information_dialog(instantiate(deinstall_prompt02),
+                             instantiate(deinstall_content02),
+                             instantiate(deinstall_help02));
+          doit = FALSE;
+        }
+      ]
+
+      /**********************************************************************
+         Bind all NLS deinstall strings here...
+       **********************************************************************/
+
+      remove_prompt = instantiate(nls("remove_prompt","Do you want to remove the database in %%oracle_home%%\DATABASE?"));
+      remove_content = instantiate( nls("remove_content","Remove Database"));
+      remove_help = instantiate(nls("remove_help","If you want to remove the database in the %%oracle_home%%\DATABASE directory, choose 'YES'. If you want to retain this database, choose 'NO' and the database files will not be removed."));
+
+      unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+      remove_database = nls("remove_database","Removing Database Files...");
+      remove_service = nls("remove_service","Removing Database Service...");
+      deinst_help = nls("deinst_help","Deinstalling %%registry_label%% Help Files...");
+      deinst_doc = nls("deinst_doc","Deinstalling %%registry_label%% Informational Files...");
+      deinst_msb = nls("deinst_msb","Deinstalling %%registry_label%% Message Files...");
+      deinst_dll = nls("deinst_dll","Deinstalling %%registry_label%% Dynamic Link Libraries...");
+      deinst_exe = nls("deinst_exe","Deinstalling %%registry_label%% Executables...");
+      deinst_script = nls("deinst_script","Deinstalling %%registry_label%% Installation Scripts...");
+
+      oracle7_run_dei = instantiate(nls("failure_of_service", "Please stop all Oracle services before deinstalling.
+
+Choose OK after you have stopped all Oracle services and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+      "));
+      oracle7_run_dei_content = instantiate(nls("oracle7_run_dei_content", "Oracle7 services"));
+      oracle7_run_dei_help = instantiate(nls("oracle7_run_dei_help", "Please stop all Oracle services before deinstalling.
+Choose OK after you have stopped all Oracle services and want to resume the deinstallation of %%registry_label%%.
+
+Choose CANCEL to terminate the deinstallation of %%registry_label%%.
+
+"));
+
+      expand_db_prompt = nls("expand_db_prompt", "Deinstallation doesn't remove those database files created after the installation of the starter database or those created due to a custom 'create database' command. You may remove these files manually after deinstallation has completed.");
+      expand_db_content = nls("expand_db_content", "Database files");
+      expand_db_help = nls("expand_db_help", "If you expanded the starter database after installation or created your own custom database, the deinstall process may not remove all of the database, log, or control files in your database. You may remove them manually after deinstallation has completed.");
+
+      yes_prompt = nls("yes_prompt", "Yes");
+      no_prompt = nls("no_prompt", "No");
+      ynprompt = list(yes_prompt, no_prompt);
+
+      /**********************************************************************
+         Continue with the deinstallation
+       **********************************************************************/
+
+      ui_product(registry_label);
+
+
+/* mrlai -- changed to allow user to shut down services w/o exiting install */
+	  done = FALSE;
+	  i = 1;
+        /***** gather a list of existing OracleWWW* services *****/
+        temp = win32_enumerate_keys("HKEY_LOCAL_MACHINE",
+                                  "System\CurrentControlSet\Services");
+
+        service_list = list();
+        while (not(empty(temp)))
+        {
+            service_name = first(temp);
+
+            if (contains(service_name, "Oracle"))
+                add(service_list, service_name);
+             temp = rest(temp);
+        }
+
+      while (not(done)) {
+		
+		  /*********************** stop all the services **********************/
+            { winnt_stop_service("OracleServiceORCL"); }
+            [ 'DEFAULT: continue(); ]
+
+            { winnt_stop_service("OracleStartORCL"); }
+            [ 'DEFAULT: continue(); ]
+
+            temp = service_list;
+
+            while (not(empty(temp)))
+            {
+                service_name = first(temp);
+
+                {
+                    winnt_stop_service(service_name);
+                }
+                [
+                  'DEFAULT: {
+                      temp = temp;
+                  }
+                ]
+
+                temp = rest(temp);
+            }
+
+	
+		  /* check to see if all of the other oracle services are shutdown */
+	
+		  permit_retry_operations = FALSE; /* this should be the default */
+		  {
+			copy_file("%oracle_home%\bin\oraspawn.dll", "%oracle_home%\bin\oraspawn.sav");
+		  }
+		  [
+			'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+			  continue();
+			'READ_ERROR,'WRITE_ERROR:
+			  signal('FAILURE, nls("failure_of_copy", "Deinstallation terminated because %oracle_home%\bin\oraspawn.dll could not be copied."));
+		  ]
+
+			{
+				move_file("%ORACLE_HOME%\bin\oraspawn.sav", "%ORACLE_HOME%\bin\oraspawn.dll");
+				done = TRUE;
+			}
+			[ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+				{
+					i = i + 1;
+				}
+			  'FILE_NOT_FOUND:
+				  done = TRUE;
+			]
+		
+		  {
+			copy_file("%oracle_home%\bin\ora73dis.dll", "%oracle_home%\bin\ora73dis.sav");
+		  }
+		  [
+			'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+			  continue();
+			'READ_ERROR,'WRITE_ERROR:
+			  signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\ora73dis.dll could not be copied."));
+		  ]
+
+		{
+			move_file("%ORACLE_HOME%\bin\oracledis.sav", "%ORACLE_HOME%\bin\ora73dis.dll");
+			done = TRUE;
+		}
+		[ 'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+			{
+				i = i + 1;
+			}
+		  'FILE_NOT_FOUND:
+					done = TRUE;
+		]
+
+		/* if the services still have been shut down after 3 tries, prompt user */
+		if (not(done) && i > 3) {
+			information_dialog(oracle7_run_dei, oracle7_run_dei_content, oracle7_run_dei_help);
+			i = 0;
+		}
+	 }
+	
+      /********************** deinstall seed database **********************/
+
+      remove_db = FALSE;
+
+      if (exists("%oracle_home%\database\sys1orcl.ora"))
+      {
+          ans = single_selection_dialog(remove_prompt,ynprompt, no_prompt, remove_content,remove_help);
+          if (ans == yes_prompt)
+            remove_db = TRUE;
+          else
+            remove_db = FALSE;
+      }
+
+      if (remove_db)
+      {
+        information_dialog(expand_db_prompt, expand_db_content, expand_db_help);
+        ui_action(instantiate(remove_service));
+
+        if ( exists("%ORACLE_HOME%\bin\oradim73.exe") )
+        {
+           spawn("%ORACLE_HOME%\bin\oradim73 -delete -sid orcl");
+
+           {
+	        nt_delete_service("OracleServiceORCL");
+	       }
+           [
+            'DEFAULT: continue() ;
+           ]
+
+	       {
+           nt_delete_service("OracleStartORCL") ;
+           }
+           [
+            'DEFAULT: continue() ;
+           ]
+        }
+        else
+           {
+            nt_delete_service("OracleServiceORCL") ;
+            nt_delete_service("OracleNMPListenerORCL") ;
+           }
+        [
+          'DEFAULT: continue() ;
+        ]
+
+        if (exists("%ORACLE_HOME%\DATABASE\strtorcl.cmd"))
+        {
+          remove_file("%ORACLE_HOME%\DATABASE\strtorcl.cmd");
+        }
+        [
+          'DEFAULT: continue() ;
+        ]
+
+        if (exists("%ORACLE_HOME%\DATABASE\createdb.log"))
+        {
+          remove_file("%ORACLE_HOME%\DATABASE\createdb.log");
+        }
+        [
+          'DEFAULT: continue() ;
+        ]
+
+        ui_action(instantiate(remove_database));
+        if (exists("%oracle_home%\database\ctl1orcl.ora"))
+          remove_file("%oracle_home%\database\ctl1orcl.ora");
+        if (exists("%oracle_home%\database\log1orcl.ora"))
+          remove_file("%oracle_home%\database\log1orcl.ora");
+        if (exists("%oracle_home%\database\log2orcl.ora"))
+          remove_file("%oracle_home%\database\log2orcl.ora");
+        if (exists("%oracle_home%\database\pwdorcl.ora"))
+          remove_file("%oracle_home%\database\pwdorcl.ora");
+        remove(seedsql);
+        remove(init);
+	remove(std, "US7ASCII");
+      }
+
+      if (exists("%oracle_home%\database\initorcl.73"))
+        remove_file("%oracle_home%\database\initorcl.73");
+
+      ui_action(instantiate(deinst_msb));
+      remove(msg);
+
+      ui_action(instantiate(deinst_help));
+      remove(help);
+      windows_delete_icons(help) ;
+
+      ui_action(instantiate(deinst_doc));
+      remove(doc);
+
+      ui_action(instantiate(deinst_dll));
+      remove(dll);
+      remove(res, nls_abbreviation);
+
+      /* when deinstalling "w32util73", "oradim73.exe" is not deleted if there
+         exists "ntrdbms73" since "ntrdbms73" needs it to manage database
+         services; */
+      if (not(registered("w32util73")) && exists("%ORACLE_HOME%\bin\oradim73.exe"))
+      {
+        remove_file("%ORACLE_HOME%\bin\oradim73.exe");
+        if(exists("%RDBMS73%\oradim73.log"))
+          remove_file("%RDBMS73%\oradim73.log");
+      }
+
+      /* "sqlnttt" is shared by ntrdbms 70, 71, 72, 73 and 80 */
+      if (not(registered("ntrdbms70")) && not(registered("ntrdbms71")) &&
+          not(registered("ntrdbms72")) && not(registered("ntrdbms80")))
+        remove(sqlnttt);
+
+      /* "oraspawn.dll" is shared among "ntrsf" 70, 71, "ntrdbms" 72, 73, and 80 */
+      if (not(registered("ntrsf70")) && not(registered("ntrsf71")) &&
+          not(registered("ntrdbms72")) && not(registered("ntrdbms80")))
+        remove(oraspwn);
+
+      ui_action(instantiate(deinst_exe));
+      remove(exec);
+      remove(oraexec);
+      if (exists("%rdbms73%\oradim73.log"))
+      {
+        remove_file("%rdbms73%\oradim73.log");
+      }
+      [
+        'DEFAULT: continue() ;
+      ]
+
+      ui_action(instantiate(deinst_dll));
+      remove(dll);
+
+      ui_action(instantiate(deinst_script));
+      remove(deinstl);
+
+      if (registered("ntpqo73"))
+      {
+        dependent = registration("ntpqo73");
+
+        unreference(dependent, current_registry);
+        deinstall(dependent);
+      }
+
+      if (registered("ntsro73"))
+      {
+        dependent = registration("ntsro73");
+
+        unreference(dependent, current_registry);
+        deinstall(dependent);
+      }
+
+      if (registered("ntdo73"))
+      {
+        dependent = registration("ntdo73");
+
+        unreference(dependent, current_registry);
+        deinstall(dependent);
+      }
+
+      if (registered("w32rsf73"))
+      {
+        dependent = registration("w32rsf73");
+        unreference(dependent,current_registry);
+        deinstall(dependent);
+      }
+      if (registered("w32util73"))
+      {
+        dependent = registration("w32util73");
+        unreference(dependent, current_registry);
+        deinstall(dependent);
+      }
+
+      if (not(registered("w32util73")) && not(registered("w32rsf73")))
+        modify("RDBMS73","",ora_config,registry_filename(current_registry));
+
+      if (remove_db) {
+        modify("ORACLE_SID","",ora_config,registry_filename(current_registry));
+        modify("ORA_ORCL_PWFILE", "", ora_config, registry_filename(current_registry));
+      }
+
+      modify("RDBMS73_CONTROL","",ora_config,registry_filename(current_registry));
+      modify("RDBMS73_ARCHIVE","",ora_config,registry_filename(current_registry));
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+    }
+}
+

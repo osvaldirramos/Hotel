@@ -1,0 +1,99 @@
+/*   Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rsf71.vrf - WinNT V3 installation verification script for the Required
+                Support Files (RSF).
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for installation
+    of the Windows NT RSF.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    MM/DD/YY  Reason
+    syau      07/01/94  7.1.3
+    HA!       04/28/94  7.1.2 and 3.0.10.2
+    trodgers  10-APR-92 Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(ntinstver);
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+  ]
+
+  if (doit)
+    {
+      /***********************************************************************
+          Set the VRF-INS script "ratchet"
+       ***********************************************************************/
+      vrf_ratchet = "7.1.3.3.6";
+
+      /***********************************************************************
+         Bind path variables...
+      ************************************************************************/
+      {
+        set_rdbms71 = FALSE;
+        rdbms71 = v7_translate("RDBMS71");
+
+        if (not(exists(rdbms71)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            rdbms71 = "%oracle_home%\RDBMS71";
+            set_rdbms71 = TRUE;
+          }
+        ]
+
+      {
+        set_plsql21 = FALSE;
+        plsql21 = v7_translate("PLSQL21");
+
+        if (not(exists(plsql21)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            plsql21 = "%oracle_home%\PLSQL21";
+            set_plsql21 = TRUE;
+          }
+        ]
+
+      /***********************************************************************
+         Bind string variables & prompt strings...
+      ***********************************************************************/
+      installing_scripts = nls("installing_scripts",
+                               "Installing %%product_label%% Scripts...");
+      installing_dlls = nls("installing_dlls",
+                               "Installing %%product_label%% Dynamic Link Libraries...");
+      installing_msbs = nls("installing_msbs",
+                               "Installing %%product_label%% Message Files...");
+      installing_sql = nls("installing_sql",
+                               "Installing %%product_label%% SQL Scripts...");
+      modifying_config = nls("modifying_config",
+                               "Modifying NT Registry...");
+      registering = nls("registering","Registering %%product_label%%...");
+
+      /***********************************************************************
+           Return total size of files depending upon which options were
+           selected for installation...
+      ************************************************************************/
+      return(sum(deinstl,dll,msg,nls_abbreviation,sql));
+    }
+  else
+    {
+      refresh_map_file = FALSE;
+      return(0);
+    }
+}

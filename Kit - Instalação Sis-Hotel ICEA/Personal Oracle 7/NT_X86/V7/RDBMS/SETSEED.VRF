@@ -1,0 +1,33 @@
+/* Copyright (c) Oracle Corporation 1993.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    setseed.vrf - V3 common seed database initialization script for NetWare products
+
+  DESCRIPTION
+
+  OWNER
+    Greg Dudey
+
+  MODIFIED    DD-MMM-YY  Reason
+    gdudey    07/18/95 - Creation
+*****************************************************************************/
+{
+  init_path = "%oracle_home%\DATABASE";
+  seedl_path = "%oracle_home%\DATABASE";
+  seedl_size = 200;
+  seedd_path = "%oracle_home%\DATABASE";
+  seedd_sysi_size = 10;
+  seedd_syse_size = 10;
+  seedd_sysm_size = 200;
+  seedd_usri_size = 3;
+  seedd_usre_size = 5;
+  seedd_usrm_size = 150;
+  seedd_rbsi_size = 5;
+  seedd_rbse_size = 5;
+  seedd_rbsm_size = 150;
+  seedd_tmpi_size = 2;
+  seedd_tmpe_size = 5;
+  seedd_tmpm_size = 150;
+  seedc_path = "%oracle_home%\DATABASE";
+  seed_control = "control_files = (%seedc_path%\ctl1orcl.ora, %seedc_path%\ctl2orcl.ora)";
+}

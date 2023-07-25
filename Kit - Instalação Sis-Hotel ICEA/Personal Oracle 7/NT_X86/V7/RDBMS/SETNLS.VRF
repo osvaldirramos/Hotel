@@ -1,0 +1,457 @@
+/* Copyright (c) Oracle Corporation 1993.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    setnls.vrf - V3 common seed database nls script for NetWare products
+
+  DESCRIPTION
+   Inputs:
+      nls_language - In order to get defaults.
+      getnls - TRUE, prompts the user for character set.
+               FALSE, just uses the defaults.
+
+   Outputs:
+      seed_language  - The Lnaguage of the seed database
+      seed_territory - The territory if the seed database
+      seed_charset   - The characterset of the seed database
+      seed_type      - The characterset type of the seed database
+
+  OWNER
+    Greg Dudey
+
+  MODIFIED    DD-MMM-YY  Reason
+    gdudey    06/20/95 - Creation
+*****************************************************************************/
+{
+   charset_prompt  = nls("charset_prompt","Select a character set in which to create the starter database.");
+   charset_help    = nls("charset_help","The starter database will be created in the character set specified.");
+   charset_content = nls("chaset_content","Starter Database Character Set");
+
+   yesr_prompt = nls("yesr_prompt", "Yes (Recommended)");
+   ynrprompt = list(yesr_prompt, no_prompt);
+   summary1_prompt = nls("summary1_prompt","Based on the previously chosen language of '%seed_language%', the starter database is currently configured to use the '%seed_charset%' character set.  Would you like to accept this character set?");
+   summary1_help = nls("summary1_help","The starter database will be created with the character set specified. Please refer to the 'Oracle7 Server Administrator's Guide' for instructions on changing the language of the starter database.");
+   summary1_content = nls("summary1_content","Starter Database Summary");
+
+   summary2_prompt = nls("summary2_prompt","The starter datatbase is now configured to use the '%seed_charset%' character set.  Would you like to accept this character set?");
+   summary2_help = nls("summary2_help","The starter database will be created with the character set specified. Please refer to the 'Oracle7 Server Aministrator's Guide' for instructions on changing the language of the starter database.");
+   summary2_content = nls("summary2_content","Starter Database Summary");
+
+   /* Determine the character set for the starter database */
+   mark
+   {
+      seed_nls_list = explode(nls_language, "._");
+
+      seed_type = "ERROR";
+
+      if (not(empty(seed_nls_list)))
+      {
+
+         {temp = seed_language;}
+         ['unbound_variable : seed_language = first(seed_nls_list);
+         ]
+         seed_nls_list = rest(seed_nls_list);
+
+         if (not(empty(seed_nls_list)))
+         {
+            {temp = seed_territory;}
+            ['unbound_variable : seed_territory = first(seed_nls_list);
+            ]
+            seed_nls_list = rest(seed_nls_list);
+
+            if (not(empty(seed_nls_list)))
+               seed_charset = first(seed_nls_list);
+         }
+      }
+
+      {temp = seed_charset;}
+      ['unbound_variable : seed_charset = "WE8ISO8859P1";
+      ]
+
+   if (getnls == TRUE)
+   {
+      if (seed_language == "AMERICAN")
+        seed_language = "ENGLISH";
+
+      done = FALSE;
+      done = single_selection_dialog(instantiate(summary1_prompt), 
+                                    ynrprompt, 
+                                    yesr_prompt, 
+                                    summary1_content, 
+                                    instantiate(summary1_help));
+      if (done == no_prompt)
+    	done = FALSE;
+      else
+        done = TRUE;
+    
+          while(not(done))
+      {
+         mark
+         {
+         charset_list = list("US7ASCII",
+                             "WE8DEC",
+                             "WE8HP",
+                             "US8PC437",
+                             "WE8PC850",
+                             "D7DEC",
+                             "F7DEC",
+                             "S7DEC",
+                             "E7DEC",
+                             "SF7ASCII",
+                             "NDK7DEC",
+                             "I7DEC",
+                             "NL7DEC",
+                             "CH7DEC",
+                             "YUG7ASCII",
+                             "SF7DEC",
+                             "TR7DEC",
+                             "IW7IS960",
+                             "IN8ISCII");
+
+         charset_list_1 = list("WE8ISO8859P1",
+                               "EE8ISO8859P2",
+                               "SE8ISO8859P3",
+                               "NEE8ISO8859P4",
+                               "CL8ISO8859P5",
+                               "AR8ISO8859P6",
+                               "EL8ISO8859P7",
+                               "IW8ISO8859P8",
+                               "WE8ISO8859P9",
+                               "NE8ISO8859P10",
+                               "TH8TISASCII",
+                               "BN8BSCII",
+                               "VN8VN3",
+                               "WE8NEXTSTEP",
+                               "AR8ASMO708PLUS",
+                               "AR8XBASIC",
+                               "EL8DEC",
+                               "TR8DEC");
+
+         charset_list_2 = list("EEC8EUROASCI",
+                               "EEC8EUROPA3",
+                               "LA8PASSPORT",
+                               "BG8PC437S",
+                               "EE8PC852",
+                               "RU8PC866",
+                               "RU8BESTA",
+                               "IW8PC1507",
+                               "RU8PC855",
+                               "TR8PC857",
+                               "CL8MACCYRILLIC",
+                               "CL8MACCYRILLICS",
+                               "WE8PC860",
+                               "IS8PC861",
+                               "EE8MACCES",
+                               "EE8MACCROATIANS",
+                               "TR8MACTURKISHS",
+                               "IS8MACICELANDICS");
+
+         charset_list_3 = list("EL8MACGREEKS",
+                               "IW8MACHEBREWS",
+                               "EE8MSWIN1250",
+                               "CL8MSWIN1251",
+                               "ET8MSWIN923",
+                               "BG8MSWIN",
+                               "EL8MSWIN1253",
+                               "IW8MSWIN1255",
+                               "LT8MSWIN921",
+                               "TR8MSWIN1254",
+                               "WE8MSWIN1252",
+                               "BLT8MSWIN1257",
+                               "N8PC865",
+                               "BLT8CP921",
+                               "LV8PC1117",
+                               "LV8PC8LR",
+                               "LV8RST104090",
+                               "CL8KOI8R",
+                               "BLT8PC775",
+                               "F7SIEMENS9780X",
+                               "E7SIEMENS9780X",
+                               "S7SIEMENS9780X");
+
+         charset_list_4 = list("DK7SIEMENS9780X",
+                               "N7SIEMENS9780X",
+                               "I7SIEMENS9780X",
+                               "D7SIEMENS9780X",
+                               "WE8GCOS7",
+                               "EL8GCOS7",
+                               "US8BS2000",
+                               "D8BS2000",
+                               "F8BS2000",
+                               "E8BS2000",
+                               "DK8BS2000",
+                               "WE8BS2000",
+                               "CL8BS2000",
+                               "WE8BS2000",
+                               "CL8BS2000",
+                               "WE8BS2000L5",
+                               "WE8DG",
+                               "WE8NCR4970",
+                               "WE8ROMAN8",
+                               "EE8MACCE",
+                               "EE8MACCROATIAN",
+                               "TR8MACTURKISH",
+                               "IS8MACICELANDIC");
+
+         charset_list_5 = list("EL8MACGREEK",
+                               "EL8MACHEBREW",
+                               "US8ICL",
+                               "WE8ICL",
+                               "WE8ISOICLUK",
+                               "WE8MACROMAN8",
+                               "WE8MACROMAN8S",
+                               "TH8MACTHAI",
+                               "TH8MACTHAIS",
+                               "HU8CWI2",
+                               "EL8PC437S",
+                               "EL8PC737",
+                               "LT8PC772",
+                               "LT8PC774",
+                               "EL8PC869",
+                               "EL8PC851",
+                               "CDN8PC863",
+                               "HU8ABMOD",
+                               "AR8ASMO8X");
+
+         charset_list_6 = list("AR8NAFITHA711T",
+                               "AR8SAKHR707T",
+                               "AR8MUSSAD768T",
+                               "AR8ADOS710T",
+                               "AR8ADOS720T",
+                               "AR8APTEC715T",
+                               "AR8NAFITHA721T",
+                               "AR8HPARABIC8T",
+                               "AR8NAFITHA711",
+                               "AR8SAKHR707",
+                               "AR8MUSSAD768",
+                               "AR8ADOS710",
+                               "AR8ADOS720",
+                               "AR8APTEC715",
+                               "AR8MSWIN1256",
+                               "AR8MSAWIN",
+                               "AR8NAFITHA721",
+                               "AR8SAKHR706",
+                               "AR8ARABICMAC",
+                               "AR8ARABICMACS",
+                               "AR8ARABICMACT",
+                               "LA8ISO6937",
+                               "US8NOOP",
+                               "JA16VMS",
+                               "JA16EUC",
+                               "JA16SJIS",
+                               "JA16DBCS",
+                               "JA16EBCDIC930",
+                               "JA16MACSJIS",
+                               "KO16KSC5601",
+                               "KO16DBCS",
+                               "KO16KSCCS",
+                               "ZHS16CGB231280",
+                               "ZHS16MACCGB231280",
+                               "ZHT32EUC",
+                               "ZHT32SOPS",
+                               "ZHT16DBT",
+                               "ZHT32TRIS",
+                               "ZHT16DBCS",
+                               "ZHT16BIG5",
+                               "ZHT16CCDC",
+                               "AL24UTFFSS",
+                               "JA16TSTSET2",
+                               "JA16TSTSET");
+
+         union(charset_list, charset_list_1);
+         union(charset_list, charset_list_2);
+         union(charset_list, charset_list_3);
+         union(charset_list, charset_list_4);
+         union(charset_list, charset_list_5);
+         union(charset_list, charset_list_6);
+
+         sort(charset_list);
+
+         seed_charset = single_selection_dialog(instantiate(charset_prompt),
+                        charset_list,seed_charset,
+                        instantiate(charset_content),
+                        instantiate(charset_help));
+            
+            mark {
+       			done = single_selection_dialog(instantiate(summary2_prompt), 
+       			                            ynprompt, 
+       			                            yes_prompt, 
+       			                            summary2_content,
+       			                            instantiate(summary2_help));
+    			if (done == no_prompt)
+    				done = FALSE;
+    			else
+    				done = TRUE;
+				
+            }
+         }
+      }
+   }
+   }
+   if ((seed_charset == "US7ASCII") ||
+      (seed_charset == "WE8DEC") ||
+      (seed_charset == "WE8HP") ||
+      (seed_charset == "US8PC437") ||
+      (seed_charset == "WE8PC850") ||
+      (seed_charset == "D7DEC") ||
+      (seed_charset == "F7DEC") ||
+      (seed_charset == "S7DEC") ||
+      (seed_charset == "E7DEC") ||
+      (seed_charset == "SF7ASCII") ||
+      (seed_charset == "NDK7DEC") ||
+      (seed_charset == "I7DEC") ||
+      (seed_charset == "NL7DEC") ||
+      (seed_charset == "CH7DEC") ||
+      (seed_charset == "YUG7ASCII") ||
+      (seed_charset == "SF7DEC") ||
+      (seed_charset == "TR7DEC") ||
+      (seed_charset == "IW7IS960") ||
+      (seed_charset == "IN8ISCII") ||
+      (seed_charset == "WE8ISO8859P1") ||
+      (seed_charset == "EE8ISO8859P2") ||
+      (seed_charset == "SE8ISO8859P3") ||
+      (seed_charset == "NEE8ISO8859P4") ||
+      (seed_charset == "CL8ISO8859P5") ||
+      (seed_charset == "AR8ISO8859P6") ||
+      (seed_charset == "EL8ISO8859P7") ||
+      (seed_charset == "IW8ISO8859P8") ||
+      (seed_charset == "WE8ISO8859P9") ||
+      (seed_charset == "NE8ISO8859P10") ||
+      (seed_charset == "TH8TISASCII") ||
+      (seed_charset == "BN8BSCII") ||
+      (seed_charset == "VN8VN3") ||
+      (seed_charset == "WE8NEXTSTEP") ||
+      (seed_charset == "AR8ASMO708PLUS") ||
+      (seed_charset == "AR8XBASIC") ||
+      (seed_charset == "EL8DEC") ||
+      (seed_charset == "TR8DEC") ||
+      (seed_charset == "EEC8EUROASCI") ||
+      (seed_charset == "EEC8EUROPA3") ||
+      (seed_charset == "LA8PASSPORT") ||
+      (seed_charset == "BG8PC437S") ||
+      (seed_charset == "EE8PC852") ||
+      (seed_charset == "RU8PC866") ||
+      (seed_charset == "RU8BESTA") ||
+      (seed_charset == "IW8PC1507") ||
+      (seed_charset == "RU8PC855") ||
+      (seed_charset == "TR8PC857") ||
+      (seed_charset == "CL8MACCYRILLIC") ||
+      (seed_charset == "CL8MACCYRILLICS") ||
+      (seed_charset == "WE8PC860") ||
+      (seed_charset == "IS8PC861") ||
+      (seed_charset == "EE8MACCES") ||
+      (seed_charset == "EE8MACCROATIANS") ||
+      (seed_charset == "TR8MACTURKISHS") ||
+      (seed_charset == "IS8MACICELANDICS") ||
+      (seed_charset == "EL8MACGREEKS") ||
+      (seed_charset == "IW8MACHEBREWS") ||
+      (seed_charset == "EE8MSWIN1250") ||
+      (seed_charset == "CL8MSWIN1251") ||
+      (seed_charset == "ET8MSWIN923") ||
+      (seed_charset == "BG8MSWIN") ||
+      (seed_charset == "EL8MSWIN1253") ||
+      (seed_charset == "IW8MSWIN1255") ||
+      (seed_charset == "LT8MSWIN921") ||
+      (seed_charset == "TR8MSWIN1254") ||
+      (seed_charset == "WE8MSWIN1252") ||
+      (seed_charset == "BLT8MSWIN1257") ||
+      (seed_charset == "N8PC865") ||
+      (seed_charset == "BLT8CP921") ||
+      (seed_charset == "LV8PC1117") ||
+      (seed_charset == "LV8PC8LR") ||
+      (seed_charset == "LV8RST104090") ||
+      (seed_charset == "CL8KOI8R") ||
+      (seed_charset == "BLT8PC775") ||
+      (seed_charset == "F7SIEMENS9780X") ||
+      (seed_charset == "E7SIEMENS9780X") ||
+      (seed_charset == "S7SIEMENS9780X") ||
+      (seed_charset == "DK7SIEMENS9780X") ||
+      (seed_charset == "N7SIEMENS9780X") ||
+      (seed_charset == "I7SIEMENS9780X") ||
+      (seed_charset == "D7SIEMENS9780X") ||
+      (seed_charset == "WE8GCOS7") ||
+      (seed_charset == "EL8GCOS7") ||
+      (seed_charset == "US8BS2000") ||
+      (seed_charset == "D8BS2000") ||
+      (seed_charset == "F8BS2000") ||
+      (seed_charset == "E8BS2000") ||
+      (seed_charset == "DK8BS2000") ||
+      (seed_charset == "WE8BS2000") ||
+      (seed_charset == "CL8BS2000") ||
+      (seed_charset == "WE8BS2000") ||
+      (seed_charset == "CL8BS2000") ||
+      (seed_charset == "WE8BS2000L5") ||
+      (seed_charset == "WE8DG") ||
+      (seed_charset == "WE8NCR4970") ||
+      (seed_charset == "WE8ROMAN8") ||
+      (seed_charset == "EE8MACCE") ||
+      (seed_charset == "EE8MACCROATIAN") ||
+      (seed_charset == "TR8MACTURKISH") ||
+      (seed_charset == "IS8MACICELANDIC") ||
+      (seed_charset == "EL8MACGREEK") ||
+      (seed_charset == "EL8MACHEBREW") ||
+      (seed_charset == "US8ICL") ||
+      (seed_charset == "WE8ICL") ||
+      (seed_charset == "WE8ISOICLUK") ||
+      (seed_charset == "WE8MACROMAN8") ||
+      (seed_charset == "WE8MACROMAN8S") ||
+      (seed_charset == "TH8MACTHAI") ||
+      (seed_charset == "TH8MACTHAIS") ||
+      (seed_charset == "HU8CWI2") ||
+      (seed_charset == "LT8PC772") ||
+      (seed_charset == "LT8PC774") ||
+      (seed_charset == "EL8PC869") ||
+      (seed_charset == "EL8PC851") ||
+      (seed_charset == "CDN8PC863") ||
+      (seed_charset == "HU8ABMOD") ||
+      (seed_charset == "AR8ASMO8X") ||
+      (seed_charset == "AR8NAFITHA711T") ||
+      (seed_charset == "AR8SAKHR707T") ||
+      (seed_charset == "AR8MUSSAD768T") ||
+      (seed_charset == "AR8ADOS710T") ||
+      (seed_charset == "AR8ADOS720T") ||
+      (seed_charset == "AR8APTEC715T") ||
+      (seed_charset == "AR8NAFITHA721T") ||
+      (seed_charset == "AR8HPARABIC8T") ||
+      (seed_charset == "AR8NAFITHA711") ||
+      (seed_charset == "AR8SAKHR707") ||
+      (seed_charset == "AR8MUSSAD768") ||
+      (seed_charset == "AR8ADOS710") ||
+      (seed_charset == "AR8ADOS720") ||
+      (seed_charset == "AR8APTEC715") ||
+      (seed_charset == "AR8MSWIN1256") ||
+      (seed_charset == "AR8MSAWIN") ||
+      (seed_charset == "AR8NAFITHA721") ||
+      (seed_charset == "AR8SAKHR706") ||
+      (seed_charset == "AR8ARABICMAC") ||
+      (seed_charset == "AR8ARABICMACS") ||
+      (seed_charset == "AR8ARABICMACT") ||
+      (seed_charset == "LA8ISO6937") ||
+      (seed_charset == "US8NOOP") ||
+      (seed_charset == "JA16VMS") ||
+      (seed_charset == "JA16EUC") ||
+      (seed_charset == "JA16SJIS") ||
+      (seed_charset == "JA16DBCS") ||
+      (seed_charset == "JA16EBCDIC930") ||
+      (seed_charset == "JA16MACSJIS") ||
+      (seed_charset == "KO16KSC5601") ||
+      (seed_charset == "KO16DBCS") ||
+      (seed_charset == "KO16KSCCS") ||
+      (seed_charset == "ZHS16CGB231280") ||
+      (seed_charset == "ZHS16MACCGB231280") ||
+      (seed_charset == "ZHT32EUC") ||
+      (seed_charset == "ZHT32SOPS") ||
+      (seed_charset == "ZHT16DBT") ||
+      (seed_charset == "ZHT32TRIS") ||
+      (seed_charset == "ZHT16DBCS") ||
+      (seed_charset == "ZHT16BIG5") ||
+      (seed_charset == "ZHT16CCDC") ||
+      (seed_charset == "AL24UTFFSS") ||
+      (seed_charset == "JA16TSTSET2") ||
+      (seed_charset == "JA16TSTSET"))
+      seed_type = "US7ASCII";
+   else if((seed_charset == "EL8PC437S") ||
+      (seed_charset == "EL8PC737"))
+      seed_type = "EL8PC437S";
+   else
+      seed_type = "ERROR";
+}

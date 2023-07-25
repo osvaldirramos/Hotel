@@ -1,0 +1,139 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    object10.dei - Windows V3 de-installation script for OO4W.
+
+  DESCRIPTION
+    This script removes the OO4W files and un-registers the product.
+
+  OWNER
+    Biju Albert
+
+  MODIFIED    DD-MMM-YY Reason
+    balbert   01-DEC-94 Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+         Ensure that the necessary environment variables are bound
+       **********************************************************************/
+      winsys = windows_system_directory();
+
+      /**********************************************************************
+         Bind all NLS deinstall strings here...
+       **********************************************************************/
+
+      unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+      deinst_doc = nls("deinst_doc","Removing %%registry_label%% Informational Files...");
+      deinst_dll = nls("deinst_dll","Removing %%registry_label%% Dynamic Link Libraries...");
+      deinst_exe = nls("deinst_exe","Removing %%registry_label%% Executables...");
+      deinst_msg = nls("deinst_msg","Removing %%registry_label%% Message Files...");
+      deinst_script = nls("deinst_script","Removing %%registry_label%% Installation Scripts...");
+      deinst_class_library = nls("deinst_class_library",
+                               "Removing C++ Class Library Files...");
+      deinst_object_server = nls("deinst_object_server",
+                               "Removing Oracle Object Server Files...");
+      deinst_ole_libraries = nls("deinst_ole_libraries",
+                               "Removing Microsoft OLE 2.0 Library Files...");
+      deinst_vb_vba = nls("deinst_vb_vba",
+                               "Removing VB and VBA Support Files...");
+
+
+      /**********************************************************************
+         Continue with the deinstallation
+       **********************************************************************/
+
+      ui_product(registry_label);
+
+/*
+      ui_action(instantiate(deinst_doc));
+      remove(doc);
+      remove(pldoc);
+
+      ui_action(instantiate(deinst_exe));
+      remove(exec);
+      remove(bin);
+
+      ui_action(instantiate(deinst_msg));
+      remove(msg);
+      remove(plmsg);
+      remove(OIPMSBS);
+*/
+      ui_action(instantiate(deinst_class_library));    
+      remove (CPPBMFCEMPEDIT);
+      remove (CPPBMFCEMPEDITRES);
+      remove (CPPBMFCH);
+      remove (CPPBMFCLIB);
+      remove (CPPBMFCLIBD);
+      remove (CPPBMFCSRC);
+      remove (CPPBOWL); 
+    /*  remove (CPPBOWLEMPEDIT); */
+      remove (CPPBOWLH);
+      remove (CPPBOWLLIB);
+      remove (CPPBOWLLIBD);
+      remove (CPPBOWLSRC); 
+      remove (CPPOWLBIN);
+      remove (CPPOWLBIND);
+      remove (CPPOWLLIB); 
+      remove (CPPOWLLIBD); 
+      remove (CPPDOC);
+      remove (CPPH);
+      remove (CPPMFCBIN);
+      remove (CPPMFCBIND);
+      remove (CPPMFCLIB);
+      remove (CPPMFCLIBD);
+      remove (CPPSRC);
+      remove (CPPWORK);
+      remove (CPPWORKBOUNDVAL);
+      remove (CPPWORKEMPEDT);
+      remove (CPPWORKEMPEDTRES);
+      remove (CPPWORKLOGDLG);
+      remove (CPPWORKPOSADV);
+      remove (CPPDEMOSQL);
+
+      
+/*      remove (Files); */
+      ui_action(instantiate(deinst_object_server));    
+      remove (OIPBIN);
+      remove (OIPSRV);
+
+      remove (OIPDOC);
+      remove (OO4W);
+      remove (OO4WREL);
+/*      ui_action(instantiate(deinst_ole_libraries));    */
+/*      remove (OLEBIN); */
+/*      remove (OLEREG); */
+      ui_action(instantiate(deinst_vb_vba));    
+/*      remove (VBBIN); */
+      remove (VBDEPT);
+      remove (VBEMP);
+      remove (VBLOGIN);
+      remove (VBMSG);
+ /*     remove (VBOBJ); */
+      remove (VBPARM);
+/*      remove (VBQUOTE);
+      remove (VBRAISE);
+      remove (VBSQL); */
+      remove (VBQT);
+      remove (XSAMP);
+
+      ui_action(instantiate(deinst_script));
+      remove(deinstl);
+
+      if (registered("w32rsf73"))
+      {
+        dependent = registration("w32rsf73");
+        unreference(dependent,current_registry);
+      }
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+
+    }
+}

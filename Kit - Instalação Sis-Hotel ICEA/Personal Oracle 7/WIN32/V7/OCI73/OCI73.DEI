@@ -1,0 +1,68 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    oci73.dei - V3 deinstallation script for Windows 95 and Windows NT OCI 7.3
+
+  DESCRIPTION
+    This script deinstalls Windows 95 and Windows NT OCI 7.3
+
+  MODIFIED    DD-MMM-YY  Reason
+    echien    19-APR-95  Creation
+    mclose    19-JUL-95  Adopted from Windows 3.1 and modeified for Windows 95
+
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\%operating_system%.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+         Ensure that the necessary environment variables are bound
+       **********************************************************************/
+
+  if (doit)
+    {
+      /**********************************************************************
+         Bind all NLS deinstall strings here...
+       **********************************************************************/
+
+      unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+      deinst_ocifiles = nls("deinst_ocifiles","Removing %%registry_label%% Files...");
+      deinst_ocisamples = nls("deinst_ocisamples","Removing %%registry_label%% Sample Programs...");
+      deinst_script = nls("deinst_script","Removing %%registry_label%% Installation Scripts...");
+      modify_config = nls("modify_config","Modifying %%product_label%% Environment Variables...");
+
+
+      /**********************************************************************
+         Continue with the deinstallation
+       **********************************************************************/
+
+      if (registered("w32rsf73"))
+        {
+         dependent = registration("w32rsf73");
+         unreference(dependent,current_registry);
+         deinstall(dependent);
+        }
+      ui_product(registry_label);
+
+      permit_retry_operations = TRUE;
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+
+      ui_action(instantiate(deinst_ocisamples));
+      remove(ocisamples);
+
+      ui_action(instantiate(deinst_ocifiles));
+      remove(ocifiles);
+
+      ui_action(instantiate(deinst_script));
+      remove(deinstl);
+
+      permit_retry_operations = FALSE;
+    }
+  }
+}

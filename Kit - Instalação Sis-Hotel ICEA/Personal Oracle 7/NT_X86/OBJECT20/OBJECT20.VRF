@@ -1,0 +1,129 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    object10.vrf - Windows V3 installation verification script for the
+                  Personal Oracle RDBMS.
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for installation
+    of the OO4W product and prompts the user for different options.
+
+  OWNER
+    Gopal Kirsur
+
+  MODIFIED    DD-MMM-YY Reason
+    gkirsur  06-Dec-94 Modified for ver 2.0
+    balbert  01-DEC-94 Created.
+*****************************************************************************/
+{
+  /**********************************************************************
+    Bind default variables...
+   ***********************************************************************/
+
+  { install_type = install_type; }
+  ['UNBOUND_VARIABLE: install_type =  nls("install_type_custom","Custom Install");]
+
+  { bundle_name = bundle_name; }
+  ['UNBOUND_VARIABLE: bundle_name = "";]
+
+  { doit = execute("%installer_home%\nt.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(ntinstver);
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+  ]
+
+  if (doit)
+    {
+     /* Check if previous (beta version) has already been installed.*/
+     if (registered("ntobject20")) 
+     {
+	/* Check version number. Signal failure only if prior to version 2.0.7 */
+	curr_reg = registration("ntobject20"); /* The one already installed */
+        if (earlier_version(curr_reg, "2.0.07"))
+	 {
+        	signal('failure,instantiate(nls("beta_version","The installer has detected a non-production version of Oracle Objects for OLE. Please de-install that version before preceding with the installation.")));
+          }
+ 
+      }
+      /***********************************************************************
+          Set the VRF-INS script "ratchet"
+       ***********************************************************************/
+      vrf_ratchet = "2.0.07.0.0";
+
+      {
+        set_mshelp = FALSE;
+        mshelp = v7_translate("MSHELP");
+
+        if (not(exists(mshelp)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            mshelp = "%oracle_home%\MSHELP";
+            set_mshelp = TRUE;
+          }
+        ]
+
+	windir = windows_directory();
+	winsys = windows_system_directory();
+
+      /***********************************************************************
+         Bind string variables & prompt strings...
+      ***********************************************************************/
+
+      installing_scripts = nls("installing_scripts",
+                               "Installing %%product_label%% Scripts...");
+      installing_msg = nls("installing_msg",
+                               "Installing %%product_label%% Message Files...");
+      installing_executables = nls("installing_executables",
+                               "Installing %%product_label%% Executables...");
+      installing_dlls = nls("installing_dlls",
+                               "Installing %%product_label%% Dynamic Link Libraries...");
+      installing_doc = nls("installing_doc",
+                               "Installing %%product_label%% Informational Files...");
+
+      installing_class_library = nls("installing_class_library",
+                               "Installing C++ Class Library Files...");
+      installing_object_server = nls("installing_object_server",
+                               "Installing Oracle Object Server Files...");
+      installing_ole_libraries = nls("installing_ole_libraries",
+                               "Installing Microsoft OLE 2.0 Library Files...");
+      installing_vb_vba = nls("installing_vb_vba",
+                               "Installing VB and VBA Support Files...");
+
+      modifying_config = nls("modifying_config",
+                               "Modifying Environment Variables...");
+      registering = nls("registering","Registering %%product_label%%...");
+
+
+
+/*****************************************************************************
+   Start processing ...
+*****************************************************************************/
+      ui_product(product_label);
+
+      return(verify(w32rsf73) + sum(deinstl, OIPMSBS,nls_abbreviation, CPPBMFCEMPEDIT,nls_abbreviation , CPPBMFCEMPEDITRES ,
+CPPBMFCH , CPPBMFCLIB , CPPBMFCLIBD , CPPBMFCSRC, CPPDOC , CPPH , CPPMFCBIN ,
+CPPMFCBIND , CPPMFCLIB , CPPMFCLIBD, CPPSRC , CPPWORK,nls_abbreviation , CPPWORKBOUNDVAL , CPPWORKEMPEDT , 
+CPPWORKEMPEDTRES , CPPWORKLOGDLG ,
+/* Borland Files */
+CPPBOWL,nls_abbreviation, CPPBOWLH, CPPBOWLLIB,nls_abbreviation, CPPBOWLLIBD,nls_abbreviation, CPPBOWLSRC,
+CPPOWLBIN,nls_abbreviation, CPPOWLBIND,nls_abbreviation, CPPOWLLIB,nls_abbreviation, CPPOWLLIBD,nls_abbreviation,
+CPPWORKPOSADV , CPPDEMOSQL,/*Files ,*/ OIPBIN , OIPSRV, OIPDOC ,OO4W , OO4WREL,nls_abbreviation,
+/*OLEBIN , OLEREG*/ VBDEPT , VBEMP , VBLOGIN , VBMSG , /*VBOBJ ,*/ VBPARM , /*VBQUOTE ,
+VBRAISE , VBSQL ,*/ VBQT, XSAMP ));
+    }
+  else
+    {
+      refresh_map_file = FALSE;
+      return(0);
+    }
+}

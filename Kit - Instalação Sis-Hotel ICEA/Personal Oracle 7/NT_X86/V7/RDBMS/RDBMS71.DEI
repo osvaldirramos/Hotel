@@ -1,0 +1,217 @@
+/* Copyright (c) Oracle Corporation 1992.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rdbms71.dei - Windows NT V3 de-installation script for ORACLE7.
+
+  DESCRIPTION
+    This script removes the Windows NT ORACLE7 files and un-registers
+    the product.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    DD-MMM-YY Reason
+   syau        02/02/95 - 7.1.3.3.4
+   syau        07/01/94 - 7.1.3
+    HA!        04/28/94 - 7.1.2 and 3.0.10.2
+   Hartenstine 04/20/93 - WIN_NT: Adapt for Windows NT
+    Colello    10/09/92 - DESKTOP: remove doc and demo files as well
+    trodgers  01-APR-92 Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.dei"); }
+  [
+    'UNBOUND_VARIABLE: signal('failure,instantiate(nls("instver_too_early2","The version of the Installer currently running is %%installer_version%%. The product(s) you have chosen to deinstall were installed with a later version of the Installer. Please use a later version of the Installer to deinstall these product(s).")));
+  ]
+
+  if (doit)
+    {
+      /**********************************************************************
+	 Ensure that the necessary environment variables are bound
+       **********************************************************************/
+
+      {
+	rdbms71 = v7_translate("rdbms71");
+	{
+	  if (not(exists(rdbms71)))
+	    signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	}
+	  [ 'OS_ERROR: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	    'INVALID_FILE_NAME: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	    'PERMISSION_DENIED: signal('UNBOUND_ENVIRONMENT_VARIABLE); ]
+      }
+	[
+	  'UNBOUND_ENVIRONMENT_VARIABLE:
+	  {
+	    variable = "rdbms71";
+	    information_dialog(instantiate(deinstall_prompt02),
+			       instantiate(deinstall_content02),
+			       instantiate(deinstall_help02));
+	    doit = FALSE;
+	  }
+	]
+/*
+      {
+	plsql21 = v7_translate("PLSQL21");
+	{
+	  if (not(exists(plsql21)))
+	    signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	}
+	  [ 'OS_ERROR: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	    'INVALID_FILE_NAME: signal('UNBOUND_ENVIRONMENT_VARIABLE);
+	    'PERMISSION_DENIED: signal('UNBOUND_ENVIRONMENT_VARIABLE); ]
+      }
+	[
+	  'UNBOUND_ENVIRONMENT_VARIABLE:
+	  {
+	    variable = "plsql21";
+	    information_dialog(instantiate(deinstall_prompt02),
+			       instantiate(deinstall_content02),
+			       instantiate(deinstall_help02));
+	    doit = FALSE;
+	  }
+	]
+*/
+      /**********************************************************************
+	 Bind all NLS deinstall strings here...
+       **********************************************************************/
+
+      remove_prompt = instantiate(nls("remove_prompt","Do you want to remove the database in %%RDBMS71%%?"));
+      remove_content = instantiate( nls("remove_content","Remove Database"));
+      remove_help = instantiate(nls("remove_help","If you want to remove the database in the %%RDBMS71%% directory, choose 'YES'. If you want to retain this database, choose 'NO' and the database files will not be removed."));
+
+      unregistering = nls("unregistering","Unregistering %%registry_label%%...");
+      remove_database = nls("remove_database","Removing Database Files...");
+      remove_service = nls("remove_service","Removing Database Service...");
+      deinst_doc = nls("deinst_doc","Deinstalling %%registry_label%% Informational Files...");
+      deinst_dll = nls("deinst_dll","Deinstalling %%registry_label%% Dynamic Link Libraries...");
+      deinst_exe = nls("deinst_exe","Deinstalling %%registry_label%% Executables...");
+      deinst_script = nls("deinst_script","Deinstalling %%registry_label%% Installation Scripts...");
+
+      expand_db_prompt = nls("expand_db_prompt", "Deinstallation doesn't remove those database files created after the installation of the seed database or those created due to a custom 'create database' command. You may remove these files manually after deinstallation has completed.");
+      expand_db_content = nls("expand_db_content", "Database files");
+      expand_db_help = nls("expand_db_help", "If you expanded the seed database after installation or created your own custom database, the deinstall process may not remove all of the database, log, or control files in your database. You may remove them manually after deinstallation has completed.");
+
+      /**********************************************************************
+	 Continue with the deinstallation
+       **********************************************************************/
+
+      permit_retry_operations = FALSE;
+      
+      if (exists("%RDBMS71%\sysorcl.ora") || exists("%RDBMS71%\ctl1orcl.ora"))
+	remove_db = yesno_dialog(remove_prompt,remove_content,remove_help);
+      else
+	remove_db = FALSE;
+
+      ui_product(registry_label);
+
+      if (remove_db)
+      {
+	information_dialog(expand_db_prompt, expand_db_content, expand_db_help);
+	ui_action(instantiate(remove_service));
+	
+	
+	/* If oradim71.exe doesn't exist, Oracle7 utilities must have been */
+	/* removed earlier. Oracle services would not be cleaned up here.*/
+	/* At the next installation, corresponding services will be cleaned up*/
+	/* Since oradim71.exe wasn't run, remove the password  */
+	/* file corresponding to the database. */
+	if (exists("%ORACLE_HOME%\bin\oradim71.exe") && exists("%RDBMS71%\pwdorcl.ora")) 
+	{
+	  spawn("net stop OracleNMPListenerORCL", "%rdbms71%\nmp1.out", "%rdbms71%\nmp1.err");
+          spawn("net stop OracleServiceORCL", "%rdbms71%\srv1.out", "%rdbms71%\srv1.err");
+	  spawn("net stop OracleTCPListener", "%rdbms71%\tcp1.out", "%rdbms71%\tcp1.err");
+	}
+/*	else*/
+	  if (exists("%RDBMS71%\pwdorcl.ora"))
+	    remove_file("%RDBMS71%\pwdorcl.ora");
+
+	if (exists("%RDBMS71%\ctrllog.log"))
+	  {remove_file("%RDBMS71%\ctrllog.log");}
+	  [
+	    'PERMISSION_DENIED, 'INVALID_FILE_NAME, 'OS_ERROR, 'WRITE_ERROR:
+	    continue();
+	  ]
+
+	ui_action(instantiate(remove_database));
+	remove(seed);
+      }
+      else
+      {
+	/* Stop all services before deleting server */
+	/* check to see if all of the oracle services are shutdown */
+	{
+	   remove_file("%ORACLE_HOME%\bin\ora71dis.dll");
+	}
+	['PERMISSION_DENIED: 
+	 {
+	    spawn("net stop OracleNMPListenerORCL","%rdbms71%\nmp2.out", "%rdbms71%\nmp2.err");
+            spawn("net stop OracleServiceORCL","%rdbms71%\srv2.out", "%rdbms71%\srv2.err");
+	    spawn("net stop OracleTCPListener", "%rdbms71%\tcp2.out", "%rdbms71%\tcp2.err");
+	 }
+	]
+      }
+
+      ui_action(instantiate(deinst_doc));
+      remove(doc);
+
+      ui_action(instantiate(deinst_dll));
+      remove(dll);
+      remove(snapshot);
+	 
+      if (not(registered("ntutil71")) && exists("%ORACLE_HOME%\bin\oradim71.exe")) 
+	  {remove_file("%ORACLE_HOME%\bin\oradim71.exe");}
+	  [ 'DEFAULT:continue();]
+
+      if (not(registered("ntrdbms70")) && not(registered("ntrdbms72")) &&
+	  not(registered("ntrdbms73")) && not(registered("ntrdbms80")))
+	remove(sqlnttt);
+
+      ui_action(instantiate(deinst_exe));
+      remove(exec);
+
+      ui_action(instantiate(deinst_script));
+      remove(deinstl);
+
+      err_files = files("%RDBMS71%\*.err");
+      union(err_files, files("%RDBMS71%\*.out"));
+      while (not(empty(err_files)))
+      {
+	err_file = file_name(first(err_files));
+	{remove_file("%RDBMS71%\%err_file%");}
+	[
+	'default:
+	continue();
+	]
+	err_files = rest(err_files);
+      }
+      
+      if (registered("ntrsf71"))
+      {
+	dependent = registration("ntrsf71");
+	unreference(dependent,current_registry);
+      }
+      if (registered("ntutil71"))
+      {
+	dependent = registration("ntutil71");
+	unreference(dependent, current_registry);
+	deinstall(dependent);
+      }
+
+      ui_action(instantiate(unregistering));
+      unregister(current_registry);
+
+      if (not(registered("ntutil71")) && not(registered("ntrsf71")))
+      {
+	modify("RDBMS71","",ora_config,"=");
+/*        modify("PLSQL21","",ora_config,"=");*/
+      }
+
+      if (remove_db) {
+	modify("ORACLE_SID","",ora_config,"=");
+	modify("RDBMS71_ARCHIVE", "", ora_config, "=");
+	modify("RDBMS71_CONTROL", "", ora_config, "=");
+      }
+      modify("ORACLE_PRIORITY","",ora_config,"=");
+    }
+}

@@ -1,0 +1,12 @@
+        (ADDRESS= 
+          (COMMUNITY= TCP.world)
+          (PROTOCOL= TCP)
+          (Host= %host_name%)
+          (Port= 1521)
+        )
+        (ADDRESS= 
+          (COMMUNITY= TCP.world)
+          (PROTOCOL= TCP)
+          (Host= %host_name%)
+          (Port= 1526)
+        )

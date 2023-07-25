@@ -1,0 +1,314 @@
+/*   Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rsf72.vrf - WinNT V3 installation verification script for the Required
+                Support Files (RSF).
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for installation
+    of the Windows NT RSF.
+
+  OWNER
+    Tony Rodgers
+
+  MODIFIED    MM/DD/YY  Reason
+    ljiang    07/20/95  7.2
+    syau      07/01/94  7.1.3
+    HA!       04/28/94  7.1.2 and 3.0.10.2
+    trodgers  10-APR-92 Created.
+*****************************************************************************/
+{
+  { doit = execute("%installer_home%\nt.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(ntinstver);
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+  ]
+
+  if (doit)
+    {
+      /***********************************************************************
+          Set the VRF-INS script "ratchet"
+       ***********************************************************************/
+      vrf_ratchet = "7.2.2.4.3";
+
+      /***********************************************************************
+         Bind path variables...
+      ************************************************************************/
+      {
+        set_rdbms72 = FALSE;
+        rdbms72 = translate("RDBMS72", ora_config, product_filename(current_product));
+        if (not(exists(rdbms72)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            rdbms72 = "%oracle_home%\RDBMS72";
+            set_rdbms72 = TRUE;
+          }
+        ]
+
+      {
+        set_plsql22 = FALSE;
+        plsql22 = translate("PLSQL22", ora_config, product_filename(current_product));
+        if (not(exists(plsql22)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            plsql22 = "%oracle_home%\PLSQL22";
+            set_plsql22 = TRUE;
+          }
+        ]
+
+      {
+        set_pro17 = FALSE;
+        pro17 = translate("PRO17", ora_config, product_filename(current_product));
+        if (not(exists(pro17)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            pro17 = "%oracle_home%\PRO17";
+            set_pro17 = TRUE;
+          }
+        ]
+
+      {
+        set_nlsrtl31 = FALSE;
+        nlsrtl31 = translate("NLSRTL31", ora_config, product_filename(current_product));
+        if (not(exists(nlsrtl31)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            nlsrtl31 = "%oracle_home%\NLSRTL31";
+            set_nlsrtl31 = TRUE;
+          }
+        ]
+
+      {
+        set_ora_nls = FALSE;
+        ora_nls = translate("ORA_NLS", ora_config, product_filename(current_product));
+        if (not(exists(ora_nls)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            ora_nls = "%nlsrtl31%\DATA";
+            set_ora_nls = TRUE;
+          }
+        ]
+
+      /***********************************************************************
+         Bind string variables & prompt strings...
+      ***********************************************************************/
+      installing_scripts = nls("installing_scripts",
+                               "Installing %%product_label%% Scripts...");
+      installing_sys = nls("installing_sys",
+                               "Installing %%product_label%% System Files...");
+      installing_dlls = nls("installing_dlls",
+                               "Installing %%product_label%% Dynamic Link Libraries...");
+      installing_msbs = nls("installing_msbs",
+                               "Installing %%product_label%% Message Files...");
+      installing_sql = nls("installing_sql",
+                               "Installing %%product_label%% SQL Scripts...");
+      installing_nlsdata = nls("installing_nlsdata",
+                               "Installing %%product_label%% NLS data files...");
+      modifying_config = nls("modifying_config",
+                               "Modifying NT Registry...");
+      registering = nls("registering","Registering %%product_label%%...");
+
+      /***********************************************************************
+           Return total size of files depending upon which options were
+           selected for installation...
+      ************************************************************************/
+
+      /* Stop services */
+      make_directory("%rdbms72%");
+
+      {
+        nt_stop_service("oracletnslistener");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclenmplistenerorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracletcplistener");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclestartorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracleserviceorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracleservice"); /* for 70 */
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oraclenmplistener"); /* for 70, ? */
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+/*
+      spawn("net stop oracletnslistener");
+      spawn("net stop oraclenmplistenerorcl");
+      spawn("net stop oracletcplistener");
+      spawn("net stop oracleserviceorcl");
+      spawn("net stop oracleservice"); /o for 70 o/
+      spawn("net stop oraclenmplistener"); /o for 70, ? o/
+*/
+
+      /* check to see if all of the other oracle services are shutdown */
+
+      permit_retry_operations = FALSE; /* this should be the default */
+      {
+        copy_file("%oracle_home%\bin\oraspawn.dll", "%oracle_home%\bin\oraspawn.sav");
+      }
+      [
+        'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+          continue();
+        'READ_ERROR,'WRITE_ERROR:
+          signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\oraspawn.dll could not be copied."));
+      ]
+      {
+        move_file("%oracle_home%\bin\oraspawn.sav", "%oracle_home%\bin\oraspawn.dll");
+      }
+      [
+        'OS_ERROR:
+          signal('FAILURE, nls("failure_of_service", "Installation terminated.  Please stop all Oracle services before installing."));
+        'DEFAULT:
+          continue();
+      ]
+
+      {
+        copy_file("%oracle_home%\bin\ora72dis.dll", "%oracle_home%\bin\ora72dis.sav");
+      }
+      [
+        'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+          continue();
+        'READ_ERROR,'WRITE_ERROR:
+          signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\ora72dis.dll could not be copied."));
+      ]
+      {
+        move_file("%oracle_home%\bin\ora72dis.sav", "%oracle_home%\bin\ora72dis.dll");
+      }
+      [
+        'OS_ERROR:
+          signal('FAILURE, nls("failure_of_service", "Installation terminated.  Please stop all Oracle services before installing."));
+        'DEFAULT:
+          continue();
+      ]
+
+      /*********************
+       Check if system files already exist or if they are old
+       before installing them.
+      **********************/
+
+      total_sys_size = 0;
+      copy_list = list();
+      sgroup = "0";
+      system_files = group_files(sys);
+      product_directory = implode(list(product_home,
+                                       product_location(current_product)),"\");
+      pathify(product_directory);
+      winnt_sys_dir = windows_system_directory();
+      while (not(empty(system_files)))
+      {
+         /* Set up the filenames and versions */
+         current_destination_file = first(system_files);
+
+         if (file_name(current_destination_file) == "msvcrt20.dll")
+                sgroup = "1";
+         if (file_name(current_destination_file) == "mfc30.dll")
+                sgroup = "2";
+         if (file_name(current_destination_file) == "mfcans32.dll")
+                sgroup = "3";
+         if (file_name(current_destination_file) == "mfco30.dll")
+                sgroup = "4";
+         if (file_name(current_destination_file) == "mfcuia32.dll")
+                sgroup = "5";
+         if (file_name(current_destination_file) == "msvcrt40.dll")
+                sgroup = "6";
+         if (file_name(current_destination_file) == "mfc40.dll")
+                sgroup = "7";
+         if (file_name(current_destination_file) == "ociw32.dll")
+                sgroup = "8";
+
+         current_source_file = implode(list(product_directory,
+                                            file_name(current_destination_file)),
+                                       "\");
+         pathify(current_source_file);
+         current_destination_file = instantiate(current_destination_file);
+
+         { source_file_version = windows_file_version(current_source_file); }
+         ['OS_ERROR: source_file_version = no_version_version; ]
+
+         { early_ver = windows_earlier_version(current_destination_file, source_file_version); }
+         [ 'OS_ERROR: early_ver = FALSE; ]
+
+         {
+           if ((not(exists(current_destination_file)))
+              || early_ver)
+           {
+             add(copy_list, sgroup);
+             total_sys_size = total_sys_size + size(current_source_file);
+           }
+         }
+         [ 'DEFAULT: continue(); ]
+
+         system_files = rest(system_files);
+      }
+      ['OS_ERROR:
+         {
+           system_files = rest(system_files);
+           continue();
+         }
+      ]
+
+      /* reminder: we forget deinstl70, deinstl71 here */
+      return(sum(deinstl,dll,msg,nls_abbreviation,sql,nlsdata) + total_sys_size);
+    }
+  else
+    {
+      refresh_map_file = FALSE;
+      return(0);
+    }
+}

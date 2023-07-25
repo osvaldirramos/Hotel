@@ -1,0 +1,731 @@
+/* Copyright (c) Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rdbms73.vrf - Windows NT V3 installation verification script for the
+                  ORACLE7 RDBMS.
+
+  DESCRIPTION
+    This script checks dependencies and environment settings for installation
+    of the ORACLE7 RDBMS product and prompts the user for the option
+    of creating a seed database.
+
+  OWNER
+
+  MODIFIED    DD-MMM-YY Reason
+  mrlai	       9/16/96  Modified for PO7 7.3.2.2.0
+  mmacdona     6/28/96  7.3.2.2.0
+  mmacdona     3/07/96  Clean up starter database install
+  ljiang       7/12/95  Created based on previous versions.
+*****************************************************************************/
+
+{
+  { doit = execute("%installer_home%\nt.vrf"); }
+  [
+    'UNBOUND_VARIABLE:
+      {
+        required_version = product_version(ntinstver);
+        temp = explode(required_version,".");
+        required_version = implode(list(first(temp),first(rest(temp)),
+                                        first(rest(rest(temp))),
+                                        first(rest(rest(rest(temp))))),".");
+        signal('failure,instantiate(nls("instver_too_early1","The version of the Installer currently running is %%installer_version%%. The installation you have chosen requires version %%required_version%% or later. Please run version %%required_version%% or later in order to perform this installation.")));
+      }
+  ]
+
+  /**********************************************************************
+    Set the VRF-INS script ratchet.  This guarantees a match between
+    script and prd file information.
+  ***********************************************************************/
+
+  vrf_ratchet = "7.3.2.2.0";
+
+  /* This cancels the required dialog */
+  /*
+  if (member(products_for_installation, current_product))
+    extract(products_for_installation, current_product);
+  */
+
+  /* Halt if there are already problems */
+  if ((not(doit)) && (member(selected_products, current_product)))
+    signal('FAILURE, nls("failure_of_problem", "Terminated because of internel problems"));
+
+  /****************************************************************************
+    Start main logic
+  ****************************************************************************/
+
+  if (doit)
+  {
+    {
+      rdbms70 = translate("RDBMS70", ora_config, product_filename(current_product));
+      if (not(exists(rdbms70)))
+        signal('UNBOUND_ENVIRONMENT_VARIABLE);
+    }
+    [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+      'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        rdbms70 = "%oracle_home%\RDBMS70";
+    ]
+
+    {
+      rdbms71 = translate("RDBMS71", ora_config, product_filename(current_product));
+      if (not(exists(rdbms71)))
+        signal('UNBOUND_ENVIRONMENT_VARIABLE);
+    }
+    [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+      'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        rdbms71 = "%oracle_home%\RDBMS71";
+    ]
+
+    {
+      rdbms72 = translate("RDBMS72", ora_config, product_filename(current_product));
+      if (not(exists(rdbms72)))
+        signal('UNBOUND_ENVIRONMENT_VARIABLE);
+    }
+    [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+      'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        rdbms72 = "%oracle_home%\RDBMS72";
+    ]
+
+    {
+      set_rdbms73 = FALSE;
+      rdbms73 = translate("RDBMS73", ora_config, product_filename(current_product));
+      if (not(exists(rdbms73)))
+        signal('UNBOUND_ENVIRONMENT_VARIABLE);
+    }
+    [ 'OS_ERROR,'INVALID_FILE_NAME,'FILE_NOT_FOUND,
+      'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+      {
+        rdbms73 = "%oracle_home%\RDBMS73";
+        set_rdbms73 = TRUE;
+      }
+    ]
+
+      {
+        rdbms_files = v7_translate("RDBMS_FILES");
+
+        if (not(exists(rdbms_files)))
+          signal('UNBOUND_ENVIRONMENT_VARIABLE);
+      }
+        [ 'OS_ERROR,'INVALID_FILE_NAME,
+          'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+          {
+            rdbms_files = "%oracle_home%\DATABASE";
+          }
+        ]
+
+
+    rgstd70 = registered("ntrdbms70");
+    rgstd71 = registered("ntrdbms71");
+    rgstd72 = registered("ntrdbms72");
+    rgstd73 = registered("ntrdbms73");
+
+    dbexst70 = exists("%rdbms70%\dbaini.ora") ||
+               exists("%oracle_home%\DATABASE\wgsys.ora");
+    dbexst71 = exists("%rdbms71%\sysorcl.ora");
+    dbexst72 = exists("%oracle_home%\database\sys1orcl.ora");
+    dbexst73 = exists("%oracle_home%\database\sys1orcl.ora");
+
+    selected_version = product_version(current_product);
+    if (rgstd73) {
+      registry73 = registration("ntrdbms73");
+      installed_version = registry_version(registry73);
+    }
+    else if (rgstd72) {
+      registry72 = registration("ntrdbms72");
+      installed_version = registry_version(registry72);
+    }
+    else if (rgstd71) {
+      registry71 = registration("ntrdbms71");
+      installed_version = registry_version(registry71);
+    }
+    else if (rgstd70) {
+      registry70 = registration("ntrdbms70");
+      installed_version = registry_version(registry70);
+    }
+    else
+      installed_version = "";
+
+    if (version_status == 'upgrade)
+      tmp_str = "upgrade to";
+    else if (version_status == 'downgrade)
+      tmp_str = "downgrade to";
+    else if (version_status == 'reinstall)
+      tmp_str = "reinstall";
+    else /* version_status == 'new_install */
+      tmp_str = "install";
+    version_prompt_73 = nls("version_prompt_73", "You already have Oracle %installed_version% installed in %oracle_home%.  Are you sure you want to %tmp_str% the selected version?  Hit 'Cancel' if you don't want to continue.");
+    version_help_73 = nls("version_help_73", "You will %tmp_str% Oracle %selected_version% Relational Database Management System.");
+    version_prompt_7012 = nls("version_prompt_7012", "You already have Oracle %installed_version% installed in %oracle_home%.  Are you sure you want to install the selected version in addition to Oracle %installed_version%?  Hit 'Cancel' if you don't want to continue.");
+    version_help_7012 = nls("version_help_7012", "You will be using both Oracle %installed_version% and  %selected_version% at the same time.  Note never use previous versions of Oracle utilities with Oracle %selected_version%.   Oracle %selected_version% utilities can be identified by the version stamp, 73, in the executable names.");
+    version_content = nls("version_content", "Installation of Oracle %selected_version%");
+
+    if (dbexst72 && rgstd72)
+      if (dbexst71)
+        if (dbexst70)
+          tmp_str = "%rdbms70% and %rdbms71% and %oracle_home%\database";
+        else
+          tmp_str = "%rdbms71% and %oracle_home%\database";
+      else
+        if (dbexst70)
+          tmp_str = "%rdbms70% and %oracle_home%\database";
+        else
+          tmp_str = "%oracle_home%\database";
+    else
+      if (dbexst71)
+        if (dbexst70)
+          tmp_str = "%rdbms70% and %rdbms71%";
+        else
+          tmp_str = "%rdbms71%";
+      else
+        if (dbexst70)
+          tmp_str = "%rdbms70%";
+        else
+          tmp_str = "";
+
+    dbmgrt_prompt = nls("dbmgrt_prompt", "Installer has detected that you have starter database(s) in %tmp_str%, which won't work with Oracle %selected_version%.  However, you can migrate your data from old database(s) to %selected_version% starter database.  To do that, proceed with current installation and refer to 'Migration from 7.0/7.1/7.2 Database' section in Oracle7 Server User's Guide for information after the installation is completed.");
+    dbmgrt2_prompt = nls("dbmgrt_prompt", "Installer has detected that you have starter database(s) in %tmp_str%, which might not work with Oracle %selected_version%.  However, you can migrate your data from old database(s) to %selected_version% starter database.  To do that, proceed with current installation and refer to 'Migration from 7.0/7.1/7.2 Database' section in Oracle7 Server User's Guide for information after the installation is completed.");
+    dbmgrt_help = nls("dbmgrt_help", "Databases created with one version usually don't work with other versions.  Please refer to 'Migration from 7.0/7.1/7.2 Database' section in Oracle7 Server User's Guide for detailed information if you want to migrate your data from one version to another.");
+    dbmgrt_content = nls("dbmgrt_content", "Migration from 7.0/7.1/7.2 Databases");
+
+    seed_prompt = nls("seed_prompt", "Would you like to create a new Oracle 7 Release 7.3 starter database in %oracle_home%\DATABASE?");
+    seed_help = nls("seed_help", "After installation, you may create a new database manually by following the instructions in Oracle7 Server Administrator's Guide or you can have the installer create one for you automatically by choosing 'YES' at this time.  If you choose 'YES', a database with an initial size of 20 MB will be created.  You may enlarge this database at a later time if you wish.  Note that any existing database files in %ORACLE_HOME%\DATABASE will be overwritten by the new starter database."
+);
+    seed_content = nls("seed_content", "Install Starter Database");
+
+    create_db_prompt = nls("create_db_prompt", "If you do not install the starter database now, you will need to create your own instance and database using Instance Manager and Server Manager in the future.  Refer to the %bundle_name% Installation and User's Guide for more information.");
+    create_db_content = nls("create_db_content", "Create Starter Database");
+    create_db_help = nls("create_db_help", "Use Instance Manager and Server Manager to create your own instance and database.  Refer to the %bundle_name% Installation and User's Guide for more information.");
+
+    yes_prompt = nls("yes_prompt", "Yes");
+    no_prompt = nls("no_prompt", "No");
+    ynprompt = list(yes_prompt, no_prompt);
+
+    installing_scripts = nls("installing_scripts",
+                             "Installing %%product_label%% Scripts...");
+    installing_executables = nls("installing_executables",
+                             "Installing %%product_label%% Executables...");
+    installing_dlls = nls("installing_dlls",
+                          "Installing %%product_label%% Dynamic Link Libraries...");
+    installing_msbs = nls("installing_msbs",
+                          "Installing %%product_label%% Message Files...");
+    installing_help = nls("installing_help",
+                          "Installing %%product_label%% Help Files...");
+    installing_doc = nls("installing_doc",
+                         "Installing %%product_label%% Informational Files...");
+    installing_seed = nls("installing_seed",
+                          "Installing Starter Database...");
+/*
+    moving_files = nls("moving_files",
+                       "Moving database and log files...");
+*/
+    modifying_config = nls("modifying_config",
+                           "Modifying NT Registry...");
+    starting_up = nls("starting_up", "Regenerating control/log files for the Starter Database...");
+    registering = nls("registering","Registering %%product_label%%...");
+
+    spawn_script1 = nls("spawn_script1", "Running Initialization Scripts (CREATEDB.SQL). This may take a while...");
+    spawn_script2 = nls("spawn_script2", "Running Initialization Scripts (BUILDALL.SQL). This may take a while...");
+
+    failure_of_strttcp = nls("failure_of_strttcp", "Unable to start service OracleTCPListener.");
+    failure_of_stopora = nls("failure_of_stopora", "Unable to stop service OracleServiceORCL after installation of the starter database. Please stop the service manually.");
+    failure_of_auth = nls("failure_of_auth", "Installation terminated. Failed to retrieve DBA_AUTHORIZATION from registry.");
+
+    reinstall_warning = instantiate(nls("reinstall_warning","The Oracle Installer detected a previously installed %%bundle_name%% Database on your machine.  Do you wish to overwrite this database with the Starter Database?
+
+Choosing YES will DESTROY your existing data.  Choosing NO will prevent the installation of the Starter Database."));
+    reinstall_help = instantiate(nls("reinstall_help", "The Oracle Installer has detected that you currently have a database on your machine.  This database may be a previously installed Starter Database or it may be a database that you created.
+
+If your intention is to overwrite the existing database with a new Starter Database then choose 'Yes'.  Your existing database will no longer be accessaile.
+
+If you don't want to overwrite your existing database then choose 'No'.  Your existing database will remain intact and the Starter Database will not be installed."));
+
+    reinstall_sure = instantiate(nls("reinstall_sure", "Are you sure?"));
+    reinstall_sure_content = nls("reinstall_sure_content", "Confirmation");
+    reinstall_sure_help = instantiate(nls("reinstall_sure_help", "Please verify if you wish to overwrite the previously installed database."));
+
+    seedstd_total = sum(std, "US7ASCII");
+    seedrep_total = sum(rep, "US7ASCII");
+    seedstd = seedstd_total / 1024;
+    seedstd = seedstd / 1024;
+    seedrep = seedrep_total / 1024;
+    seedrep = seedrep / 1024;
+    total_seed_size_std = stringify(seedstd, FALSE);
+    total_seed_size_rep = stringify(seedrep, FALSE);
+
+    seed_help = instantiate(nls("seed_help","The Oracle Installer can automatically create a Starter Database for you at this time.  Or, after installation, you may manually create a new database by following the instructions in the Oracle7 DBMS Help file.  The Starter Database requires %%total_seed_size_std%%M disk space."));
+    seed_content = nls("seed_content","Starter Database");
+    reinstall_seed_content = nls("reinstall_seed_content","Starter Database");
+
+    std_seed = instantiate(nls("std_seed", "Standard"));
+    rep_seed = instantiate(nls("rep_seed", "Replication"));
+    no_seed = instantiate(nls("no_seed", "None"));
+
+    std_seed_size = instantiate(nls("std_seed_size", "%%total_seed_size_std%%M disk space"));
+    rep_seed_size = instantiate(nls("rep_seed_size", "%%total_seed_size_rep%%M disk space"));
+    no_seed_size = instantiate(nls("no_seed_size", "0M disk space"));
+    std_seed_prompt = instantiate(nls("std_seed_prompt", "%%std_seed%% (%%std_seed_size%%)"));
+    rep_seed_prompt = instantiate(nls("rep_seed_prompt", "%%rep_seed%% (%%rep_seed_size%%)"));
+    no_seed_prompt = instantiate(nls("no_seed_prompt", "%%no_seed%% (%%no_seed_size%%)"));
+    db_list1 = list(std_seed_prompt, rep_seed_prompt);
+    db_list2 = list(std_seed_prompt, rep_seed_prompt, no_seed_prompt);
+
+    db_check = std_seed_prompt;
+
+    db_prompt = instantiate(nls("db_prompt","Please select the type of Starter Database you want to install.  For a description of the choices available, select Help."));
+    db_help = nls("db_help","A Starter Database is a database (a set of files) that is fully configured and ready for use with Personal Oracle7.  We expect that this one database will meet all your needs for one or many projects.
+
+The replication Starter Database is appropriate if you will be using Personal Oracle7 with a remote Oracle7 Server database and will be using Oracle's updatable snapshot (update anywhere) data replication feature.  A larger Starter Database is required.
+
+The standard Starter Database is appropriate for all other uses, including using Personal Oracle7 with a remote Oracle7 Server database where you will use only the read-only snapshot (publish and subscribe) data replication feature.  A smaller Starter Database can be used.
+
+During a Custom Install, you can also choose to install no Starter Database.  This is only recommended for advanced users who need to create their own database, or if you will be migrating your Personal Oracle for Windows 3.1 database files for use with Personal Oracle7 for Windows NT.");
+    db_content = nls("db_content","Starter Database Installation Options");
+
+    prd_loc = product_location(current_product);
+
+    /* Determine which type of install - only Custom Install asks questions */
+    {
+      if (install_type == install_type_custom)
+        custom_install = TRUE;
+      else
+        custom_install = FALSE;
+    }
+    [ 'UNBOUND_VARIABLE: custom_install = TRUE; ]
+
+    /* Migration from 7.2 to 7.3 dialogs and messages */
+
+    installing_migration = nls("installing_migration",
+                                   "Installing %%product_label%% Migration Scripts...");
+
+    old_rdbms_screen = instantiate(nls("old_rdbms", "The Installer has detected Oracle RDBMS Version 7.2 on this machine.
+
+    It is necessary to exit the Installer and deinstall RDBMS 7.2 before installing RDBMS 7.3.
+
+    Please note that you SHOULD NOT remove your database files if you wish to migrate them to v7.3 when prompted during the de-installation process.
+
+    Please refer to 'Personal Oracle7 for Windows NT Migration Guide' for further instructions."));
+    old_rdbms_content = instantiate(nls("old_rdbms", "Old RDBMS"));
+    old_rdbms_help = instantiate(nls("old_rdbms", "The Installer has detected RDBMS Version 7.2 on this machine.  It is necessary to exit the Installer and deinstall RDBMS 7.2 before installing RDBMS 7.3.  Please note that you SHOULD NOT remove your database files when prompted during the de-installation process.  Please refer to 'Personal Oracle7 for Windows NT Migration Guide' for further instructions."));
+
+    /* Reminder to read migration notes */
+    migration_note = nls("migration_note", "If you have an Oracle version 7.2 database installed on this machine, please read the 'Personal Oracle7 for Windows NT Migration Guide' for instructions on how to migrate this database to work with version 7.3.");
+
+    /*****************************************************************************
+       Start processing ...
+    *****************************************************************************/
+	ui_product(product_label);
+
+	curr_dir = directory_name(current_script);
+
+    if (rgstd73)
+      information_dialog(version_prompt_73, version_content, version_help_73);
+
+    /* ctow - see if RDBMS 7.2 installed */
+    /*        If so, exit installer      */
+
+    if ( registered("ntrdbms72") ) {
+    	information_dialog(old_rdbms_screen, old_rdbms_content, old_rdbms_help, 'NO_CANCEL);
+    	signal('FAILURE, cancel_prompt01);
+    }
+
+    /******************** Shut down Oracle services ****************************/
+    /************ in order to reinstall sqlnttt.dll and oraspawn.dll ***********/
+    make_directory("%rdbms73%");
+
+    {
+      nt_stop_service("oracletnslistener");
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oraclenmplistenerorcl");
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oracletcplistener");
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oraclestartorcl");
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oracleserviceorcl");
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oracleservice");   /* for v7.0 */
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    {
+      nt_stop_service("oraclenmplistener");  /* for v7.0 */
+    }
+    [
+      'DEFAULT: continue();
+    ]
+
+    /* check to see if all of the other oracle services are shutdown */
+
+    permit_retry_operations = FALSE; /* this should be the default */
+    {
+      copy_file("%oracle_home%\bin\oraspawn.dll", "%oracle_home%\bin\oraspawn.sav");
+    }
+    [
+      'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+        continue();
+      'READ_ERROR,'WRITE_ERROR:
+        signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\oraspawn.dll could not be copied."));
+    ]
+    {
+      move_file("%oracle_home%\bin\oraspawn.sav", "%oracle_home%\bin\oraspawn.dll");
+    }
+    [
+      'OS_ERROR:
+        signal('FAILURE, nls("failure_of_service", "Installation terminated.  Please stop all Oracle services before installing."));
+      'DEFAULT:
+        continue();
+    ]
+
+    {
+      copy_file("%oracle_home%\bin\ora73dis.dll", "%oracle_home%\bin\ora73dis.sav");
+    }
+    [
+      'FILE_NOT_FOUND,'INVALID_FILE_NAME:
+        continue();
+      'READ_ERROR,'WRITE_ERROR:
+        signal('FAILURE, nls("failure_of_copy", "Installation terminated because %oracle_home%\bin\ora73dis.dll could not be copied."));
+    ]
+    {
+      move_file("%oracle_home%\bin\ora73dis.sav", "%oracle_home%\bin\ora73dis.dll");
+    }
+    [
+      'OS_ERROR:
+        signal('FAILURE, nls("failure_of_service", "Installation terminated.  Please stop all Oracle services before installing."));
+      'DEFAULT:
+        continue();
+    ]
+
+
+    /******************** Install the seed database ? ***************************/
+
+    /* Is there a database already installed on this machine? */
+
+   prev_db_inst = exists("%RDBMS_FILES%\ctl1orcl.ora");
+   db_type = "STD";
+
+   if (custom_install)
+   {
+    if (web_install)
+    {
+     mark
+     {
+        install_seed = single_selection_dialog(starter_db, ynprompt, yes_prompt, seed_content, seed_help);
+        if (install_seed == yes_prompt)
+		    install_seed = TRUE;
+	    else
+		    install_seed = FALSE;
+
+		if (install_seed)
+	    {
+		   if (prev_db_inst)
+                mark
+		   {
+            install_seed = single_selection_dialog(reinstall_warning, ynprompt, no_prompt, reinstall_seed_content,reinstall_help);
+            if (install_seed == yes_prompt)
+				install_seed = TRUE;
+			else
+				install_seed = FALSE;
+			if (install_seed)
+            mark
+			{
+               ok = FALSE;
+               while(not(ok))
+               {
+                            install_seed = single_selection_dialog(reinstall_sure, ynprompt, yes_prompt, reinstall_sure_content, reinstall_sure_help);
+                            if (install_seed == yes_prompt)
+                            {
+                                    install_seed = TRUE;
+                                    getnls = TRUE;
+                                    {
+                                            execute("%curr_dir%\setnls.vrf");
+                                            ok = TRUE;
+                                    }
+                                    ['FAILURE: signal('FAILURE, cancel_prompt01);
+                                     'CANCEL: signal('CANCEL, cancel_prompt01);
+                                     'DEFAULT: continue();
+                                    ]
+                            }
+                            else
+                            {
+                                    install_seed = FALSE;
+                                    ok = TRUE;
+                            }
+                    }
+			}
+		}
+        else if (install_seed)
+        {
+                getnls = TRUE;
+                execute("%curr_dir%\setnls.vrf");
+        }
+       }
+     }
+    }
+    else
+    {
+     db_check = std_seed_prompt;
+     mark
+     {
+       option_chosen = single_selection_dialog(db_prompt,
+                                                  db_list2,
+			                        			  db_check,
+                                                  db_content,
+                                                  db_help);
+		
+       db_check = option_chosen;
+       install_seed = FALSE;
+
+       {
+	 if (option_chosen != no_seed_prompt)
+	 {
+	     install_seed = TRUE;
+         if (prev_db_inst)
+         mark
+         {
+            install_seed = single_selection_dialog(reinstall_warning, ynprompt, no_prompt, reinstall_seed_content,reinstall_help);
+            if (install_seed == yes_prompt)
+		     install_seed = TRUE;
+			else
+			   install_seed = FALSE;
+			
+			if (install_seed)
+            mark
+    		{
+                    ok = FALSE;
+                    while(not(ok))
+                    {
+                            install_seed = single_selection_dialog(reinstall_sure, ynprompt, yes_prompt, reinstall_sure_content, reinstall_sure_help);
+                            if (install_seed == yes_prompt)
+                            {
+                                    install_seed = TRUE;
+                                    getnls = TRUE;
+                                    {
+                                            execute("%curr_dir%\setnls.vrf");
+                                            ok = TRUE;
+                                    }
+                                    ['FAILURE: signal('FAILURE, cancel_prompt01);
+                                     'CANCEL: signal('CANCEL, cancel_prompt01);
+                                     'DEFAULT: continue();
+                                    ]
+                            }
+                            else
+                            {
+                                    install_seed = FALSE;
+                                    ok = TRUE;
+                            }
+                   }
+               	}
+              }
+              else if (install_seed)
+              {
+                   getnls = TRUE;
+                   execute("%curr_dir%\setnls.vrf");
+              }
+	        }
+	      }
+       }
+     }
+   }  /* end if custom_install */
+   else
+   {
+    if (web_install)
+    {
+	    install_seed = TRUE;
+        if (prev_db_inst)
+        mark
+	    {
+            install_seed = single_selection_dialog(reinstall_warning, ynprompt, no_prompt, reinstall_seed_content,reinstall_help);
+            if (install_seed == yes_prompt)
+		        install_seed = TRUE;
+			else
+				install_seed = FALSE;
+			
+			if (install_seed)
+            mark
+			{
+                install_seed = single_selection_dialog(reinstall_sure, ynprompt, yes_prompt, reinstall_sure_content, reinstall_sure_help);
+                if (install_seed == yes_prompt)
+					install_seed = TRUE;
+				else
+					install_seed = FALSE;
+			}
+        }
+    	if (install_seed)
+    	{
+    		getnls = FALSE;
+    		execute("%curr_dir%\setnls.vrf");
+    	}
+    }
+    else    {
+     db_check = std_seed_prompt;
+     mark
+     {
+       option_chosen = single_selection_dialog(db_prompt,
+                                                  db_list1,
+				                        		  db_check,
+                                                  db_content,
+                                                  db_help);
+
+
+       db_check = option_chosen;
+       install_seed = TRUE;
+       mark
+       {
+	if (prev_db_inst)
+	{
+            install_seed = single_selection_dialog(reinstall_warning, ynprompt, no_prompt, reinstall_seed_content,reinstall_help);
+            if (install_seed == yes_prompt)
+				install_seed = TRUE;
+			else
+				install_seed = FALSE;
+			
+			if (install_seed)
+            mark
+			{
+                install_seed = single_selection_dialog(reinstall_sure, ynprompt, yes_prompt, reinstall_sure_content, reinstall_sure_help);
+                if (install_seed == yes_prompt)
+					install_seed = TRUE;
+				else
+					install_seed = FALSE;
+			}
+        }
+        if (install_seed)
+        {
+            getnls = FALSE;
+	        execute("%curr_dir%\setnls.vrf");
+        }
+       }
+     }
+    }
+   }
+
+
+    if (install_seed) {
+    	/* create user PO7 with dba role if PO7 */
+        if ( bundle_name == P_O7_W_NT ) {
+            create_po7 = "create user PO7 identified by PO7;";
+            grant_po7 = "grant dba to PO7;";
+        }
+        else {
+            create_po7 = "";
+            grant_po7 = "";
+        }
+    }
+
+
+    /************************* starter database options *************************/
+    db_type = "std";
+    if (install_seed)
+    {
+       	if (web_install || option_chosen == std_seed_prompt)
+  	        db_type = "std";
+    	else if (option_chosen == rep_seed_prompt)
+    	    db_type = "rep";
+    }
+
+      /************************* initial variables *************************/
+      if (db_type == "std") {
+        execute("%curr_dir%\setseed.vrf");
+
+        init_processes = 50;
+        init_db_block_buffers = 200;
+        init_db_file_multiblock_read_count = 8;
+        init_shared_pool_size = 6500000;
+        init_dml_locks = 100;
+        init_log_buffer = 8192;
+        init_sequence_cache_entries = 10;
+        init_sequence_cache_hash_buckets = 10;
+    	init_snapshot_refresh_processes = 1;
+      }
+      else if (db_type == "rep") {
+        execute("%curr_dir%\setseed.vrf");
+
+        init_processes = 59;
+        init_db_block_buffers = 200;
+        init_db_file_multiblock_read_count = 8;
+        init_shared_pool_size = 10000000;
+        init_dml_locks = 100;
+        init_log_buffer = 8192;
+        init_sequence_cache_entries = 10;
+        init_sequence_cache_hash_buckets = 10;
+    	init_snapshot_refresh_processes = 2;
+    	init_snapshot_refresh_interval = 60;
+    	init_job_queue_processes = 2;
+    	init_job_queue_interval = 10;
+    	init_distributed_lock_timeout = 300;
+    	init_distributed_transactions = 5;
+    	init_open_links = 4;
+      }
+
+      /************************* get internal password *************************/
+      if (install_seed)
+      {
+        password = "oracle";
+      }
+
+    /********************* Return total size of files **************************/
+    {
+    	web_install = web_install;
+    }
+    [ 'UNBOUND_VARIABLE: web_install = FALSE; ]
+
+    /* Calculate dll_size */
+    dll_size = 0 ;
+    if ( bundle_name == E_O7_W_NT )
+      if (web_install) dll_size = sum(dll, "oesw");
+      else dll_size = sum(dll,"oes") ;
+    else if ( bundle_name == W_O7_W_NT )
+      if (web_install) dll_size = sum(dll, "owsw");
+      else dll_size = sum(dll,"ows") ;
+    else if ( bundle_name == P_O7_W_NT ) {
+      if (web_install) dll_size = sum(dll, "po7w");
+      else dll_size = sum(dll,"po7") ;
+    }
+
+    /* Calculate db_size */
+    db_size = 0;
+    if (install_seed)
+    {
+      db_size = db_size + sum(init) + sum(seedsql);
+      if (db_type == "std") db_size = db_size + sum(std, seed_type);
+      else if (db_type == "rep") db_size = db_size + sum(rep, seed_type);
+    }
+
+    return(verify(w32util73) + verify(w32rsf73) +
+                 sum(deinstl, dll, oraexec, exec, help, doc, res, nls_abbreviation,
+                 msg, nls_abbreviation) + dll_size + db_size);
+  }
+  else /* not doit */
+  {
+    refresh_map_file = FALSE;
+    return(0);
+  }
+ }
+
+

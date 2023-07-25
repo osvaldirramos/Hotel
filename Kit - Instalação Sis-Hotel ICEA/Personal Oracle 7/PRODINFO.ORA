@@ -1,0 +1,5 @@
+PART_NUMBER=A42684-1
+PRODUCT=Personal Oracle7
+VERSION=7.3.2.2.1 for Windows NT, and 7.3.2.2.0 for Windows 95
+SERVER_OPERATING_SYSTEMS=Windows NT,Windows 95
+CLIENT_OPERATING_SYSTEMS=Windows NT,Windows 95,Windows 3.1

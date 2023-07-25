@@ -1,0 +1,8 @@
+{
+    w32dbint72_product_description = nls("w32dbint72_product_description","The Oracle Navigator is an interface that allows you to access the Oracle7 DBMS.");
+    w32hlpdoc73_product_description = nls("w32hlpdoc73_product_description","Online Help is a collection of help files for Personal Oracle7.");
+    w32pdfdoc73_product_description = nls("w32pdfdoc73_product_description","Online Oracle7 Documentation is the standard Oracle7 documentation in Adobe Acrobat format.");
+    ntobject20_product_description = nls("ntobject20_product_description","Oracle Objects(TM) for OLE is a collection of programmable objects that simplify communication between Oracle7 databases and applications that support Visual Basic custom controls (VBXs and OCXs) or OLE automation.");
+    w32po7_product_description = nls("w32po7_product_description","Personal Oracle7 installs the Oracle7 DBMS and Oracle7 Utilities.");
+}
+

@@ -1,0 +1,281 @@
+/* Copyright ()c Oracle Corporation 1995.  All Rights Reserved */
+/*****************************************************************************
+  NAME
+    rdbms73.ins - Windows NT V3 installation script for the ORACLE7 RDBMS.
+
+  DESCRIPTION
+    This script installs the ORACLE7 RDBMS by copying the appropriate
+    files and optionally creating a new database by using a "seed" database.
+
+  OWNER
+
+  MODIFIED    DD-MMM-YY Reason
+    mrlai      9/14/96  Modified to start services automatically after installation	
+    mmacdona   6/28/96  7.3.2.2.0
+    ljiang     7/12/95  Created base on previous versions.
+*****************************************************************************/
+{
+  /**************************************************************************
+      Start main logic...
+   **************************************************************************/
+  if (doit)
+  {
+    ins_ratchet = "7.3.2.2.0";
+
+    execute("%installer_home%\nt.ins");
+
+    {
+        windows_delete_icons(oldicons);
+    }
+    [ 'DEFAULT: continue(); ]
+
+    bmp_home = directory_name(current_script);
+    { ui_graphics("%bmp_home%\database.bmp"); }
+    [ 'default:	continue(); ]
+
+    /************************* Install dependents ***************************/
+
+    permit_retry_operations = FALSE;
+    install(w32util73);
+    install(w32rsf73);
+    permit_retry_operations = TRUE;
+
+    /************************ Copy product files ****************************/
+
+    permit_retry_operations = TRUE;
+
+    ui_product(product_label);
+
+    ui_action(instantiate(installing_scripts));
+    copy(deinstl);
+    if (rgstd70)
+      copy(deinstl70);
+    if (rgstd71)
+      copy(deinstl71);
+
+    ui_action(instantiate(installing_executables));
+    copy(exec);
+    copy(oraexec);
+
+   /************************ Adding to NT registry ****************************/
+   /* set registry to point to vs10 directory  */
+      {
+      	vs10path= "%ORACLE_HOME%\VS10";
+        win32_set_value("HKEY_LOCAL_MACHINE",
+                      "Software\Oracle",
+                      "VS10",
+                      vs10path) ;
+      }
+
+   /********* Adding variables to vs10.ini for Backup and recovery mgr */
+        {
+        set_vs10 = false;
+        vs10 = v7_translate("vs10");
+
+        if (not(exists(vs10)))
+	 signal('UNBOUND_ENVIRONMENT_VARIABLE);
+        }
+        [
+        'OS_ERROR,'INVALID_FILE_NAME,'PERMISSION_DENIED,'UNBOUND_ENVIRONMENT_VARIABLE:
+        {
+	 vs10 = "%oracle_home%\vs10";
+	 set_vs10 = true;
+        }
+        ]
+
+        {
+           if (set_vs10)
+           {
+	       modify("VS10",vs10,ora_config,product_filename(current_product));
+           }
+        }
+        ['PERMISSION_DENIED, 'OS_ERROR: ui_action("Error modifying VS10.INI file");]
+
+	modify("%ORACLE_HOME%\DATABASE\USR1ORCL.ORA"," ","%vs10%\vs10.ini","TBLFILE");
+	modify("%ORACLE_HOME%\DATABASE\RBS1ORCL.ORA"," ","%vs10%\vs10.ini","TBLFILE");
+	modify("%ORACLE_HOME%\DATABASE\TMP1ORCL.ORA"," ","%vs10%\vs10.ini","TBLFILE");
+	modify("%ORACLE_HOME%\DATABASE\SYS1ORCL.ORA"," ","%vs10%\vs10.ini","TBLFILE");
+
+	modify("%ORACLE_HOME%\DATABASE\LOG2ORCL.ORA","1","%vs10%\vs10.ini","LOGFILE");
+	modify("%ORACLE_HOME%\DATABASE\LOG1ORCL.ORA","2","%vs10%\vs10.ini","LOGFILE");
+
+	modify("%ORACLE_HOME%\DATABASE\ctl1orcl.ora","2","%vs10%\vs10.ini","CTLFILE");
+	modify("%ORACLE_HOME%\DATABASE\ctl2orcl.ora","2","%vs10%\vs10.ini","CTLFILE");
+
+    permit_retry_operations = TRUE;	
+
+    ui_action(instantiate(installing_dlls));
+    copy(dll);
+    copy(res, nls_abbreviation);
+
+    ui_action(instantiate(installing_msbs));
+    copy(msg, nls_abbreviation);
+
+    ui_action(instantiate(installing_help));
+    copy(help);
+
+    ui_action(instantiate(installing_doc));
+    copy(doc,"xpl");   /* explain plan */
+    copy(doc,"idx") ;  /* IDXSTAT */
+    copy(doc,"read") ;  /* readme */
+    /* copy the rest of the .TXT files during production release */
+
+    ui_action(instantiate(installing_dlls));
+    copy(sqlnttt);
+    copy(oraspwn);
+
+    /* Install only the licensed options of dll*/
+    /* the options work this way :: depending on the kit copy one of */
+    /* the following to O73VSNOP.DLL --                              */
+    /*    (a) O73WEBOP.DLL for the WEB edition                       */
+    /*    (a) O73VSNOP.DLL for the Enterprise Server                 */
+    /*    (a) O73OWSOP.DLL for the Workgroup Server                  */
+    /*    (a) O73PO7OP.DLL for the Personal Oracle edition           */
+    if ( bundle_name == E_O7_W_NT )
+      if (web_install) copy(dll, "oesw");
+      else copy(dll,"oes") ;
+    else if ( bundle_name == W_O7_W_NT )
+      if (web_install) copy(dll, "owsw");
+      else copy(dll,"ows") ;
+    else if ( bundle_name == P_O7_W_NT ) {
+      if (web_install) copy(dll, "po7w");
+      else copy(dll,"po7") ;
+    }
+
+    /* modify registry */
+    if (set_rdbms73)
+    {
+      ui_action(instantiate(modifying_config));
+      modify("RDBMS73", rdbms73, ora_config, product_filename(current_product));
+    }
+
+    ui_action(instantiate(modifying_config));
+    modify("RDBMS73_CONTROL","%oracle_home%\DATABASE",ora_config,product_filename(current_product));
+    modify("RDBMS73_ARCHIVE","%oracle_home%\DATABASE\ARCHIVE",ora_config,product_filename(current_product));
+    modify("ORA_XCPT","0xFF",ora_config,product_filename(current_product));
+    modify("PO7","YES",ora_config,(product_filename(current_product)));
+
+    bmp_home = directory_name(current_script);
+    { ui_graphics("%bmp_home%\repdb.bmp"); }
+	[ 'default:continue();]
+
+    if (install_seed)
+    {
+      ui_action(instantiate(installing_seed));
+
+      copy(seedsql);
+      if (exists("%oracle_home%\database\initorcl.ora"))
+        copy_file("%oracle_home%\database\initorcl.ora","%oracle_home%\database\initorcl.sav");
+      copy(init,"");
+      if (db_type == "rep") copy(init, "rep");
+
+      /* remove any old control/log files */
+      if (exists("%oracle_home%\database\log1orcl.ora"))
+        remove_file("%oracle_home%\database\log1orcl.ora");
+      if (exists("%oracle_home%\database\log2orcl.ora"))
+        remove_file("%oracle_home%\database\log2orcl.ora");
+      if (exists("%oracle_home%\database\ctl1orcl.ora"))
+        remove_file("%oracle_home%\database\ctl1orcl.ora");
+
+      if (db_type == "std") copy(std, seed_type);
+      else if (db_type == "rep") copy(rep, seed_type);
+
+      /* modify registry */
+      ui_action(instantiate(modifying_config));
+      modify("ORACLE_SID","ORCL",ora_config,product_filename(current_product));
+    }
+    else
+      instantiate_file("%product_home%\%prd_loc%\initorcl.ora", "%oracle_home%\database\initorcl.73");
+
+
+	/**** Remove .DEI scripts of previously offered options now installed with RDBMS ****/
+
+
+	pqo_map = "%INSTALLER_HOME%\PQO73.MAP";
+	pqo_dei = "%INSTALLER_HOME%\PQO73.DEI";
+	sro_map = "%INSTALLER_HOME%\SRO73.MAP";
+	sro_dei = "%INSTALLER_HOME%\SRO73.DEI";
+	do_map = "%INSTALLER_HOME%\DO73.MAP";
+	do_dei = "%INSTALLER_HOME%\DO73.DEI";
+
+	if(exists(pqo_map))
+	  remove_file(pqo_map);
+	if(exists(pqo_dei))
+	  remove_file(pqo_dei);
+	if(exists(sro_map))
+	  remove_file(sro_map);
+	if(exists(sro_dei))
+	  remove_file(sro_dei);
+	if(exists(do_map))
+	  remove_file(do_map);
+	if(exists(do_dei))
+	  remove_file(do_dei);
+
+
+    /**************************** Register **********************************/
+
+    ui_action(instantiate(registering));
+    register(current_product);
+    if (member(selected_products, current_product))
+      reference(current_product);
+
+    reference(w32rsf73, current_product);
+    reference(w32util73, current_product);
+
+    permit_retry_operations = FALSE;
+
+    if (install_seed)
+    {
+      ui_product(product_label);
+      spawn("%ORACLE_HOME%\bin\oradim73 -delete -sid orcl");
+
+      if (exists("%oracle_home%\database\pwdorcl.ora"))
+        remove_file("%oracle_home%\database\pwdorcl.ora");
+
+      spawn("%ORACLE_HOME%\bin\oradim73 -new -sid orcl -intpwd %password% -maxusers 100 -startmode auto -starttype srvc -pfile %oracle_home%\database\initorcl.ora");
+
+      /* Start up database */
+      {
+        dba_auth_tmp = translate("DBA_AUTHORIZATION", ora_config, product_filename(current_product));
+      }
+      [
+        'FILE_NOT_FOUND, 'UNBOUND_ENVIRONMENT_VARIABLE: dba_auth_tmp = "";
+        'DEFAULT: signal('FAILURE, failure_of_auth);
+      ]
+
+      if (bundle_name == P_O7_W_NT)
+        modify("DBA_AUTHORIZATION",password,ora_config,product_filename(current_product));
+      else
+        modify("DBA_AUTHORIZATION",dba_auth_tmp,ora_config,product_filename(current_product));
+
+      ui_action(instantiate(starting_up));
+
+      if (seed_type == "ERROR")
+      {
+        spawn("%ORACLE_HOME%\BIN\SVRMGR23 command=@%RDBMS73%\ADMIN\BUILDALL.SQL");
+      }
+      else {
+        spawn("%ORACLE_HOME%\BIN\SVRMGR23 command=@%RDBMS73%\ADMIN\CREATEDB.SQL");
+      }
+
+      {
+        nt_stop_service("oraclestartorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+      {
+        nt_stop_service("oracleserviceorcl");
+      }
+      [
+        'DEFAULT: continue();
+      ]
+
+    }
+
+    if (not(member(remind_list, migration_note)))
+      	add(remind_list, migration_note);
+  }
+}
+

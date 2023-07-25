@@ -1,0 +1,55 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/************************************************************************
+  NAME
+    user.avf - user-defined .avf script
+
+  DESCRIPTION
+    This script allows users access to their own customizable .avf script.
+
+
+  MODIFIED    	MM/DD/YY  Reason
+    mrlai	09/11/96  Modified for use with PO7 7.3.2.2.0 Windows NT
+    ctow      	05/04/96  Modified for PO7 7.3 Release
+    LMurphy   	06/23/95  Modified for use with Windows 95 PO7
+    zzerhoun  	01/09/95  Added NLS stuff for Book Doc. Products 
+    zzerhoun  	01/04/95  Added user_release_grp & user_release_ext intialization
+    zzerhoun  	12/20/94  Modified to set bundle_name & distributed_option
+    zzerhoun  	12/08/94  Created for Personal Oracle.
+**************************************************************************/
+
+{
+
+  { ui_graphics("%product_home%\usradus.bmp"); } 
+  ['default:
+    { ui_graphics("%product_home%\advus.bmp"); }
+    ['FILE_NOT_FOUND:
+      { ui_graphics("%installer_home%\advus.bmp"); }
+      [ 'default:continue();]
+    ]
+  ]
+
+  /* Setup Bundle Variables */
+
+  { bundle_name = bundle_name; }
+  ['UNBOUND_VARIABLE: 
+    {
+      P_O7_95 = "Personal Oracle7 for Windows 95";
+
+      if (operating_system == "win95")	
+        bundle_name = "Personal Oracle7 for Windows 95";
+      else
+        bundle_name = "Personal Oracle7 for Windows NT";
+    }
+  ]
+
+  installation_complete = nls("installation_complete","Installation Complete.");
+
+  user_release_exists_info = instantiate(nls("user_release_exists_info","Please review the %%bundle_name%% Release Notes.  The Release Notes contain information which may be vital in successfully using %%bundle_name%%.  To read the Release Notes, double-click on the Write program icon entitled 'Oracle7 Release Notes' in the 'Oracle' program group."));
+  
+  user_release_not_exists_info = instantiate(nls("user_release_not_exists_info","Please review the %%bundle_name%% Release Notes.  The Release Notes contain information which may be vital in successfully using %%bundle_name%%.  To read the Release Notes, double-click on the Write program icon entitled 'Oracle7 Release Notes' in the 'Oracle' program group.%carriage_return%%carriage_return%The Release Notes are copied as a result of installing the Oracle Installer.  Please install the Oracle Installer and then proceed with reviewing the Release Notes."));
+  
+  execute("%installer_home%\%operating_system%.avf");
+
+  return(0);
+}

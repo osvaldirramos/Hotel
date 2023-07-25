@@ -1,0 +1,93 @@
+/* Copyright (c) Oracle Corporation 1994.  All Rights Reserved */
+
+/*****************************************************************************
+  NAME
+    po7.ins - V3 installation script for Windows 95 PO7 parent product
+
+  DESCRIPTION
+    This script installs the Windows 95 PO7 parent product
+
+  OWNER
+	Bryan Sabol
+	
+  MODIFIED	MM/DD/YY	Reason
+    mrlai   10/22/96    Modified for PO7 7.3.2.2.0 release(files shared between NT & 95)
+    LMurphy 06/01/95	Modified for use with Windows 95 PO7
+	LMurphy 01/24/94    Modified for use with On-Line Help
+  	bsabol	03/21/94	Created
+*****************************************************************************/
+
+{
+	if (doit)
+	{
+
+	/*****************************
+	Set the VRF-INS script ratchet
+	******************************/
+
+    ins_ratchet = "7.3.2.2.0";
+							
+	execute("%installer_home%\%operating_system%.ins");
+
+    /* the list of old versions to check for */
+    old_prod_list = list("%prod_pref%po7");
+
+    /* run the upgrade script */
+    execute("%product_home%\upgrade.ins");
+
+    install(w32hlpdoc73);
+		
+	permit_retry_operations  = TRUE;
+	permit_ignore_operations = TRUE;
+	permit_process_operations = TRUE;
+
+	/******************
+	Install the product
+	*******************/
+
+	ui_product(product_label);
+
+
+
+	/*******************
+	Register the product
+	********************/
+
+	ui_action(instantiate(registering));
+	register(current_product);
+
+	ui_action(instantiate(installing_scripts));
+        copy(deinst, nls_abbreviation);
+
+	/*********************						
+	Install child products
+	**********************/
+
+	if(member(selected_products, current_product))
+	{
+		ui_action(instantiate(installing_components));
+		
+		while(not(empty(child_products)))
+		{
+			install(first(child_products));
+			child_products = rest(child_products);
+		}
+	}
+
+
+	/********************
+	Reference the product
+	*********************/
+
+/* If PO7 is referenced it won't be de-installed when all of
+   its children are de-installed (without de-installing itself) */
+/*
+	if(member(selected_products,current_product))
+            reference(current_product);
+*/
+	reference(w32hlpdoc73, current_product);
+
+	permit_retry_operations = FALSE;
+	}
+}
+
