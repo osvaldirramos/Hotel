@@ -1,0 +1,38 @@
+package ids9bfdsaayp86dsac4msf;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#RESERVA:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#Historico:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference37 {
+}}/**
+
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Member#RESERVA#USUARIO:oiref>=20,300,186,16,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#RESERVA#HistoricoReserva:oiref>=202,123,301,123:oigroup>
+<oigroup:<oiref:java#Class#Historico:oiref>=301,78,136,91,1:oigroup>
+<oigroup:<oiref:java#Member#RESERVA#HistoricoReserva:oiref>=10,310,186,16,1:oigroup>
+<oigroup:<oiref:java#Class#RESERVA:oiref>=10,10,192,363,1:oigroup>
+*/
+class __positions {
+}

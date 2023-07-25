@@ -1,0 +1,29 @@
+package idbwk1dsaayp86dsad7wj9;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#TABELA_PRECO:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference25 {
+}}/**
+
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#TABELA_PRECO:oiref>=50,20,152,170,0:oigroup>
+
+*/
+class __positions {
+}

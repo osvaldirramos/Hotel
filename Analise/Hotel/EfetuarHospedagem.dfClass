@@ -1,0 +1,70 @@
+package id1q4updsaayp86dsab3jfe;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#HISTORICO:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference5 {
+}/**
+@__ref <oiref:java#Class#ReservaHospedagem:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference7 {
+}/**
+@__ref <oiref:java#Class#HOSPEDAGEM:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference9 {
+}/**
+@__ref <oiref:java#Class#APTOCAMA:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference11 {
+}/**
+@__ref <oiref:java#Class#HOSPEDE:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference31 {
+}}/**
+
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:Composite#label#MemberLink#<oiref:java#Member#HISTORICO#HOSPEDAGEM:oiref>=623,456,55,16,0:oigroup>
+<oigroup:<oiref:java#Member#HOSPEDAGEM#HOSPEDE:oiref>=570,270,194,16,1:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#HISTORICO#HOSPEDAGEM:oiref>=619,600,619,332:oigroup>
+<oigroup:<oiref:java#Class#HOSPEDAGEM:oiref>=570,30,200,302,1:oigroup>
+<oigroup:<oiref:java#Class#ReservaHospedagem:oiref>=90,20,143,94,1:oigroup>
+<oigroup:<oiref:java#Member#HISTORICO#HOSPEDAGEM:oiref>=460,1190,183,16,1:oigroup>
+<oigroup:<oiref:java#Class#HISTORICO:oiref>=460,600,189,654,1:oigroup>
+<oigroup:<oiref:java#Member#HOSPEDAGEM#DESCONTO:oiref>=570,260,194,16,1:oigroup>
+<oigroup:Composite#clientCardinality#MemberLink#<oiref:java#Member#HOSPEDAGEM#lnkAPTOCAMA:oiref>=675,332,15,16,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#HOSPEDAGEM#HOSPEDE:oiref>=570,287,470,287:oigroup>
+<oigroup:Composite#clientCardinality#MemberLink#<oiref:java#Member#HISTORICO#HOSPEDAGEM:oiref>=600,580,15,16,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#HOSPEDAGEM#lnkAPTOCAMA:oiref>=694,332,831,470:oigroup>
+<oigroup:Composite#clientCardinality#MemberLink#<oiref:java#Member#ReservaHospedagem#lnkHOSPEDAGEM1:oiref>=237,52,26,16,0:oigroup>
+<oigroup:<oiref:java#Class#HOSPEDE:oiref>=270,170,200,347,1:oigroup>
+<oigroup:Composite#label#MemberLink#<oiref:java#Member#ReservaHospedagem#lnkHOSPEDAGEM1:oiref>=346,52,111,16,0:oigroup>
+<oigroup:Composite#label#MemberLink#<oiref:java#Member#HOSPEDAGEM#lnkAPTOCAMA:oiref>=766,381,265,16,0:oigroup>
+<oigroup:MemberLink#<oiref:java#Member#ReservaHospedagem#lnkHOSPEDAGEM1:oiref>=233,72,570,72:oigroup>
+<oigroup:<oiref:java#Class#APTOCAMA:oiref>=770,470,123,158,1:oigroup>
+<oigroup:<oiref:java#Member#HISTORICO#OBS:oiref>=470,1180,183,16,1:oigroup>
+*/
+class __positions {
+}

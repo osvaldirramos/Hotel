@@ -1,0 +1,540 @@
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Esta tabela trata das regras dos valores das Diarias
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                12/02/2009
+--
+-- Tabela ...: RegrasDeDiarias
+--
+-- ======================================================================
+   
+   CREATE TABLE RegrasDeDiarias
+   ( 
+      PostoGraduação                    VARCHAR(30) not null,
+      Predio                            Char(1) not null,
+      Inicio                            numeric(3) not null,
+      Termino                           numeric(3) not null,
+      Valor                             numeric(7,2) not null,
+       CONSTRAINT RegrasDeDiarias_Id_pk PRIMARY KEY (PostoGraduação, Predio, Inicio, Termino)
+    )
+
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Esta tabela tratara das regras de calculo de Desconto
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                30/06/2008
+--
+-- Tabela ...: RegrasDeDescontos
+--
+-- ======================================================================
+   
+   CREATE TABLE RegrasDeDescontos 
+   ( 
+      Situacao_Curso                    VARCHAR(10),
+      Dias                              numeric(3) not null,
+      Desconto                          numeric(3) not null,
+       CONSTRAINT RegrasDeDescontos_Id_pk PRIMARY KEY (Situacao_Curso, Dias)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados dos Apartamentos do otel
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Apartamento
+--
+-- ======================================================================
+   
+   CREATE TABLE Apartamento
+   ( 
+      Predio                                CHAR(1) not null,
+      Apto                                  numeric(3) not null,
+      Ramal                                 VARCHAR(4),
+      TV1                                   VARCHAR(10),
+      TV2                                   VARCHAR(10),
+       CONSTRAINT Apartamento_Id_pk PRIMARY KEY (Predio,Apto)
+    )
+
+-- ======================================================================
+--
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro da cama por apartamento
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                24/02/2003  
+--
+-- Tabela ...: AptoCama
+
+-- ======================================================================
+   
+   CREATE TABLE AptoCama
+   ( 
+      Predio                                CHAR(1) not null,
+      Apto                                  numeric(3) not null,
+      Cama                                  numeric(2) not null,
+      AptCodigo                             VARCHAR(12),
+      Nome                                  VARCHAR(30),  
+         CONSTRAINT AptoCama_Id_pk PRIMARY KEY (Predio,Apto,Cama),
+         CONSTRAINT Apto_AptoCama_fk FOREIGN KEY (Predio, Apto)
+             References Apartamento (Predio, Apto) on delete Cascade
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro da Tabela dos Postos
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Tabela_Posto
+--
+-- ======================================================================
+   
+   CREATE TABLE Tabela_Posto
+   ( 
+      Codigo                                   VARCHAR(2) not null,
+      CodTabela                                VARCHAR(2) not null,
+         CONSTRAINT TabelaPosto_Id_pk PRIMARY KEY (Codigo, CodTabela),
+      Posto                                   VARCHAR(30)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro a Tabela de Pre‡os de Hospedagem
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Tabela_Preco
+--
+-- ======================================================================
+   
+   CREATE TABLE Tabela_Preco
+   ( 
+      Predio                         CHAR(1) not null,
+      Codigo                         VARCHAR(2) not null,
+      Posto                          VARCHAR(30) not null,
+      Valor                          numeric(8,2) not null,
+         CONSTRAINT TabelaPreco_Id_pk PRIMARY KEY (Predio, Codigo)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados dos H¢spedes
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/03/2003
+--
+-- Tabela ...: Hospede
+--
+-- ======================================================================
+   
+   CREATE TABLE Hospede
+   ( 
+      Identidade                        CHAR(12) not null,
+      Nome                              VARCHAR(40) not null,
+      Nome_Guerra                       VARCHAR(15) not null,
+      Posto                             VARCHAR(30) not null,
+      Dependende_De                     VARCHAR(30),
+      Nacionalidade                     VARCHAR(3) not null,
+      Telefone_Residencial              VARCHAR(10),
+      Telefone_Funcional                VARCHAR(10),
+      Situacao_Curso                    VARCHAR(10),
+      Residencia                        VARCHAR(40),
+      Numero                            VARCHAR(10),
+      Cidade                            VARCHAR(40),
+      Bairro                            VARCHAR(40),
+      Estado                            VARCHAR(2),
+      OM_Origem                         VARCHAR(20),
+      Situacao                          CHAR(1),
+      OBS                               VARCHAR(50),  
+         CONSTRAINT Hospede_Id_pk PRIMARY KEY (Identidade)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados das hospedagens por hospede
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/03/2003
+--
+-- Tabela ...: Hospedagem
+--
+-- ======================================================================
+   
+   CREATE TABLE Hospedagem
+   ( 
+      Identidade                     CHAR(12) not null,
+      Ficha                          CHAR(6) not null,
+      Ano                            numeric(4) not null,
+      Predio                         CHAR(1) not null,
+      Apto                           numeric(3) not null,
+      Cama                           numeric(2) not null,
+      DataEntrada                    VARCHAR(13) not null,
+      HoraEntrada                    VARCHAR(4) not null,
+      DataSaida                      VARCHAR(13) not null,
+      Dependente                     numeric(3),
+      Situacao_Hospedagem            VARCHAR(10),
+      Recebe                         CHAR(1),
+      Desconto                       CHAR(1),
+         CONSTRAINT Hospedagem_Id_pk PRIMARY KEY (Identidade, Ficha, Ano)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados dos Historico de hospedes
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Historico
+--
+-- ======================================================================
+   
+   CREATE TABLE Historico
+   ( 
+      Identidade                     CHAR(12) not null,
+      Ficha                          VARCHAR(6) not null,
+      Ano                            numeric(4) not null,
+         CONSTRAINT Historico_Id_pk PRIMARY KEY (Identidade, Ficha, ano),
+      Predio                         CHAR(1),
+      Apto                           numeric(3),
+      DataEntrada                    VARCHAR(8),
+      HoraEntrada                    VARCHAR(4),
+      DataSaida                      VARCHAR(8),
+      DataPagamento                  VARCHAR(8),
+      NRecibo                        VARCHAR(6),
+      Banco                          VARCHAR(10),
+      NCheque                        VARCHAR(6),
+      Praca                          VARCHAR(16),
+      ValorPago                      numeric(8,2),
+      Custo_Telefone                 numeric(8,2),
+      Usuario_Entrada                VARCHAR(10),
+      Situacao_Curso                 VARCHAR(10),
+      Usuario_Saida                  VARCHAR(10),
+      Tipo_Fechamento                CHAR(1),
+      Recebido                       CHAR(1),
+      OBS                            VARCHAR(150),
+         CONSTRAINT Historico_fk FOREIGN KEY (Identidade)
+             References Hospede(Identidade) on delete Cascade
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados dos Pagamento parcelados
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                15/03/2012
+--
+-- Tabela ...: PagParcelado
+--
+-- ======================================================================
+   
+   CREATE TABLE PagParcelado
+   ( 
+      Identidade                     CHAR(12) not null,
+      Ficha                          VARCHAR(6) not null,
+      Ano                            numeric(4) not null,
+      DataPagamento                  VARCHAR(10),
+         CONSTRAINT PagParcelado_Id_pk PRIMARY KEY (Identidade, Ficha, ano, DataPagamento),
+      Valor                          numeric(8,2),
+      NRecibo                        VARCHAR(6),
+         CONSTRAINT PagParcelado_fk FOREIGN KEY (Identidade, Ficha, ano)
+             References Historico(Identidade, Ficha, ano) on delete Cascade
+    )
+
+-- ======================================================================
+--
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos dependentes 
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                31/04/2004
+--
+-- Tabela ...: Dependente
+--
+-- Atualizacao: 
+--
+-- ======================================================================
+   
+   CREATE TABLE Dependente
+   ( 
+      Identidade                    char(12) not null,
+      Ficha                         CHAR(6) not null,
+      Ano                           numeric(4) not null,
+      Predio                        CHAR(1) not null,
+      Apto                          numeric(3) not null,
+      Cama                          numeric(2) not null,
+      Nome                          VARCHAR(30) not null,  
+         CONSTRAINT Dependente_Id_pk PRIMARY KEY (Ficha, Ano, Predio, Apto, Cama),
+         CONSTRAINT Dependente_fk FOREIGN KEY (Identidade, Ficha, ano)
+               References hospedagem (Identidade, Ficha, ano) on delete Cascade
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos Dados das Reservas do Hotel
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Reserva
+--
+-- Alterado em: 09/04/2003
+-- ======================================================================
+   
+   CREATE TABLE Reserva
+   ( 
+      Identidade                        CHAR(12) not null,
+      DataEntrada                       Date not null,
+      Nome                              VARCHAR(40),
+      Nome_Guerra                       VARCHAR(15),
+      Posto                             VARCHAR(30),
+      Dependente_De                     VARCHAR(30),
+      Telefone_Funcional                VARCHAR(10),
+      Situacao_Curso                    VARCHAR(10),
+      OM_Origem                         VARCHAR(20),
+      Dependente                        numeric(3),
+      HoraEntrada                       VARCHAR(4),
+      DataSaida                         Date,
+      Predio                            CHAR(1),
+      Apto                              numeric(3),
+      Cama                              numeric(2),
+      Recebe                            CHAR(1),
+      Usuario                           VARCHAR(10),
+         CONSTRAINT Reserva_Id_pk PRIMARY KEY (Identidade, DataEntrada),
+         CONSTRAINT Reserva_fk FOREIGN KEY (Predio, Apto, Cama)
+             References AptoCama(Predio, Apto, Cama) on delete Cascade
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Tabela de valor de hospedagem para residente.
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                29/04/2003  
+--
+-- Tabela ...: Residente
+--
+-- ======================================================================
+   
+   CREATE TABLE Residente
+   ( 
+      Posto                          VARCHAR(30) not null,
+      Valor                          numeric(8,2) not null,
+         CONSTRAINT Residente_pk PRIMARY KEY (Posto)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro dos responsaveis pela assinatura em documentos
+--             do Hotel.
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Responsavel
+--
+-- ======================================================================
+   
+   CREATE TABLE Responsavel
+   ( 
+      Codigo                           numeric(1) not null,
+         CONSTRAINT Responsavel_Id_pk PRIMARY KEY (Codigo),
+      Nome                              VARCHAR(40) not null,
+      Funcao                            VARCHAR(40)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro da Tabela da Cursos do IPV
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Tabela_Curso
+--
+-- ======================================================================
+   
+   CREATE TABLE Tabela_Cursos
+   ( 
+      Curso                         VARCHAR(10) not null,
+         CONSTRAINT TabelaCursos_Id_pk PRIMARY KEY (Curso)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro da Tabela da unidades do decea
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                08/04/2003  
+--
+-- Tabela ...: Unidades_Decea
+--
+-- ======================================================================
+   
+   CREATE TABLE Unidades_Decea
+   ( 
+      Localidade                         VARCHAR(20) not null,
+         CONSTRAINT TabelaDecea_Id_pk PRIMARY KEY (Localidade)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastra dos usuarios do sistema
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Usuario
+--
+-- ======================================================================
+   
+   CREATE TABLE Usuario
+   ( 
+       USUARIO               VARCHAR(10) not null,
+       SENHA                 VARCHAR(10) not null,
+       PRIVILEGIO            CHAR(1),
+         CONSTRAINT Hotel_Usuario_Id_pk PRIMARY KEY (Usuario, Senha)
+)
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastra a utilizacao do sistema
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Hotel_Logs
+--
+-- ======================================================================
+   
+   CREATE TABLE Hotel_Logs
+   ( 
+      Usuario                  VARCHAR(10) not null,
+      Data                     DATE not null,
+      HoraEntrada              VARCHAR(5) not null,
+      NAtividade               numeric(5),
+      Atividade                VARCHAR(20),
+         CONSTRAINT Hotel_Logs_Id_pk PRIMARY KEY (Usuario, Data, HoraEntrada)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Registra acesso ao sistema do Hotel
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                06/07/2000  
+--
+-- Tabela ...: Verifica
+--
+-- ======================================================================
+   
+   CREATE TABLE Verifica
+   ( 
+      VUsuario                  VARCHAR(10) not null,
+      VData                     DATE not null,
+      VHoraEntrada              VARCHAR(5) not null,
+      VHoraSaida                VARCHAR(5),
+         CONSTRAINT Verifica_pk PRIMARY KEY (VUsuario, VData, VHoraEntrada)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Cadastro Cursos
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Tabela_Cursos
+--
+-- ======================================================================
+   
+   CREATE TABLE Tabela_Cursos
+   ( 
+      Curso                         VARCHAR(10) not null,
+         CONSTRAINT TabelaCursos_Id_pk PRIMARY KEY (Curso)
+    )
+
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Tabela temporaria para calculo estatistico
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Estatitica
+--
+-- ======================================================================
+   
+   CREATE TABLE Estatistica
+   ( 
+      Codigo                numeric(2,0) not null,
+      Situacao              Varchar(15),
+      Valor                 numeric(8,2),
+         CONSTRAINT Estatistica_pk PRIMARY KEY (Codigo)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Tabela para armazenar as facilidades
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Facilidade
+--
+-- ======================================================================
+
+    CREATE TABLE facilidade
+    (
+       TIPO               VARCHAR(20) not null,
+       NOME               VARCHAR(35) not null,
+       TELEFONE           VARCHAR(15),
+       ENDERECO           VARCHAR(35),
+       HORARIO            VARCHAR(25),
+       OBS                VARCHAR(30),
+          CONSTRAINT Facilidade_pk PRIMARY KEY (Tipo, Nome)
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Tabela para armazenar o numero da ultima ficha cadastrada
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Ficha
+--
+-- ======================================================================
+
+    CREATE TABLE Ficha
+    (
+       FICHA        CHAR(6) NOT NULL
+    )
+
+-- ======================================================================
+-- Projeto...: HOTEL (Hotel IPV)                              Versao: 1.0
+--
+-- Descricao.: Tabela para armazenar os valores referentes a residentes
+--
+-- Autor.....: Prog. Osvaldir Donizetti Ramos                02/05/2003  
+--
+-- Tabela ...: Residente
+--
+-- ======================================================================
+
+    CREATE table residente
+    (
+      POSTO                       VARCHAR(30) not null,
+      VALOR                       numeric(8,2),
+          CONSTRAINT Residente_pk PRIMARY KEY (POSTO)
+    )
+     

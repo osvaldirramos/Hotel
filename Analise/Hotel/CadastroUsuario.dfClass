@@ -1,0 +1,28 @@
+package id9zv0dsa8mz7tdsa8v5me;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#HOTEL_USUARIO:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference {
+}}/**
+
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:java#Class#HOTEL_USUARIO:oiref>=90,40,122,126,1:oigroup>
+*/
+class __positions {
+}

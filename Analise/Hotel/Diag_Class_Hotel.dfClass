@@ -1,0 +1,87 @@
+package id4ky43dsa6poqqdsa6x0be;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:java#Class#APARTAMENTO:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference {
+}/**
+@__ref <oiref:java#Class#FACILIDADE:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference3 {
+}/**
+@__ref <oiref:java#Class#HISTORICO_X:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference4 {
+}/**
+@__ref <oiref:java#Class#HOTEL_LOGS:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference7 {
+}/**
+@__ref <oiref:java#Class#LOG:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference9 {
+}/**
+@__ref <oiref:java#Class#RESIDENTE:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference11 {
+}/**
+@__ref <oiref:java#Class#TABELA_DECEA:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference13 {
+}/**
+@__ref <oiref:java#Class#TABELA_POSTO:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference14 {
+}/**
+@__ref <oiref:java#Class#VERIFICA:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference16 {
+}}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+
+
+
+<oigroup:<oiref:java#Class#FACILIDADE:oiref>=364,510,129,270,1:oigroup>
+<oigroup:<oiref:java#Class#TABELA_DECEA:oiref>=459,10,135,110,1:oigroup>
+<oigroup:<oiref:java#Class#VERIFICA:oiref>=1159,550,157,206,1:oigroup>
+<oigroup:<oiref:java#Class#HOTEL_LOGS:oiref>=420,230,150,238,1:oigroup>
+<oigroup:<oiref:java#Class#HISTORICO_X:oiref>=614,10,177,1006,1:oigroup>
+<oigroup:<oiref:java#Class#APARTAMENTO:oiref>=811,10,108,238,1:oigroup>
+<oigroup:<oiref:java#Class#RESIDENTE:oiref>=229,830,101,142,1:oigroup>
+<oigroup:<oiref:java#Class#LOG:oiref>=160,230,89,94,1:oigroup>
+<oigroup:<oiref:java#Class#TABELA_POSTO:oiref>=156,10,131,174,1:oigroup>
+*/
+class __positions {
+}

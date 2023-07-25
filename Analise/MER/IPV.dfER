@@ -1,0 +1,1828 @@
+package id386dndruuediwdruvp07c;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node20:oiref><oihard>
+@__modelType reference 
+*/
+class reference21 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node26:oiref><oihard>
+@__modelType reference 
+*/
+class reference27 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node30:oiref><oihard>
+@__modelType reference 
+*/
+class reference31 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node37:oiref><oihard>
+@__modelType reference 
+*/
+class reference38 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node59:oiref><oihard>
+@__modelType reference 
+*/
+class reference60 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node73:oiref><oihard>
+@__modelType reference 
+*/
+class reference74 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node89:oiref><oihard>
+@__modelType reference 
+*/
+class reference90 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node95:oiref><oihard>
+@__modelType reference 
+*/
+class reference96 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node99:oiref><oihard>
+@__modelType reference 
+*/
+class reference100 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node101:oiref><oihard>
+@__modelType reference 
+*/
+class reference102 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node115:oiref><oihard>
+@__modelType reference 
+*/
+class reference116 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node133:oiref><oihard>
+@__modelType reference 
+*/
+class reference134 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node136:oiref><oihard>
+@__modelType reference 
+*/
+class reference137 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node140:oiref><oihard>
+@__modelType reference 
+*/
+class reference141 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node142:oiref><oihard>
+@__modelType reference 
+*/
+class reference143 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node144:oiref><oihard>
+@__modelType reference 
+*/
+class reference145 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node148:oiref><oihard>
+@__modelType reference 
+*/
+class reference149 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node153:oiref><oihard>
+@__modelType reference 
+*/
+class reference154 {
+}/**
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node1:oiref><oihard>
+@__modelType reference 
+*/
+class reference2 {
+}}/**
+@__tags
+@shapeType ERDiagram
+@rdbServerType ipv 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node89:oiref>=345,290,50,100,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node73:oiref>=161,290,50,300,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node59:oiref>=333,10,50,260,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node20.link:oiref>=126,67,106,67:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node140:oiref>=425,670,50,20,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node37:oiref>=10,310,50,420,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node26:oiref>=10,170,50,60,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node30:oiref>=230,10,50,120,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node148:oiref>=661,130,50,80,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node:oiref>=10,10,50,100,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node101:oiref>=517,10,50,260,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node115:oiref>=470,310,50,340,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node1:oiref>=106,141,149,121,0:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node99:oiref>=345,590,50,20,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node20.member23:oiref>=130,70,78,16,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node95:oiref>=345,470,50,60,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node153:oiref>=661,270,50,80,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node144:oiref>=752,10,50,60,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node142:oiref>=554,670,50,20,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node20:oiref>=126,10,50,100,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node133:oiref>=661,10,50,40,1:oigroup>
+<oigroup:<oiref:design#Class#id386dndruuediwdruvp07c.node136:oiref>=10,730,50,60,1:oigroup>
+*/
+class __positions {
+}/**
+@shapeType erEntity
+@__modelType node
+@name APARTAMENTO
+@rdbOldLogicalName APARTAMENTO
+@internalPhysicalName APARTAMENTO
+@rdbInternalPhysicalPrimaryKeyName APARTAMENTO_ID_PK 
+*/
+class node {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 1
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTO
+@rdbOldLogicalName APTO
+@internalPhysicalName APTO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalNotNull
+@internalSize 3
+@internalPrimaryKey 
+*/
+class member16 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RAMAL
+@rdbOldLogicalName RAMAL
+@internalPhysicalName RAMAL
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 4
+@internalDigits 0 
+*/
+class member17 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TV1
+@rdbOldLogicalName TV1
+@internalPhysicalName TV1
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member18 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TV2
+@rdbOldLogicalName TV2
+@internalPhysicalName TV2
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member19 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name APTOCAMA
+@rdbOldLogicalName APTOCAMA
+@internalPhysicalName APTOCAMA
+@rdbInternalPhysicalPrimaryKeyName APTOCAMA_ID_PK 
+*/
+class node20 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CAMA
+@rdbOldLogicalName CAMA
+@internalPhysicalName CAMA
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalNotNull
+@internalSize 2
+@internalPrimaryKey 
+*/
+class member23 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTCODIGO
+@rdbOldLogicalName APTCODIGO
+@internalPhysicalName APTCODIGO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 12
+@internalDigits 0 
+*/
+class member24 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member25 {
+}/**
+@shapeType erRelationship
+@__modelType link
+@__ref <oiref:design#Class#id386dndruuediwdruvp07c.node:oiref><oihard>
+@internalIdentifying
+@name predio 
+*/
+class link {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName 
+@foreignLink <oiref:design#Class#id386dndruuediwdruvp07c.node20.link:oiref>
+@referencedAttribute <oiref:design#Class#id386dndruuediwdruvp07c.node.member16:oiref> 
+*/
+class member163 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName 
+@foreignLink <oiref:design#Class#id386dndruuediwdruvp07c.node20.link:oiref>
+@referencedAttribute <oiref:design#Class#id386dndruuediwdruvp07c.node.member:oiref> 
+*/
+class member {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name ESTATISTICA
+@rdbOldLogicalName ESTATISTICA
+@internalPhysicalName ESTATISTICA 
+*/
+class node26 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODIGO
+@rdbOldLogicalName CODIGO
+@internalPhysicalName CODIGO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 2 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO
+@rdbOldLogicalName SITUACAO
+@internalPhysicalName SITUACAO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 15
+@internalDigits 0 
+*/
+class member28 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VALOR
+@rdbOldLogicalName VALOR
+@internalPhysicalName VALOR
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 8 
+*/
+class member29 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name FACILIDADE
+@rdbOldLogicalName FACILIDADE
+@internalPhysicalName FACILIDADE 
+*/
+class node30 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName TIPO
+@rdbOldLogicalName TIPO
+@internalPhysicalName TIPO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 20
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 35
+@internalDigits 0 
+*/
+class member32 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TELEFONE
+@rdbOldLogicalName TELEFONE
+@internalPhysicalName TELEFONE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 15
+@internalDigits 0 
+*/
+class member33 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName ENDERECO
+@rdbOldLogicalName ENDERECO
+@internalPhysicalName ENDERECO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 35
+@internalDigits 0 
+*/
+class member34 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName HORARIO
+@rdbOldLogicalName HORARIO
+@internalPhysicalName HORARIO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 25
+@internalDigits 0 
+*/
+class member35 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName OBS
+@rdbOldLogicalName OBS
+@internalPhysicalName OBS
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member36 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name HISTORICO
+@rdbOldLogicalName HISTORICO
+@internalPhysicalName HISTORICO
+@rdbInternalPhysicalPrimaryKeyName HISTORICO_ID_PK 
+*/
+class node37 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName IDENTIDADE
+@rdbOldLogicalName IDENTIDADE
+@internalPhysicalName IDENTIDADE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 12
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName FICHA
+@rdbOldLogicalName FICHA
+@internalPhysicalName FICHA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 6
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member39 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName ANO
+@rdbOldLogicalName ANO
+@internalPhysicalName ANO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalNotNull
+@internalSize 4
+@internalPrimaryKey 
+*/
+class member40 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member41 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTO
+@rdbOldLogicalName APTO
+@internalPhysicalName APTO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member42 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATAENTRADA
+@rdbOldLogicalName DATAENTRADA
+@internalPhysicalName DATAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 8
+@internalDigits 0 
+*/
+class member43 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName HORAENTRADA
+@rdbOldLogicalName HORAENTRADA
+@internalPhysicalName HORAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 4
+@internalDigits 0 
+*/
+class member44 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATASAIDA
+@rdbOldLogicalName DATASAIDA
+@internalPhysicalName DATASAIDA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 8
+@internalDigits 0 
+*/
+class member45 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATAPAGAMENTO
+@rdbOldLogicalName DATAPAGAMENTO
+@internalPhysicalName DATAPAGAMENTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 8
+@internalDigits 0 
+*/
+class member46 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NRECIBO
+@rdbOldLogicalName NRECIBO
+@internalPhysicalName NRECIBO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 6
+@internalDigits 0 
+*/
+class member47 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName BANCO
+@rdbOldLogicalName BANCO
+@internalPhysicalName BANCO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member48 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NCHEQUE
+@rdbOldLogicalName NCHEQUE
+@internalPhysicalName NCHEQUE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 6
+@internalDigits 0 
+*/
+class member49 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PRACA
+@rdbOldLogicalName PRACA
+@internalPhysicalName PRACA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 16
+@internalDigits 0 
+*/
+class member50 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VALORPAGO
+@rdbOldLogicalName VALORPAGO
+@internalPhysicalName VALORPAGO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 8 
+*/
+class member51 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CUSTO_TELEFONE
+@rdbOldLogicalName CUSTO_TELEFONE
+@internalPhysicalName CUSTO_TELEFONE
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 8 
+*/
+class member52 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName USUARIO_ENTRADA
+@rdbOldLogicalName USUARIO_ENTRADA
+@internalPhysicalName USUARIO_ENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member53 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName USUARIO_SAIDA
+@rdbOldLogicalName USUARIO_SAIDA
+@internalPhysicalName USUARIO_SAIDA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member54 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TIPO_FECHAMENTO
+@rdbOldLogicalName TIPO_FECHAMENTO
+@internalPhysicalName TIPO_FECHAMENTO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member55 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RECEBIDO
+@rdbOldLogicalName RECEBIDO
+@internalPhysicalName RECEBIDO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member56 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName OBS
+@rdbOldLogicalName OBS
+@internalPhysicalName OBS
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 150
+@internalDigits 0 
+*/
+class member57 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO_CURSO
+@rdbOldLogicalName SITUACAO_CURSO
+@internalPhysicalName SITUACAO_CURSO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member58 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name HOSPEDAGEM
+@rdbOldLogicalName HOSPEDAGEM
+@internalPhysicalName HOSPEDAGEM
+@rdbInternalPhysicalPrimaryKeyName HOSPEDAGEM_ID_PK 
+*/
+class node59 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName IDENTIDADE
+@rdbOldLogicalName IDENTIDADE
+@internalPhysicalName IDENTIDADE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 12
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName FICHA
+@rdbOldLogicalName FICHA
+@internalPhysicalName FICHA
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 6
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member61 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName ANO
+@rdbOldLogicalName ANO
+@internalPhysicalName ANO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalNotNull
+@internalSize 4
+@internalPrimaryKey 
+*/
+class member62 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member63 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTO
+@rdbOldLogicalName APTO
+@internalPhysicalName APTO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member64 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CAMA
+@rdbOldLogicalName CAMA
+@internalPhysicalName CAMA
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 2 
+*/
+class member65 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATAENTRADA
+@rdbOldLogicalName DATAENTRADA
+@internalPhysicalName DATAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 13
+@internalDigits 0 
+*/
+class member66 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName HORAENTRADA
+@rdbOldLogicalName HORAENTRADA
+@internalPhysicalName HORAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 4
+@internalDigits 0 
+*/
+class member67 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATASAIDA
+@rdbOldLogicalName DATASAIDA
+@internalPhysicalName DATASAIDA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 13
+@internalDigits 0 
+*/
+class member68 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DEPENDENTE
+@rdbOldLogicalName DEPENDENTE
+@internalPhysicalName DEPENDENTE
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member69 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO_HOSPEDAGEM
+@rdbOldLogicalName SITUACAO_HOSPEDAGEM
+@internalPhysicalName SITUACAO_HOSPEDAGEM
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member70 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RECEBE
+@rdbOldLogicalName RECEBE
+@internalPhysicalName RECEBE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member71 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DESCONTO
+@rdbOldLogicalName DESCONTO
+@internalPhysicalName DESCONTO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member72 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name HOSPEDE
+@rdbOldLogicalName HOSPEDE
+@internalPhysicalName HOSPEDE
+@rdbInternalPhysicalPrimaryKeyName HOSPEDE_ID_PK 
+*/
+class node73 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName IDENTIDADE
+@rdbOldLogicalName IDENTIDADE
+@internalPhysicalName IDENTIDADE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 12
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member75 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME_GUERRA
+@rdbOldLogicalName NOME_GUERRA
+@internalPhysicalName NOME_GUERRA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 15
+@internalDigits 0 
+*/
+class member76 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName POSTO
+@rdbOldLogicalName POSTO
+@internalPhysicalName POSTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member77 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NACIONALIDADE
+@rdbOldLogicalName NACIONALIDADE
+@internalPhysicalName NACIONALIDADE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 3
+@internalDigits 0 
+*/
+class member78 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TELEFONE_RESIDENCIAL
+@rdbOldLogicalName TELEFONE_RESIDENCIAL
+@internalPhysicalName TELEFONE_RESIDENCIAL
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member79 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TELEFONE_FUNCIONAL
+@rdbOldLogicalName TELEFONE_FUNCIONAL
+@internalPhysicalName TELEFONE_FUNCIONAL
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member80 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO_CURSO
+@rdbOldLogicalName SITUACAO_CURSO
+@internalPhysicalName SITUACAO_CURSO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member81 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RESIDENCIA
+@rdbOldLogicalName RESIDENCIA
+@internalPhysicalName RESIDENCIA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member82 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NUMERO
+@rdbOldLogicalName NUMERO
+@internalPhysicalName NUMERO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member83 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CIDADE
+@rdbOldLogicalName CIDADE
+@internalPhysicalName CIDADE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member84 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName BAIRRO
+@rdbOldLogicalName BAIRRO
+@internalPhysicalName BAIRRO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member85 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName ESTADO
+@rdbOldLogicalName ESTADO
+@internalPhysicalName ESTADO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 2
+@internalDigits 0 
+*/
+class member86 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName OM_ORIGEM
+@rdbOldLogicalName OM_ORIGEM
+@internalPhysicalName OM_ORIGEM
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 20
+@internalDigits 0 
+*/
+class member87 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DEPENDENTE_DE
+@rdbOldLogicalName DEPENDENTE_DE
+@internalPhysicalName DEPENDENTE_DE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member88 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name HOTEL_LOGS
+@rdbOldLogicalName HOTEL_LOGS
+@internalPhysicalName HOTEL_LOGS 
+*/
+class node89 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName USUARIO
+@rdbOldLogicalName USUARIO
+@internalPhysicalName USUARIO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NATIVIDADE
+@rdbOldLogicalName NATIVIDADE
+@internalPhysicalName NATIVIDADE
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 5 
+*/
+class member91 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName ATIVIDADE
+@rdbOldLogicalName ATIVIDADE
+@internalPhysicalName ATIVIDADE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 20
+@internalDigits 0 
+*/
+class member92 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATA
+@rdbOldLogicalName DATA
+@internalPhysicalName DATA
+@internalLogicalType TIMESTAMP
+@internalPhysicalType DATE
+@internalSize 7
+@internalDigits 0 
+*/
+class member93 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName HORAENTRADA
+@rdbOldLogicalName HORAENTRADA
+@internalPhysicalName HORAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 5
+@internalDigits 0 
+*/
+class member94 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name HOTEL_USUARIO
+@rdbOldLogicalName HOTEL_USUARIO
+@internalPhysicalName HOTEL_USUARIO
+@rdbInternalPhysicalPrimaryKeyName HOTEL_USUARIO_ID_PK 
+*/
+class node95 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName USUARIO
+@rdbOldLogicalName USUARIO
+@internalPhysicalName USUARIO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 10
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SENHA
+@rdbOldLogicalName SENHA
+@internalPhysicalName SENHA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 10
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member97 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PRIVILEGIO
+@rdbOldLogicalName PRIVILEGIO
+@internalPhysicalName PRIVILEGIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member98 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name LOG
+@rdbOldLogicalName LOG
+@internalPhysicalName LOG 
+*/
+class node99 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName STATUS
+@rdbOldLogicalName STATUS
+@internalPhysicalName STATUS
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 1 
+*/
+class member {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name MAPA
+@rdbOldLogicalName MAPA
+@internalPhysicalName MAPA 
+*/
+class node101 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODIGO
+@rdbOldLogicalName CODIGO
+@internalPhysicalName CODIGO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 4
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member103 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTO
+@rdbOldLogicalName APTO
+@internalPhysicalName APTO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member104 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CAMA
+@rdbOldLogicalName CAMA
+@internalPhysicalName CAMA
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 2 
+*/
+class member105 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RAMAL
+@rdbOldLogicalName RAMAL
+@internalPhysicalName RAMAL
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 11
+@internalDigits 0 
+*/
+class member106 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TV1
+@rdbOldLogicalName TV1
+@internalPhysicalName TV1
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 10
+@internalDigits 0 
+*/
+class member107 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TV2
+@rdbOldLogicalName TV2
+@internalPhysicalName TV2
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 10
+@internalDigits 0 
+*/
+class member108 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TIPO
+@rdbOldLogicalName TIPO
+@internalPhysicalName TIPO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member109 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO
+@rdbOldLogicalName SITUACAO
+@internalPhysicalName SITUACAO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 60
+@internalDigits 0 
+*/
+class member110 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO_CURSO
+@rdbOldLogicalName SITUACAO_CURSO
+@internalPhysicalName SITUACAO_CURSO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member111 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member112 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATA_ENTRADA
+@rdbOldLogicalName DATA_ENTRADA
+@internalPhysicalName DATA_ENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 13
+@internalDigits 0 
+*/
+class member113 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATA_SAIDA
+@rdbOldLogicalName DATA_SAIDA
+@internalPhysicalName DATA_SAIDA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 13
+@internalDigits 0 
+*/
+class member114 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name RESERVA
+@rdbOldLogicalName RESERVA
+@internalPhysicalName RESERVA 
+*/
+class node115 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName IDENTIDADE
+@rdbOldLogicalName IDENTIDADE
+@internalPhysicalName IDENTIDADE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 12
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATAENTRADA
+@rdbOldLogicalName DATAENTRADA
+@internalPhysicalName DATAENTRADA
+@internalLogicalType TIMESTAMP
+@internalPhysicalType DATE
+@internalSize 7
+@internalDigits 0 
+*/
+class member117 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member118 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME_GUERRA
+@rdbOldLogicalName NOME_GUERRA
+@internalPhysicalName NOME_GUERRA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 15
+@internalDigits 0 
+*/
+class member119 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName POSTO
+@rdbOldLogicalName POSTO
+@internalPhysicalName POSTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member120 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DEPENDENTE_DE
+@rdbOldLogicalName DEPENDENTE_DE
+@internalPhysicalName DEPENDENTE_DE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member121 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName TELEFONE_FUNCIONAL
+@rdbOldLogicalName TELEFONE_FUNCIONAL
+@internalPhysicalName TELEFONE_FUNCIONAL
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member122 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName SITUACAO_CURSO
+@rdbOldLogicalName SITUACAO_CURSO
+@internalPhysicalName SITUACAO_CURSO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member123 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName OM_ORIGEM
+@rdbOldLogicalName OM_ORIGEM
+@internalPhysicalName OM_ORIGEM
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 20
+@internalDigits 0 
+*/
+class member124 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DEPENDENTE
+@rdbOldLogicalName DEPENDENTE
+@internalPhysicalName DEPENDENTE
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member125 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName HORAENTRADA
+@rdbOldLogicalName HORAENTRADA
+@internalPhysicalName HORAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 4
+@internalDigits 0 
+*/
+class member126 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName DATASAIDA
+@rdbOldLogicalName DATASAIDA
+@internalPhysicalName DATASAIDA
+@internalLogicalType TIMESTAMP
+@internalPhysicalType DATE
+@internalSize 7
+@internalDigits 0 
+*/
+class member127 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member128 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName APTO
+@rdbOldLogicalName APTO
+@internalPhysicalName APTO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 3 
+*/
+class member129 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CAMA
+@rdbOldLogicalName CAMA
+@internalPhysicalName CAMA
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 2 
+*/
+class member130 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName RECEBE
+@rdbOldLogicalName RECEBE
+@internalPhysicalName RECEBE
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalSize 1
+@internalDigits 0 
+*/
+class member131 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName USUARIO
+@rdbOldLogicalName USUARIO
+@internalPhysicalName USUARIO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member132 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name RESIDENTE
+@rdbOldLogicalName RESIDENTE
+@internalPhysicalName RESIDENTE 
+*/
+class node133 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName POSTO
+@rdbOldLogicalName POSTO
+@internalPhysicalName POSTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VALOR
+@rdbOldLogicalName VALOR
+@internalPhysicalName VALOR
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 8 
+*/
+class member135 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name RESPONSAVEL
+@rdbOldLogicalName RESPONSAVEL
+@internalPhysicalName RESPONSAVEL
+@rdbInternalPhysicalPrimaryKeyName RESPONSAVEL_ID_PK 
+*/
+class node136 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODIGO
+@rdbOldLogicalName CODIGO
+@internalPhysicalName CODIGO
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalNotNull
+@internalSize 1
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName FUNCAO
+@rdbOldLogicalName FUNCAO
+@internalPhysicalName FUNCAO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member138 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName NOME
+@rdbOldLogicalName NOME
+@internalPhysicalName NOME
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 40
+@internalDigits 0 
+*/
+class member139 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name TABELA_CURSOS
+@rdbOldLogicalName TABELA_CURSOS
+@internalPhysicalName TABELA_CURSOS
+@rdbInternalPhysicalPrimaryKeyName TABELACURSOS_ID_PK 
+*/
+class node140 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CURSO
+@rdbOldLogicalName CURSO
+@internalPhysicalName CURSO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 10
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name TABELA_DECEA
+@rdbOldLogicalName TABELA_DECEA
+@internalPhysicalName TABELA_DECEA
+@rdbInternalPhysicalPrimaryKeyName TABELADECEA_ID_PK 
+*/
+class node142 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName LOCALIDADE
+@rdbOldLogicalName LOCALIDADE
+@internalPhysicalName LOCALIDADE
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 20
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name TABELA_POSTO
+@rdbOldLogicalName TABELA_POSTO
+@internalPhysicalName TABELA_POSTO
+@rdbInternalPhysicalPrimaryKeyName TABELAPOSTO_ID_PK 
+*/
+class node144 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODIGO
+@rdbOldLogicalName CODIGO
+@internalPhysicalName CODIGO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 2
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODTABELA
+@rdbOldLogicalName CODTABELA
+@internalPhysicalName CODTABELA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 2
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member146 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName POSTO
+@rdbOldLogicalName POSTO
+@internalPhysicalName POSTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member147 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name TABELA_PRECO
+@rdbOldLogicalName TABELA_PRECO
+@internalPhysicalName TABELA_PRECO
+@rdbInternalPhysicalPrimaryKeyName TABELAPRECO_ID_PK 
+*/
+class node148 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName PREDIO
+@rdbOldLogicalName PREDIO
+@internalPhysicalName PREDIO
+@internalLogicalType CHAR
+@internalPhysicalType CHAR
+@internalNotNull
+@internalSize 1
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName CODIGO
+@rdbOldLogicalName CODIGO
+@internalPhysicalName CODIGO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalNotNull
+@internalSize 2
+@internalDigits 0
+@internalPrimaryKey 
+*/
+class member150 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName POSTO
+@rdbOldLogicalName POSTO
+@internalPhysicalName POSTO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 30
+@internalDigits 0 
+*/
+class member151 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VALOR
+@rdbOldLogicalName VALOR
+@internalPhysicalName VALOR
+@internalLogicalType TINYINT
+@internalPhysicalType NUMBER
+@internalSize 8 
+*/
+class member152 {
+}}/**
+@shapeType erEntity
+@__modelType node
+@name VERIFICA
+@rdbOldLogicalName VERIFICA
+@internalPhysicalName VERIFICA 
+*/
+class node153 {
+/**
+@shapeType erAttribute
+@__modelType member
+@internalName VUSUARIO
+@rdbOldLogicalName VUSUARIO
+@internalPhysicalName VUSUARIO
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 10
+@internalDigits 0 
+*/
+class member {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VDATA
+@rdbOldLogicalName VDATA
+@internalPhysicalName VDATA
+@internalLogicalType TIMESTAMP
+@internalPhysicalType DATE
+@internalSize 7
+@internalDigits 0 
+*/
+class member155 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VHORAENTRADA
+@rdbOldLogicalName VHORAENTRADA
+@internalPhysicalName VHORAENTRADA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 5
+@internalDigits 0 
+*/
+class member156 {
+}/**
+@shapeType erAttribute
+@__modelType member
+@internalName VHORASAIDA
+@rdbOldLogicalName VHORASAIDA
+@internalPhysicalName VHORASAIDA
+@internalLogicalType VARCHAR
+@internalPhysicalType VARCHAR2
+@internalSize 5
+@internalDigits 0 
+*/
+class member157 {
+}}/**
+@shapeType Note
+@__modelType node
+@name Note1 
+*/
+class node1 {
+}

@@ -1,0 +1,471 @@
+package id1udijdsa6poqqdsa76fps;
+
+/**
+@version 2.0
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33:oiref><oihard>
+@__modelType reference 
+*/
+class reference34 {
+}/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node35:oiref><oihard>
+@__modelType reference 
+*/
+class reference36 {
+}/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node37:oiref><oihard>
+@__modelType reference 
+*/
+class reference38 {
+}/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node46:oiref><oihard>
+@__modelType reference 
+*/
+class reference47 {
+}/**
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node53:oiref><oihard>
+@__modelType reference 
+*/
+class reference54 {
+}}/**
+
+@__tags
+@shapeType UseCaseDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions 
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node48.link:oiref>=682,397,356,560:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node56.link:oiref>=343,255,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node48:oiref>=580,370,204,27,1:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node65.link:oiref>=260,862,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node.link:oiref>=7,610,98,427:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node53:oiref>=0,30,110,90,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node40.link:oiref>=445,10,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node56.link68:oiref>=318,130,318,50:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node49:oiref>=640,640,174,56,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node35.link51:oiref>=164,583,310,583:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node44.link:oiref>=529,190,357,50:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node43.link:oiref>=516,278,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33:oiref>=200,-20,790,940,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node61.link:oiref>=499,528,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node60:oiref>=660,420,262,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node56:oiref>=240,130,180,51,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node56.link:oiref>=360,181,479,330:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node61:oiref>=690,490,208,46,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node65.link:oiref>=336,890,336,855:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node40.link:oiref>=566,30,396,30:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node49.link:oiref>=560,605,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node35:oiref>=70,530,94,77,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node37.link74:oiref>=159,363,210,317:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node40:oiref>=566,11,174,56,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node42.link50:oiref>=577,78,72,16,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node67.link:oiref>=521,847,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node41:oiref>=430,330,147,44,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node42.link:oiref>=512,153,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node.link66:oiref>=7,687,412,800:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node35.link:oiref>=85,530,128,427:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node:oiref>=230,0,166,50,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node43.link:oiref>=657,267,528,330:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node60.link:oiref>=520,483,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node37:oiref>=90,350,69,77,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node61.link:oiref>=690,526,460,570:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node42:oiref>=540,110,265,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node53.link:oiref>=55,120,129,170:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node64:oiref>=320,800,184,55,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node45.link:oiref>=548,575,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node:oiref>=-10,610,52,77,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node.link72:oiref>=24,687,558,770:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node43:oiref>=580,240,154,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node65:oiref>=220,890,150,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node42.link50:oiref>=653,110,653,67:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node35.link58:oiref>=104,530,503,374:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref>=310,560,150,50,0:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node48.link:oiref>=443,458,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node49.link:oiref>=727,640,385,610:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node44:oiref>=450,190,181,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node.link52:oiref>=42,620,70,592:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node67.link:oiref>=614,880,420,855:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node71:oiref>=460,770,197,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node42.link:oiref>=588,137,588,190:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node37.link57:oiref>=136,350,300,181:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node45:oiref>=709,582,211,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node67:oiref>=500,880,228,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node60.link:oiref>=784,447,408,560:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node46:oiref>=100,170,59,77,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node35.link70:oiref>=117,607,539,670:oigroup>
+<oigroup:Composite#<<extend>>#<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node44.link:oiref>=447,100,72,16,0:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node45.link:oiref>=709,595,460,595:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node37.link:oiref>=113,350,274,50:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node73:oiref>=210,300,222,27,1:oigroup>
+<oigroup:<oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node69:oiref>=450,670,179,59,0:oigroup>
+*/
+class __positions {
+}/**
+@shapeType Actor
+@__modelType node
+@name Gerente 
+*/
+class node {
+/**
+@shapeType GeneralizationLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node37:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType GeneralizationLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node35:oiref><oihard> 
+*/
+class link52 {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node64:oiref><oihard> 
+*/
+class link66 {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node71:oiref><oihard> 
+*/
+class link72 {
+}}/**
+@shapeType SystemBoundary
+@__modelType node
+@name Sis-Hotel - Sistema do Hotel do IPV
+@backgroundColor 200,200,200 
+*/
+class node33 {
+/**
+@shapeType UseCase
+@__modelType node
+@name Gerenciar hospedagem 
+*/
+class node {
+}/**
+@shapeType UseCase
+@__modelType node
+@name Gerenciar Hotel
+*/
+class node39 {
+}/**
+@shapeType UseCase
+@__modelType node
+@name Fechamento da conta do hospede 
+*/
+class node40 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Realizar Reserva 
+*/
+class node41 {
+/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#ids9bfdsaayp86dsac4msf.diagram:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Gerar Histórico de hospedagem 
+*/
+class node42 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node40:oiref><oihard> 
+*/
+class link50 {
+}/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node44:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Cancelar Reserva 
+*/
+class node43 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node41:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Efetuar Hospedagem
+*/
+class node44 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#id1q4updsaayp86dsab3jfe.diagram:oiref><oihard> 
+*/
+class link1 {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Atualizar tabela de preço 
+*/
+class node48 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#idbwk1dsaayp86dsad7wj9.diagram:oiref><oihard> 
+*/
+class link13 {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Disponibilizar/Indisponibilizar Cama
+*/
+class node49 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> */
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Transforma reserva em hospedagem 
+*/
+class node56 {
+/**
+@shapeType IncludesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node:oiref><oihard> 
+*/
+class link68 {
+}/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node41:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Atualizar Tabela de cursos ICEA
+*/
+class node60 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#id46wgzdsaayp86dsadgx5i.diagram:oiref><oihard> 
+*/
+class link34 {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Atualizar Tabela de Unidades do decea 
+*/
+class node61 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#id3v5pcdsaayp86dsadjfrp.diagram:oiref><oihard> 
+*/
+class link35 {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Gerenciar utilizaçäo do sistema 
+*/
+class node64 {
+}/**
+@shapeType UseCase
+@__modelType node
+@name Cadastro usuário 
+*/
+class node65 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node64:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#id9zv0dsa8mz7tdsa8v5me.diagram:oiref><oihard> 
+*/
+class link1 {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Consultar Logs do Sistema 
+*/
+class node67 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node64:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Manter o cadastro de Facilidade 
+*/
+class node69 {
+/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#idh548dsaayp86dsae5v7w.diagram:oiref><oihard> 
+*/
+class link {
+}}/**
+@shapeType UseCase
+@__modelType node
+@name Cancelar Hospedagem 
+*/
+class node71 {
+}/**
+@shapeType UseCase
+@__modelType node
+@name Realizar fachamento diário
+*/
+class node73 {
+}/**
+@shapeType UseCase
+@__modelType node
+@name Atualizar Tabela de Posto 
+*/
+class node45 {
+/**
+@shapeType ExtendsLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType Hyperlink
+@__modelType link
+@__ref <oiref:design#Class#id1oooddsaayp86dsae2okk.diagram:oiref><oihard> 
+*/
+class link46 {
+}}}/**
+@shapeType Actor
+@__modelType node
+@name Auxiliar Gerente
+*/
+class node35 {
+/**
+@shapeType GeneralizationLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node37:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node39:oiref><oihard> 
+*/
+class link51 {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node41:oiref><oihard> 
+*/
+class link58 {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node69:oiref><oihard> 
+*/
+class link70 {
+}}/**
+@shapeType Actor
+@__modelType node
+@name Cassineiro
+*/
+class node37 {
+/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node:oiref><oihard> 
+*/
+class link {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node56:oiref><oihard> 
+*/
+class link57 {
+}/**
+@shapeType CommunicatesLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node33.node73:oiref><oihard> 
+*/
+class link74 {
+}}/**
+@shapeType Actor
+@__modelType node
+@name Hospede 
+*/
+class node46 {
+}/**
+@shapeType Note
+@__modelType node
+@name Note1
+@text Preenche ficha de hospedagem. 
+*/
+class node53 {
+/**
+@shapeType NoteLink
+@__modelType link
+@__ref <oiref:design#Class#id1udijdsa6poqqdsa76fps.node46:oiref><oihard> 
+*/
+class link {
+}}
